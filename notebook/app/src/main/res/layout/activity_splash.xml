@@ -18,7 +18,6 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textViewAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
