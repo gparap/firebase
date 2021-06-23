@@ -9,4 +9,13 @@
     <string name="hint_password">password</string>
     <string name="hint_confirm_password">confirm password</string>
     <string name="register">Register</string>
+
+    <!-- toast messages -->
+    <string name="toast_empty_username">Username cannot be empty.</string>
+    <string name="toast_empty_email">E-mail cannot be empty.</string>
+    <string name="toast_empty_password">Password cannot be empty.</string>
+    <string name="toast_empty_password_confirm">Please, confirm your password.</string>
+    <string name="toast_failed_password_confirm">Password confirmation failed.</string>
+    <string name="toast_registration_failed">User registration failed.</string>
+    <string name="toast_welcome">Welcome, </string>
 </resources>
