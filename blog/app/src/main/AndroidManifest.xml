@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Blog"
         tools:ignore="AllowBackup">
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>

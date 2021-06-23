@@ -3,4 +3,10 @@
     <string name="fab_add_post">Add Post</string>
     <string name="menu_add_post">Add Post</string>
     <string name="app_logo">app logo</string>
+    <string name="description_image_logo">Image logo</string>
+    <string name="hint_username">username</string>
+    <string name="hint_email">e-mail address</string>
+    <string name="hint_password">password</string>
+    <string name="hint_confirm_password">confirm password</string>
+    <string name="register">Register</string>
 </resources>

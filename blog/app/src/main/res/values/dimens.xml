@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Design dimensions -->
+    <dimen name="edit_text_layout_marginStart">24dp</dimen>
+    <dimen name="edit_text_layout_marginTop">32dp</dimen>
+    <dimen name="edit_text_layout_marginEnd">24dp</dimen>
+</resources>

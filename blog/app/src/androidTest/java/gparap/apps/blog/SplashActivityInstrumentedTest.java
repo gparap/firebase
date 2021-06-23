@@ -15,7 +15,7 @@ import org.junit.Test;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
-public class SplashActivityTest {
+public class SplashActivityInstrumentedTest {
 
     @Before
     public void setUp() {
