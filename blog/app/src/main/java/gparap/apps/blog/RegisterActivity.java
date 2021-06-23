@@ -42,6 +42,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean validateUserInput() {
+        //TODO: validate e-mail
+        //TODO: check if user exists in firebase
+
         //check if user input is empty
         if (username.getText().toString().isEmpty()) {
             Toast.makeText(this, getString(R.string.toast_empty_username), Toast.LENGTH_SHORT).show();

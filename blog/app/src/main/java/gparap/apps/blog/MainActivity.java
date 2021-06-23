@@ -16,6 +16,7 @@
 package gparap.apps.blog;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 @SuppressWarnings("Convert2Lambda")
 @SuppressLint("NonConstantResourceId")
@@ -63,12 +65,22 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menuAddPost) {
-            Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.menu_item_add_post:
+                Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_item_log_out:
+                signOutUserAndReturnToLoginActivity();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void signOutUserAndReturnToLoginActivity() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 }

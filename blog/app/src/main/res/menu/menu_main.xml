@@ -4,6 +4,10 @@
 
     <item
         app:showAsAction="never"
-        android:id="@+id/menuAddPost"
+        android:id="@+id/menu_item_add_post"
         android:title="@string/menu_add_post" />
+    <item
+        app:showAsAction="never"
+        android:id="@+id/menu_item_log_out"
+        android:title="@string/menu_log_out" />
 </menu>
