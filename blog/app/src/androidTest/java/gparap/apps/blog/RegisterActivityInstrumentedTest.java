@@ -157,7 +157,7 @@ public class RegisterActivityInstrumentedTest {
         onView(withId(R.id.buttonRegister)).perform(click());
         Thread.sleep(1677);
 
-        onView(withId(R.id.layout_main_activity)).check(matches(isDisplayed()));
+        onView(withId(R.id.layout_activity_main)).check(matches(isDisplayed()));
 
         //delete test user and wait for firebase
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();

@@ -1,19 +1,30 @@
 <resources>
     <string name="app_name">Blog</string>
-    <string name="fab_add_post">Add Post</string>
+
+    <!--images-->
     <string name="app_logo">app logo</string>
+    <string name="login_logo_placeholder">placeholder</string>
+
+    <!--buttons-->
+    <string name="fab_add_post">Add Blog Post</string>
+    <string name="button_login">Login</string>
+    <string name="button_register">Register</string>
+    <string name="button_guest">Continue as guest</string>
+
+    <!--menu items-->
+    <string name="menu_add_post">Add Post</string>
+    <string name="menu_log_out">Log Out</string>
+
+    <!--content descriptions-->
     <string name="description_image_logo">Image logo</string>
+
+    <!--input hints-->
     <string name="hint_username">username</string>
     <string name="hint_email">e-mail address</string>
     <string name="hint_password">password</string>
     <string name="hint_confirm_password">confirm password</string>
-    <string name="register">Register</string>
 
-    <!-- menu items -->
-    <string name="menu_add_post">Add Post</string>
-    <string name="menu_log_out">Log Out</string>
-
-    <!-- toast messages -->
+    <!--toast messages-->
     <string name="toast_empty_username">Username cannot be empty.</string>
     <string name="toast_empty_email">E-mail cannot be empty.</string>
     <string name="toast_empty_password">Password cannot be empty.</string>
@@ -21,4 +32,7 @@
     <string name="toast_failed_password_confirm">Password confirmation failed.</string>
     <string name="toast_registration_failed">User registration failed.</string>
     <string name="toast_welcome">Welcome, </string>
+    <string name="toast_wrong_credentials">User login failed. Please, check your credentials and try again.</string>
+    <string name="toast_login_successful">Login successful.</string>
+    <string name="toast_login_guest">Continue as guest.</string>
 </resources>
