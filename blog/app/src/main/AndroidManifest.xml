@@ -11,9 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Blog"
         tools:ignore="AllowBackup">
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".ui.post.AddPostActivity" />
+        <activity android:name=".auth.RegisterActivity" />
+        <activity android:name=".auth.LoginActivity" />
+        <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

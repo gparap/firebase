@@ -29,6 +29,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import gparap.apps.blog.auth.LoginActivity;
+import gparap.apps.blog.ui.post.AddPostActivity;
+
 @SuppressWarnings("Convert2Lambda")
 @SuppressLint("NonConstantResourceId")
 public class MainActivity extends AppCompatActivity {
@@ -39,12 +42,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //init floating action button
+        //add a new blog post
         fabAddPost = findViewById(R.id.fab_addPost);
         fabAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, String.valueOf(v.getId()), Toast.LENGTH_SHORT).show();
+                Intent intentAddPost = new Intent(MainActivity.this, AddPostActivity.class);
+                startActivity(intentAddPost);
             }
         });
     }

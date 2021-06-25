@@ -35,4 +35,7 @@
     <string name="toast_wrong_credentials">User login failed. Please, check your credentials and try again.</string>
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_login_guest">Continue as guest.</string>
+    <string name="hint_enter_title_here">enter title here</string>
+    <string name="hint_enter_details_here">enter details here</string>
+    <string name="button_save">Save</string>
 </resources>

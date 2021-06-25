@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.post.AddPostActivity">
+
+    <!-- Image placeholder -->
+    <ImageView
+        android:id="@+id/imageViewAddPost"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/add_photo_black_48"
+        android:contentDescription="@string/login_logo_placeholder"
+        android:gravity="center|top"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/editTextAddPostTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--Blog post title-->
+    <EditText
+        android:id="@+id/editTextAddPostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="false"
+        android:gravity="center"
+        android:hint="@string/hint_enter_title_here"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Blog Post Title" />
+
+    <!--Blog post details-->
+    <EditText
+        android:id="@+id/editTextAddPostDetails"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autofillHints="false"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="top|start"
+        android:hint="@string/hint_enter_details_here"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSavePost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAddPostTitle"
+        tools:text="Blog Post Details" />
+
+    <!--Save button-->
+    <Button
+        android:id="@+id/buttonSavePost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_save"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
