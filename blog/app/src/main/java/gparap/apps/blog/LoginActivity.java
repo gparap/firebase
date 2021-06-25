@@ -50,15 +50,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //redirect to user registration
-        buttonRegister.setOnClickListener(v ->
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class))
-        );
+        buttonRegister.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
 
         //continue as guest
         buttonGuest.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
             signInAsGuest();
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
         });
     }
 
@@ -67,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, getString(R.string.toast_login_guest), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     }
                     progressBar.setVisibility(View.INVISIBLE);
                 });
@@ -76,8 +75,8 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         Toast.makeText(this, getString(R.string.toast_login_successful), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else {
                         Toast.makeText(this, getString(R.string.toast_wrong_credentials), Toast.LENGTH_SHORT).show();
                     }
