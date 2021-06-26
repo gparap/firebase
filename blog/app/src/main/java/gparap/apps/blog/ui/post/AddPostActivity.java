@@ -11,15 +11,22 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.Objects;
 
 import gparap.apps.blog.R;
+import gparap.apps.blog.auth.LoginActivity;
 
 public class AddPostActivity extends AppCompatActivity {
     ImageButton buttonAdd;
     EditText postTitle, postDetails;
     Button buttonSave;
-    private final int ACTION_GET_CONTENT_ReSULT_CODE = 999;
+    private final int ACTION_GET_CONTENT_RESULT_CODE = 999;
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +42,7 @@ public class AddPostActivity extends AppCompatActivity {
         //save post
         buttonSave.setOnClickListener(v -> {
             if (isPostValidated()) {
-                savePostToDatabase();
+                savePost();
             }
         });
     }
@@ -45,21 +52,57 @@ public class AddPostActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //set button image as the selected image
-        if (resultCode == ACTION_GET_CONTENT_ReSULT_CODE) {
-            Uri selectedImage = Objects.requireNonNull(data).getData();
-            buttonAdd.setImageURI(selectedImage);
+        if (resultCode == RESULT_OK && requestCode == ACTION_GET_CONTENT_RESULT_CODE) {
+            imageUri = Objects.requireNonNull(data).getData();
+            buttonAdd.setImageURI(imageUri);
         }
     }
 
     private void savePostToDatabase() {
-        //TODO
+        //TODO:
+    }
+
+    private void saveImageToCloudStorage(String userId) {
+        if (imageUri == null)
+            return;
+
+        //get a reference to app cloud storage
+        StorageReference cloudRef = FirebaseStorage.getInstance().getReference();
+
+        //get a reference to the user image
+        StorageReference imageRef = cloudRef.child("images").child(userId).child(imageUri.getLastPathSegment());
+
+        //add user image to cloud storage
+        imageRef.putFile(imageUri).addOnFailureListener(e ->
+                Toast.makeText(AddPostActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show()
+        );
+    }
+
+    /**
+     * Saves a user's blog post to the cloud.
+     * Firstly, it saves the image to cloud storage and
+     * secondly, it saves the post to the database.
+     */
+    private void savePost() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            //user is authenticated
+            if (!user.isAnonymous()) {
+                saveImageToCloudStorage(user.getUid());
+                savePostToDatabase();
+            } else if (user.isAnonymous()) {
+                //redirect to login activity and inform user that they must be authenticated to post
+                Toast.makeText(AddPostActivity.this, R.string.toast_user_must_authenticate, Toast.LENGTH_LONG).show();
+                startActivity(new Intent(AddPostActivity.this, LoginActivity.class));
+            }
+        }
     }
 
     @SuppressWarnings("deprecation")
     private void addPostImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        startActivityForResult(intent, ACTION_GET_CONTENT_ReSULT_CODE);
+        startActivityForResult(intent, ACTION_GET_CONTENT_RESULT_CODE);
     }
 
     /**

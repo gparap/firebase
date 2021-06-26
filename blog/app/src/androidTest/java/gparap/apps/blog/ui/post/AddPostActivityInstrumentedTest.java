@@ -19,6 +19,8 @@ import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -97,5 +99,24 @@ public class AddPostActivityInstrumentedTest {
         onView(withText(R.string.toast_empty_post_details))
                 .inRoot(withDecorView(not(is(rootView))))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void savePost_redirectNonAuthenticatedUserToLoginActiity() throws InterruptedException {
+        //sign-in anonymous user
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.signInAnonymously();
+
+        //fill-in post title and details
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText("any title"));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextAddPostDetails)).perform(typeText("any details"));
+        closeSoftKeyboard();
+
+        //try to save post and wait for firebase
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        Thread.sleep(1667);
+
+        onView(withId(R.id.layout_login_activity)).check(matches(isDisplayed()));
     }
 }
