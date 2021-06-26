@@ -15,6 +15,8 @@
  */
 package gparap.apps.blog.ui.post;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
 
 import org.junit.Before;
@@ -22,20 +24,36 @@ import org.junit.Test;
 
 import gparap.apps.blog.R;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.clearText;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 
 public class AddPostActivityInstrumentedTest {
+    ActivityScenario<AddPostActivity> activityScenario;
+    View rootView;
+
     @Before
     public void setUp() {
-        ActivityScenario.launch(AddPostActivity.class);
+        activityScenario = ActivityScenario.launch(AddPostActivity.class);
+
+        //get the top-level window view
+        activityScenario.onActivity(activity ->
+                rootView = activity.getWindow().getDecorView()
+        );
     }
 
     @Test
     public void isVisible_imageView() {
-        onView(withId(R.id.imageViewAddPost)).check(matches(isDisplayed()));
+        onView(withId(R.id.imageButtonAddPost)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -51,5 +69,33 @@ public class AddPostActivityInstrumentedTest {
     @Test
     public void isVisible_buttonSavePost() {
         onView(withId(R.id.buttonSavePost)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void savePost_postTitleIsEmpty_showErrorMessage() {
+        //clear title and save post
+        onView(withId(R.id.editTextAddPostTitle)).perform(clearText());
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonSavePost)).perform(click());
+
+        onView(withText(R.string.toast_empty_post_title))
+                .inRoot(withDecorView(not(is(rootView))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void savePost_postDetailsAreEmpty_showErrorMessage() {
+        //fill in post title
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText("any title"));
+        closeSoftKeyboard();
+
+        //clear details and save post
+        onView(withId(R.id.editTextAddPostDetails)).perform(clearText());
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonSavePost)).perform(click());
+
+        onView(withText(R.string.toast_empty_post_details))
+                .inRoot(withDecorView(not(is(rootView))))
+                .check(matches(isDisplayed()));
     }
 }
