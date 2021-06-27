@@ -19,6 +19,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import gparap.apps.blog.auth.LoginActivityInstrumentedTest;
+import gparap.apps.blog.auth.RegisterActivityInstrumentedTest;
+import gparap.apps.blog.ui.SplashActivityInstrumentedTest;
+
 @RunWith(Suite.class)
 @SuiteClasses({
         SplashActivityInstrumentedTest.class,

@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
         fabAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentAddPost = new Intent(MainActivity.this, AddPostActivity.class);
-                startActivity(intentAddPost);
+                startActivity(new Intent(MainActivity.this, AddPostActivity.class));
             }
         });
     }
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_add_post:
-                Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, AddPostActivity.class));
                 break;
             case R.id.menu_item_log_out:
                 signOutUserAndReturnToLoginActivity();

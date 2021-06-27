@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.blog;
+package gparap.apps.blog.auth;
 
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import gparap.apps.blog.auth.LoginActivity;
+import gparap.apps.blog.R;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
@@ -50,7 +51,7 @@ public class LoginActivityInstrumentedTest {
 
     @Test
     public void isVisible_logoPlaceholder() {
-        onView(withId(R.id.imageViewLoginLogoPlaceholder)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.imageViewLoginLogoPlaceholder)).check(matches(isDisplayed()));
     }
 
     @Test

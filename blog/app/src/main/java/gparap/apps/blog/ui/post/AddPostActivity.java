@@ -3,38 +3,53 @@ package gparap.apps.blog.ui.post;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
 
+import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
 import gparap.apps.blog.auth.LoginActivity;
 
 public class AddPostActivity extends AppCompatActivity {
-    ImageButton buttonAdd;
-    EditText postTitle, postDetails;
-    Button buttonSave;
+    private ImageButton buttonAdd;
+    private EditText postTitle, postDetails;
+    private Button buttonSave;
+    private ProgressBar progressBar;
     private final int ACTION_GET_CONTENT_RESULT_CODE = 999;
-    Uri imageUri;
+    private Uri imageUri;
+    /*Note from Firebase: To get a reference to a database other than a us-central1 default database,
+    you must pass the database URL to getInstance() (or Kotlin+KTX database()).
+    For a us-central1 default database, you can call getInstance() (or database) without arguments.*/
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String databaseURL = "https://blog-d6918-default-rtdb.europe-west1.firebasedatabase.app/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.add_post));
         getWidgets();
 
-        //add an image
+        //add an image to post
         buttonAdd.setOnClickListener(v ->
                 addPostImage()
         );
@@ -58,13 +73,25 @@ public class AddPostActivity extends AppCompatActivity {
         }
     }
 
-    private void savePostToDatabase() {
-        //TODO:
+    private void savePostToDatabase(String imageDownloadUrl, String userId) {
+        //get the FirebaseDatabase instance for the specified URL
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(databaseURL);
+
+        //get the DatabaseReference for the database root node
+        DatabaseReference postsRef = firebaseDatabase.getReference().child("posts");
+
+        //get the DatabaseReference for an auto-generated node
+        DatabaseReference postRef = postsRef.push();
+
+        //write data to the database
+        postRef.child("title").setValue(postTitle.getText().toString().trim());
+        postRef.child("details").setValue(postDetails.getText().toString().trim());
+        postRef.child("image").setValue(imageDownloadUrl.trim());
+        postRef.child("user_id").setValue(userId);
     }
 
-    private void saveImageToCloudStorage(String userId) {
-        if (imageUri == null)
-            return;
+    private StorageTask<UploadTask.TaskSnapshot> saveImageToCloudStorage(String userId) {
+        StorageTask<UploadTask.TaskSnapshot> storageTask;
 
         //get a reference to app cloud storage
         StorageReference cloudRef = FirebaseStorage.getInstance().getReference();
@@ -73,9 +100,10 @@ public class AddPostActivity extends AppCompatActivity {
         StorageReference imageRef = cloudRef.child("images").child(userId).child(imageUri.getLastPathSegment());
 
         //add user image to cloud storage
-        imageRef.putFile(imageUri).addOnFailureListener(e ->
+        storageTask = imageRef.putFile(imageUri).addOnFailureListener(e ->
                 Toast.makeText(AddPostActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show()
         );
+        return storageTask;
     }
 
     /**
@@ -88,8 +116,27 @@ public class AddPostActivity extends AppCompatActivity {
         if (user != null) {
             //user is authenticated
             if (!user.isAnonymous()) {
-                saveImageToCloudStorage(user.getUid());
-                savePostToDatabase();
+                progressBar.setVisibility(View.VISIBLE);
+
+                //save post without image
+                if (imageUri == null) {
+                    savePostToDatabase("", user.getUid());
+                    progressBar.setVisibility(View.INVISIBLE);
+                    gotoMainActivity();
+                } else {
+                    StorageTask<UploadTask.TaskSnapshot> saveImageTask = saveImageToCloudStorage(user.getUid());
+                    saveImageTask.addOnCompleteListener(task -> task.addOnSuccessListener(taskSnapshot -> {
+                        Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl();
+                        downloadURL.addOnCompleteListener(task1 ->
+                                task1.addOnSuccessListener(uri ->
+                                        savePostToDatabase(uri.toString(), user.getUid()))
+                                        .addOnCompleteListener(task2 -> {
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            gotoMainActivity();
+                                        })
+                        );
+                    }));
+                }
             } else if (user.isAnonymous()) {
                 //redirect to login activity and inform user that they must be authenticated to post
                 Toast.makeText(AddPostActivity.this, R.string.toast_user_must_authenticate, Toast.LENGTH_LONG).show();
@@ -121,10 +168,16 @@ public class AddPostActivity extends AppCompatActivity {
         return true;
     }
 
+    private void gotoMainActivity() {
+        startActivity(new Intent(AddPostActivity.this, MainActivity.class));
+        finish();
+    }
+
     private void getWidgets() {
         buttonAdd = findViewById(R.id.imageButtonAddPost);
         postTitle = findViewById(R.id.editTextAddPostTitle);
         postDetails = findViewById(R.id.editTextAddPostDetails);
         buttonSave = findViewById(R.id.buttonSavePost);
+        progressBar = findViewById(R.id.progressBarAddPost);
     }
 }

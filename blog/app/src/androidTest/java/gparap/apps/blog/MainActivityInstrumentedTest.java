@@ -50,7 +50,7 @@ public class MainActivityInstrumentedTest {
         }
 
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
-        onView(withText(R.string.menu_log_out)).perform(click());
+        onView(withText(R.string.log_out)).perform(click());
         Thread.sleep(1667);
 
         onView(withId(R.id.layout_login_activity)).check(matches(isDisplayed()));

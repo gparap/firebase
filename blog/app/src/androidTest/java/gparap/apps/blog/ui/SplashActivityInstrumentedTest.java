@@ -1,4 +1,4 @@
-package gparap.apps.blog;
+package gparap.apps.blog.ui;
 
 import android.os.SystemClock;
 
@@ -12,8 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.auth.LoginActivity;
-import gparap.apps.blog.ui.SplashActivity;
 
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;

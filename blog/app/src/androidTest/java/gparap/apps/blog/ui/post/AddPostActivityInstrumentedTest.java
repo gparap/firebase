@@ -74,6 +74,11 @@ public class AddPostActivityInstrumentedTest {
     }
 
     @Test
+    public void isInvisible_progressBar() {
+        onView(withId(R.id.progressBarAddPost)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void savePost_postTitleIsEmpty_showErrorMessage() {
         //clear title and save post
         onView(withId(R.id.editTextAddPostTitle)).perform(clearText());

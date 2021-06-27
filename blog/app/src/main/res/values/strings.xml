@@ -13,8 +13,8 @@
     <string name="button_save">Save</string>
 
     <!--menu items-->
-    <string name="menu_add_post">Add Post</string>
-    <string name="menu_log_out">Log Out</string>
+    <string name="add_post">Add Post</string>
+    <string name="log_out">Log Out</string>
 
     <!--content descriptions-->
     <string name="description_image_logo">Image logo</string>
