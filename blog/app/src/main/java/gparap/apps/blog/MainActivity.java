@@ -26,10 +26,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.blog.auth.LoginActivity;
-import gparap.apps.blog.ui.post.AddPostActivity;
+import gparap.apps.blog.ui.post.AddBlogPostActivity;
+import gparap.apps.blog.utils.FirebaseUtils;
 
 @SuppressWarnings("Convert2Lambda")
 @SuppressLint("NonConstantResourceId")
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         fabAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AddPostActivity.class));
+                startActivity(new Intent(MainActivity.this, AddBlogPostActivity.class));
             }
         });
     }
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_add_post:
-                startActivity(new Intent(MainActivity.this, AddPostActivity.class));
+                startActivity(new Intent(MainActivity.this, AddBlogPostActivity.class));
                 break;
             case R.id.menu_item_log_out:
                 signOutUserAndReturnToLoginActivity();
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signOutUserAndReturnToLoginActivity() {
-        FirebaseAuth.getInstance().signOut();
+        FirebaseUtils.getInstance().signOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }

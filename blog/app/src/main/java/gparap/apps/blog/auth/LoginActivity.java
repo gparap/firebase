@@ -15,8 +15,6 @@
  */
 package gparap.apps.blog.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,12 +23,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
 import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
+import gparap.apps.blog.utils.FirebaseUtils;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
@@ -63,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signInAsGuest() {
-        FirebaseAuth.getInstance().signInAnonymously()
+        FirebaseUtils.getInstance().signInAnonymously()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, getString(R.string.toast_login_guest), Toast.LENGTH_SHORT).show();
@@ -75,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signInWithEmailAndPassword() {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
+        FirebaseUtils.getInstance().signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, getString(R.string.toast_login_successful), Toast.LENGTH_SHORT).show();

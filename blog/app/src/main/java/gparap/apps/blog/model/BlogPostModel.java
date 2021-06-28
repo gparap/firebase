@@ -18,7 +18,7 @@ package gparap.apps.blog.model;
 /**
  * Model class for a blog post.
  */
-public class PostModel {
+public class BlogPostModel {
     private String imageUrl, title, details, userId;
 
     public String getImageUrl() {
@@ -53,10 +53,10 @@ public class PostModel {
         this.userId = userId;
     }
 
-    public PostModel() {
+    public BlogPostModel() {
     }
 
-    public PostModel(String imageUrl, String title, String details, String userId) {
+    public BlogPostModel(String imageUrl, String title, String details, String userId) {
         this.imageUrl = imageUrl;
         this.title = title;
         this.details = details;

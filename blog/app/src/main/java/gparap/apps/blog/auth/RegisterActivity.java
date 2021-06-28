@@ -8,10 +8,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
+import gparap.apps.blog.utils.FirebaseUtils;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText username, email, password, passwordConfirm;
@@ -30,8 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+        FirebaseUtils.getInstance().createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(RegisterActivity.this, getString(R.string.toast_welcome) + username.getText().toString(), Toast.LENGTH_SHORT).show();

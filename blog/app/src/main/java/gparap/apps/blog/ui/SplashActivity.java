@@ -15,19 +15,18 @@
  */
 package gparap.apps.blog.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
 import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
 import gparap.apps.blog.auth.LoginActivity;
+import gparap.apps.blog.utils.FirebaseUtils;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -40,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
         //check if user is authenticated and redirect appropriately
         new Handler(getMainLooper()).postDelayed(() -> {
 
-            if (FirebaseAuth.getInstance().getCurrentUser() == null){
+            if (FirebaseUtils.getInstance().getUser() == null){
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             }else{
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));

@@ -39,13 +39,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
-public class AddPostActivityInstrumentedTest {
-    ActivityScenario<AddPostActivity> activityScenario;
+public class AddBlogPostActivityInstrumentedTest {
+    ActivityScenario<AddBlogPostActivity> activityScenario;
     View rootView;
 
     @Before
     public void setUp() {
-        activityScenario = ActivityScenario.launch(AddPostActivity.class);
+        activityScenario = ActivityScenario.launch(AddBlogPostActivity.class);
 
         //get the top-level window view
         activityScenario.onActivity(activity ->
