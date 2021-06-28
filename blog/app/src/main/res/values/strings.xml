@@ -18,6 +18,7 @@
 
     <!--content descriptions-->
     <string name="description_image_logo">Image logo</string>
+    <string name="description_blog_post_image">Blog post image</string>
 
     <!--input hints-->
     <string name="hint_username">username</string>

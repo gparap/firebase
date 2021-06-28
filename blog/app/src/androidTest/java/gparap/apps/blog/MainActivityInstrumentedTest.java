@@ -40,6 +40,16 @@ public class MainActivityInstrumentedTest {
     }
 
     @Test
+    public void isVisible_recyclerViewBlogPosts() {
+        onView(withId(R.id.recyclerViewBlogPosts)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void isVisible_buttonAddBlogPost() {
+        onView(withId(R.id.fab_addPost)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void signOutUserFromMainMenu() throws InterruptedException {
         //get current user from firebase
         // if it is null, sign-in as an anonymous user

@@ -37,7 +37,7 @@ public class AddBlogPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_post);
+        setContentView(R.layout.activity_add_blog_post);
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.add_post));
         getWidgets();
 
