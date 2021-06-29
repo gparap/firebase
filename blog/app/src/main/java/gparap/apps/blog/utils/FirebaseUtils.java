@@ -19,12 +19,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -65,11 +67,11 @@ public class FirebaseUtils {
         return FirebaseAuth.getInstance().signInAnonymously();
     }
 
-    public com.google.android.gms.tasks.Task<AuthResult> signInWithEmailAndPassword(String email, String password){
+    public com.google.android.gms.tasks.Task<AuthResult> signInWithEmailAndPassword(String email, String password) {
         return FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password);
     }
 
-    public com.google.android.gms.tasks.Task<AuthResult> createUserWithEmailAndPassword(String email, String password){
+    public com.google.android.gms.tasks.Task<AuthResult> createUserWithEmailAndPassword(String email, String password) {
         return FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
     }
 
@@ -86,8 +88,8 @@ public class FirebaseUtils {
         //write data to the database
         postRef.child("title").setValue(model.getTitle());
         postRef.child("details").setValue(model.getDetails());
-        postRef.child("image").setValue(model.getImageUrl());
-        postRef.child("user_id").setValue(model.getUserId());
+        postRef.child("image").setValue(model.getImage());
+        postRef.child("user_id").setValue(model.getUser_id());
     }
 
     public StorageTask<UploadTask.TaskSnapshot> saveBlogPostImageToCloudStorage(
@@ -106,5 +108,25 @@ public class FirebaseUtils {
                 Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show()
         );
         return storageTask;
+    }
+
+    /**
+     * Creates options to configure FirebaseRecyclerAdapter.
+     *
+     * @return options
+     */
+    public FirebaseRecyclerOptions<BlogPostModel> createFirebaseRecyclerOptions() {
+        return new FirebaseRecyclerOptions.Builder<BlogPostModel>()
+                .setQuery(getBlogPostsQuery(), BlogPostModel.class)
+                .build();
+    }
+
+    /**
+     * Returns a Firebase query for blog posts.
+     *
+     * @return query
+     */
+    private Query getBlogPostsQuery() {
+        return FirebaseDatabase.getInstance(databaseURL).getReference().child("posts");
     }
 }

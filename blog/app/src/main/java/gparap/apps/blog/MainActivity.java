@@ -24,17 +24,21 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import gparap.apps.blog.adapter.BlogPostAdapter;
 import gparap.apps.blog.auth.LoginActivity;
 import gparap.apps.blog.ui.post.AddBlogPostActivity;
 import gparap.apps.blog.utils.FirebaseUtils;
 
-@SuppressWarnings("Convert2Lambda")
+@SuppressWarnings({"Convert2Lambda", "FieldCanBeLocal"})
 @SuppressLint("NonConstantResourceId")
 public class MainActivity extends AppCompatActivity {
-    FloatingActionButton fabAddPost;
+    private RecyclerView recyclerView;
+    private BlogPostAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +46,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //add a new blog post
-        fabAddPost = findViewById(R.id.fab_addPost);
+        FloatingActionButton fabAddPost = findViewById(R.id.fab_addPost);
         fabAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AddBlogPostActivity.class));
             }
         });
+
+        //create and configure adapter for blog posts
+        adapter = new BlogPostAdapter(FirebaseUtils.getInstance().createFirebaseRecyclerOptions());
+        adapter.setContext(MainActivity.this);
+
+        //setup recyclerView with adapter
+        recyclerView = findViewById(R.id.recyclerViewBlogPosts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        adapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        adapter.stopListening();
     }
 
     @Override

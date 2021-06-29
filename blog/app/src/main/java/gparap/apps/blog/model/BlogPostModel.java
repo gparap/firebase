@@ -18,15 +18,16 @@ package gparap.apps.blog.model;
 /**
  * Model class for a blog post.
  */
+@SuppressWarnings("unused")
 public class BlogPostModel {
-    private String imageUrl, title, details, userId;
+    private String image, title, details, user_id;
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getTitle() {
@@ -45,21 +46,22 @@ public class BlogPostModel {
         this.details = details;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
+    //required for Firebase
     public BlogPostModel() {
     }
 
-    public BlogPostModel(String imageUrl, String title, String details, String userId) {
-        this.imageUrl = imageUrl;
+    public BlogPostModel(String image, String title, String details, String user_id) {
+        this.image = image;
         this.title = title;
         this.details = details;
-        this.userId = userId;
+        this.user_id = user_id;
     }
 }

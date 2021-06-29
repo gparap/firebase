@@ -8,7 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/layout_marginTop">
 
         <!--Blog post image-->
         <ImageView
@@ -34,6 +35,18 @@
             app:layout_constraintTop_toBottomOf="@+id/cardview_post_image"
             tools:text="@string/hint_enter_title_here" />
 
+        <!--Blogger-->
+        <TextView
+            android:id="@+id/cardview_post_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardview_post_title"
+            tools:text="by blogger" />
+
         <!--Post's details-->
         <TextView
             android:id="@+id/cardview_post_details"
@@ -43,7 +56,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview_post_title"
+            app:layout_constraintTop_toBottomOf="@+id/cardview_post_user"
             tools:text="@string/hint_enter_details_here" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
