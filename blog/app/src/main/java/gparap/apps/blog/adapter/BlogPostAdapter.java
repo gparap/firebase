@@ -59,10 +59,10 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
      */
     @Override
     protected void onBindViewHolder(@NonNull @NotNull BlogPostAdapter.BlogPostViewHolder blogPostViewHolder, int i, @NonNull @NotNull BlogPostModel model) {
-        blogPostViewHolder.setPostImage(model.getImage(), context);
+        blogPostViewHolder.setPostImage(model.getImageUrl(), context);
         blogPostViewHolder.setPostTitle(model.getTitle());
         blogPostViewHolder.setPostDetails(model.getDetails());
-        blogPostViewHolder.setPostblogger(model.getUser_id());
+        blogPostViewHolder.setPostblogger(model.getUsername());
     }
 
     @NonNull
@@ -90,11 +90,11 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
             postImage = itemView.findViewById(R.id.cardview_post_image);
             postTitle = itemView.findViewById(R.id.cardview_post_title);
             postDetails = itemView.findViewById(R.id.cardview_post_details);
-            postblogger = itemView.findViewById(R.id.cardview_post_user);
+            postblogger = itemView.findViewById(R.id.cardview_post_username);
         }
 
         public void setPostImage(String imageUrl, Context context) {
-            if (!imageUrl.isEmpty()) {
+            if (imageUrl != null && !imageUrl.isEmpty()) {
                 Picasso.with(context).load(imageUrl).into(postImage);
             }
         }
@@ -108,7 +108,6 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
         }
 
         public void setPostblogger(String blogger) {
-            //TODO: use username not iser_id
             postblogger.setText(blogger);
         }
     }

@@ -99,7 +99,7 @@ public class AddBlogPostActivity extends AppCompatActivity {
                         downloadURL.addOnCompleteListener(task1 ->
                                 task1.addOnSuccessListener(uri -> {
                                     //update blog post with image url
-                                    blogPost.setImage(uri.toString().trim());
+                                    blogPost.setImageUrl(uri.toString().trim());
 
                                     FirebaseUtils.getInstance().saveBlogPostToDatabase(blogPost);
                                 }).addOnCompleteListener(task2 -> {
