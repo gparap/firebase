@@ -10,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
+import gparap.apps.blog.model.BlogUserModel;
 import gparap.apps.blog.utils.FirebaseUtils;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText username, email, password, passwordConfirm;
     private Button buttonRegister;
+    private BlogUserModel user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         getWidgets();
         buttonRegister.setOnClickListener(v -> {
+            user = createUser();
             if (validateUserInput()) {
                 registerUser();
             }
@@ -29,10 +32,19 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
-        FirebaseUtils.getInstance().createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+        FirebaseUtils.getInstance().createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(RegisterActivity.this, getString(R.string.toast_welcome) + username.getText().toString(), Toast.LENGTH_SHORT).show();
+                        //update userId after user successful registration
+                        if (task.getResult() != null && task.getResult().getUser() != null) {
+                            user.setUserId(task.getResult().getUser().getUid());
+                        }
+
+                        //save user to database
+                        FirebaseUtils.getInstance().saveBlogUserToDatabase(user);
+                        Toast.makeText(RegisterActivity.this, getString(R.string.toast_welcome) + user.getUsername(), Toast.LENGTH_SHORT).show();
+
+                        //redirect to blog
                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         finish();
                     } else {
@@ -47,13 +59,13 @@ public class RegisterActivity extends AppCompatActivity {
         //TODO: check if user exists in firebase
 
         //check if user input is empty
-        if (username.getText().toString().isEmpty()) {
+        if (user.getUsername().isEmpty()) {
             Toast.makeText(this, getString(R.string.toast_empty_username), Toast.LENGTH_SHORT).show();
             return false;
-        } else if (email.getText().toString().isEmpty()) {
+        } else if (user.getEmail().isEmpty()) {
             Toast.makeText(this, getString(R.string.toast_empty_email), Toast.LENGTH_SHORT).show();
             return false;
-        } else if (password.getText().toString().isEmpty()) {
+        } else if (user.getPassword().isEmpty()) {
             Toast.makeText(this, getString(R.string.toast_empty_password), Toast.LENGTH_SHORT).show();
             return false;
         } else if (passwordConfirm.getText().toString().isEmpty()) {
@@ -61,12 +73,20 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         //check password confirmation
-        if (!password.getText().toString().isEmpty() && !passwordConfirm.getText().toString().isEmpty()
-                && !passwordConfirm.getText().toString().equals(password.getText().toString())) {
+        if (!user.getPassword().isEmpty() && !passwordConfirm.getText().toString().isEmpty()
+                && !passwordConfirm.getText().toString().equals(user.getPassword())) {
             Toast.makeText(this, getString(R.string.toast_failed_password_confirm), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
+    }
+
+    private BlogUserModel createUser() {
+        return new BlogUserModel(
+                username.getText().toString().trim(),
+                email.getText().toString().trim(),
+                password.getText().toString().trim()
+        );
     }
 
     private void getWidgets() {

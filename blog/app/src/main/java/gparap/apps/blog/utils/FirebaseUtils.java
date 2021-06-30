@@ -33,6 +33,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import gparap.apps.blog.model.BlogPostModel;
+import gparap.apps.blog.model.BlogUserModel;
 
 /**
  * Utilities for Firebase authentication, storage and database operations.
@@ -73,6 +74,24 @@ public class FirebaseUtils {
 
     public com.google.android.gms.tasks.Task<AuthResult> createUserWithEmailAndPassword(String email, String password) {
         return FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
+    }
+
+    public void saveBlogUserToDatabase(BlogUserModel model) {
+        //get the FirebaseDatabase instance for the specified URL
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(databaseURL);
+
+        //get the DatabaseReference for the database root node
+        DatabaseReference postsRef = firebaseDatabase.getReference().child("users");
+
+        //get the DatabaseReference for an auto-generated node
+        DatabaseReference postRef = postsRef.push();
+
+        //write data to the database
+        postRef.child("username").setValue(model.getUsername());
+        postRef.child("email").setValue(model.getEmail());
+        postRef.child("password").setValue(model.getPassword());
+        postRef.child("imageUrl").setValue(model.getImageUrl());
+        postRef.child("userId").setValue(model.getUserId());
     }
 
     public void saveBlogPostToDatabase(BlogPostModel model) {
