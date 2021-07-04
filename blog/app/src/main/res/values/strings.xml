@@ -11,14 +11,20 @@
     <string name="button_register">Register</string>
     <string name="button_guest">Continue as guest</string>
     <string name="button_save">Save</string>
+    <string name="button_update">Update</string>
 
     <!--menu items-->
     <string name="add_post">Add Post</string>
     <string name="log_out">Log Out</string>
+    <string name="user_settings">Settings</string>
 
     <!--content descriptions-->
     <string name="description_image_logo">Image logo</string>
     <string name="description_blog_post_image">Blog post image</string>
+    <string name="description_user_image">User Account Image</string>
+    <string name="description_change_username">Change username</string>
+    <string name="description_change_email">Change e-mail</string>
+    <string name="description_change_password">Change password</string>
 
     <!--input hints-->
     <string name="hint_username">username</string>
@@ -27,6 +33,10 @@
     <string name="hint_confirm_password">confirm password</string>
     <string name="hint_enter_title_here">enter title here</string>
     <string name="hint_enter_details_here">enter details here</string>
+    <string name="hint_new_username">choose new username</string>
+    <string name="hint_new_email">choose new e-mail address</string>
+    <string name="hint_new_password">choose new password</string>
+    <string name="hint_new_confirm_password">confirm new password</string>
 
     <!--toast messages-->
     <string name="toast_empty_username">Username cannot be empty.</string>

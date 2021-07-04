@@ -32,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import gparap.apps.blog.adapter.BlogPostAdapter;
 import gparap.apps.blog.auth.LoginActivity;
 import gparap.apps.blog.ui.post.AddBlogPostActivity;
+import gparap.apps.blog.ui.settings.UserSettingsActivity;
 import gparap.apps.blog.utils.FirebaseUtils;
 
 @SuppressWarnings({"Convert2Lambda", "FieldCanBeLocal"})
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_add_post:
                 startActivity(new Intent(MainActivity.this, AddBlogPostActivity.class));
+                break;
+            case R.id.menu_item_user_settings:
+                startActivity(new Intent(MainActivity.this, UserSettingsActivity.class));
                 break;
             case R.id.menu_item_log_out:
                 signOutUserAndReturnToLoginActivity();

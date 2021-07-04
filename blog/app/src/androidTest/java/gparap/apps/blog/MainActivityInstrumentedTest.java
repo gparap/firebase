@@ -50,6 +50,22 @@ public class MainActivityInstrumentedTest {
     }
 
     @Test
+    public void gotoAddNewPostActivityFromMainMenu() {
+        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText(R.string.add_post)).perform(click());
+
+        onView(withId(R.id.layout_activity_add_blog_post)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void gotoUserSettingsActivityFromMainMenu() {
+        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText(R.string.user_settings)).perform(click());
+
+        onView(withId(R.id.layout_activity_user_settings)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void signOutUserFromMainMenu() throws InterruptedException {
         //get current user from firebase
         // if it is null, sign-in as an anonymous user

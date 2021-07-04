@@ -22,6 +22,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import gparap.apps.blog.auth.LoginActivityInstrumentedTest;
 import gparap.apps.blog.auth.RegisterActivityInstrumentedTest;
 import gparap.apps.blog.ui.SplashActivityInstrumentedTest;
+import gparap.apps.blog.ui.settings.UserSettingsActivityInstrumentedTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -29,6 +30,7 @@ import gparap.apps.blog.ui.SplashActivityInstrumentedTest;
         MainActivityInstrumentedTest.class,
         RegisterActivityInstrumentedTest.class,
         LoginActivityInstrumentedTest.class,
+        UserSettingsActivityInstrumentedTest.class
 })
 public class AppTestSuite {
 }

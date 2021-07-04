@@ -8,6 +8,10 @@
         android:title="@string/add_post" />
     <item
         app:showAsAction="never"
+        android:id="@+id/menu_item_user_settings"
+        android:title="@string/user_settings" />
+    <item
+        app:showAsAction="never"
         android:id="@+id/menu_item_log_out"
         android:title="@string/log_out" />
 </menu>

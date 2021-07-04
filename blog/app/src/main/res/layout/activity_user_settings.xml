@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_user_settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.UserSettingsActivity">
+
+    <!--User image-->
+    <ImageButton
+        android:id="@+id/imageButtonUserSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/image_button_layout_marginTop"
+        android:contentDescription="@string/description_user_image"
+        android:minWidth="@dimen/image_button_min_width"
+        android:minHeight="@dimen/image_button_min_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/portrait_black_48" />
+
+    <!-- Username -->
+    <EditText
+        android:id="@+id/editTextUserSettingsUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/edit_text_layout_marginStart"
+        android:layout_marginTop="@dimen/edit_text_layout_marginTop"
+        android:autofillHints="false"
+        android:ems="10"
+        android:hint="@string/hint_new_username"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonUserSettingsChangeUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonUserSettings" />
+
+    <!-- Change username -->
+    <ImageButton
+        android:id="@+id/imageButtonUserSettingsChangeUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/image_button_layout_marginEnd"
+        android:contentDescription="@string/description_change_username"
+        android:src="@drawable/ic_baseline_edit_black_24"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextUserSettingsUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextUserSettingsUsername" />
+
+    <!-- Email -->
+    <EditText
+        android:id="@+id/editTextUserSettingsEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/edit_text_layout_marginStart"
+        android:autofillHints="false"
+        android:hint="@string/hint_new_email"
+        android:inputType="textEmailAddress"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonUserSettingsChangeEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsUsername" />
+
+    <!-- Change email -->
+    <ImageButton
+        android:id="@+id/imageButtonUserSettingsChangeEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/image_button_layout_marginEnd"
+        android:contentDescription="@string/description_change_email"
+        android:src="@drawable/ic_baseline_edit_black_24"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextUserSettingsEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextUserSettingsEmail"
+        app:layout_constraintTop_toTopOf="@+id/editTextUserSettingsEmail" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/editTextUserSettingsPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/edit_text_layout_marginStart"
+        android:autofillHints="false"
+        android:hint="@string/hint_new_password"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonUserSettingsChangePassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsEmail" />
+
+    <!-- Change password -->
+    <ImageButton
+        android:id="@+id/imageButtonUserSettingsChangePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/image_button_layout_marginEnd"
+        android:contentDescription="@string/description_change_username"
+        android:src="@drawable/ic_baseline_edit_black_24"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextUserSettingsPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextUserSettingsPassword" />
+
+    <!-- Password confirmation -->
+    <EditText
+        android:id="@+id/editTextUserSettingsPasswordConfirm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/edit_text_layout_marginStart"
+        android:autofillHints="false"
+        android:hint="@string/hint_confirm_password"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="@+id/editTextUserSettingsPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsPassword" />
+
+    <!-- Update user settings button -->
+    <Button
+        android:id="@+id/buttonUserSettingsUpdate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:text="@string/button_update"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonUserSettingsChangePassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextUserSettingsPasswordConfirm"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsPasswordConfirm" />
+
+    <!-- Update user settings progress -->
+    <ProgressBar
+        android:id="@+id/progressBarUserSettings"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonUserSettingsUpdate"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
