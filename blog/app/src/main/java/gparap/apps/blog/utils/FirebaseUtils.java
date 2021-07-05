@@ -64,6 +64,11 @@ public class FirebaseUtils {
     private FirebaseUtils() {
     }
 
+    /**
+     * Returns the currently signed-in FirebaseUser.
+     *
+     * @return FirebaseUser
+     */
     public FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -176,7 +181,7 @@ public class FirebaseUtils {
      *
      * @return query
      */
-    private Query getUsernameQuery(@SuppressWarnings("unused") String userId) {
+    public Query getUsernameQuery(@SuppressWarnings("unused") String userId) {
         return FirebaseDatabase.getInstance(databaseURL).getReference("users");
     }
 

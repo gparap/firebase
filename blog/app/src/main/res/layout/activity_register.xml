@@ -70,7 +70,7 @@
 
     <!-- Password confirmation -->
     <EditText
-        android:id="@+id/editTextPasswordConfirm"
+        android:id="@+id/editTextRegisterPasswordConfirm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/edit_text_layout_marginStart"
@@ -92,9 +92,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:text="@string/button_register"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPasswordConfirm"
-        app:layout_constraintStart_toStartOf="@+id/editTextPasswordConfirm"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordConfirm" />
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterPasswordConfirm"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterPasswordConfirm"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterPasswordConfirm" />
 
     <!-- Registration progress -->
     <ProgressBar

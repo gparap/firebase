@@ -37,7 +37,7 @@ public class UserSettingsActivityInstrumentedTest {
 
     @Test
     public void isVisible_imageButtonUserSettings() {
-        onView(withId(R.id.imageButtonUserSettings)).check(matches(isDisplayed()));
+        onView(withId(R.id.imageButtonUserSettingsUserImage)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -71,8 +71,8 @@ public class UserSettingsActivityInstrumentedTest {
     }
 
     @Test
-    public void isVisible_editTextUserSettingsPasswordConfirm() {
-        onView(withId(R.id.editTextUserSettingsPasswordConfirm)).check(matches(isDisplayed()));
+    public void isNotVisible_editTextUserSettingsPasswordConfirm() {
+        onView(withId(R.id.editTextUserSettingsPasswordConfirm)).check(matches(not(isDisplayed())));
     }
 
     @Test

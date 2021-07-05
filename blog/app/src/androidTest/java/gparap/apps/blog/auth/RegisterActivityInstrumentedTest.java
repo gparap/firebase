@@ -73,7 +73,7 @@ public class RegisterActivityInstrumentedTest {
 
     @Test
     public void isVisible_editTextPasswordConfirmation() {
-        onView(withId(R.id.editTextPasswordConfirm)).check(matches(isDisplayed()));
+        onView(withId(R.id.editTextRegisterPasswordConfirm)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -127,7 +127,7 @@ public class RegisterActivityInstrumentedTest {
         typeNewText(R.id.editTextRegisterEmail, "email");
         typeNewText(R.id.editTextRegisterPassword, "password");
 
-        clearPreviousText(R.id.editTextPasswordConfirm);
+        clearPreviousText(R.id.editTextRegisterPasswordConfirm);
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withText(R.string.toast_empty_password_confirm))
                 .inRoot(withDecorView(not(is(rootView))))
@@ -141,7 +141,7 @@ public class RegisterActivityInstrumentedTest {
         typeNewText(R.id.editTextRegisterEmail, "email");
 
         clearPreviousTextAndTypeNewText(R.id.editTextRegisterPassword, "password");
-        clearPreviousTextAndTypeNewText(R.id.editTextPasswordConfirm, "do no match");
+        clearPreviousTextAndTypeNewText(R.id.editTextRegisterPasswordConfirm, "do no match");
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withText(R.string.toast_failed_password_confirm))
                 .inRoot(withDecorView(not(is(rootView))))
@@ -154,7 +154,7 @@ public class RegisterActivityInstrumentedTest {
         typeNewText(R.id.editTextRegisterUsername, "username");
         typeNewText(R.id.editTextRegisterEmail, "username@email.com");
         typeNewText(R.id.editTextRegisterPassword, "123456");
-        typeNewText(R.id.editTextPasswordConfirm, "123456");
+        typeNewText(R.id.editTextRegisterPasswordConfirm, "123456");
 
         //register user and wait for firebase
         onView(withId(R.id.buttonRegister)).perform(click());
@@ -179,7 +179,7 @@ public class RegisterActivityInstrumentedTest {
         typeNewText(R.id.editTextRegisterUsername, "username");
         typeNewText(R.id.editTextRegisterEmail, existingUser);
         typeNewText(R.id.editTextRegisterPassword, "123456");
-        typeNewText(R.id.editTextPasswordConfirm, "123456");
+        typeNewText(R.id.editTextRegisterPasswordConfirm, "123456");
 
         //register user and wait for firebase
         onView(withId(R.id.buttonRegister)).perform(click());

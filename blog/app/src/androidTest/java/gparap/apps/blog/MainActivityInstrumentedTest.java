@@ -17,6 +17,7 @@ package gparap.apps.blog;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,15 +26,17 @@ import com.google.firebase.auth.FirebaseUser;
 import org.junit.Before;
 import org.junit.Test;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class MainActivityInstrumentedTest {
-
     @Before
     public void setUp() {
         ActivityScenario.launch(MainActivity.class);
@@ -80,5 +83,37 @@ public class MainActivityInstrumentedTest {
         Thread.sleep(1667);
 
         onView(withId(R.id.layout_login_activity)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @LargeTest
+    public void clickMainMenuSettings_displayAuthenticatedUserSettings() throws InterruptedException {
+        //!!! before the test we should make sure that a test-user must exist in Firebase,
+        //!!!   with the following settings:
+        String username = "test_user_0";
+        String email = "test_user_0@mail.com";
+        String password = "123456";
+
+        //log-out current user and wait for Firebase
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText(R.string.log_out)).perform(click());
+        Thread.sleep(1667);
+
+        //log-in with test-user and wait for Firebase
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText(email));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(password));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonLogin)).perform(click());
+        Thread.sleep(1667);
+
+        //goto menu settings and wait for Firebase
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText(R.string.user_settings)).perform(click());
+        Thread.sleep(1667);
+
+        onView(withId(R.id.editTextUserSettingsUsername)).check(matches(withText(username)));
+        onView(withId(R.id.editTextUserSettingsEmail)).check(matches(withText(email)));
+        onView(withId(R.id.editTextUserSettingsPassword)).check(matches(withText(password)));
     }
 }

@@ -93,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
         username = findViewById(R.id.editTextRegisterUsername);
         email = findViewById(R.id.editTextRegisterEmail);
         password = findViewById(R.id.editTextRegisterPassword);
-        passwordConfirm = findViewById(R.id.editTextPasswordConfirm);
+        passwordConfirm = findViewById(R.id.editTextRegisterPasswordConfirm);
         buttonRegister = findViewById(R.id.buttonRegister);
     }
 }

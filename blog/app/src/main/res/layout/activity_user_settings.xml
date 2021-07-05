@@ -9,7 +9,7 @@
 
     <!--User image-->
     <ImageButton
-        android:id="@+id/imageButtonUserSettings"
+        android:id="@+id/imageButtonUserSettingsUserImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/image_button_layout_marginTop"
@@ -30,13 +30,15 @@
         android:layout_marginStart="@dimen/edit_text_layout_marginStart"
         android:layout_marginTop="@dimen/edit_text_layout_marginTop"
         android:autofillHints="false"
+        android:editable="false"
         android:ems="10"
         android:hint="@string/hint_new_username"
-        android:inputType="textPersonName"
+        android:inputType="none"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toStartOf="@+id/imageButtonUserSettingsChangeUsername"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonUserSettings" />
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonUserSettingsUserImage"
+        tools:ignore="Deprecated" />
 
     <!-- Change username -->
     <ImageButton
@@ -57,12 +59,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/edit_text_layout_marginStart"
         android:autofillHints="false"
+        android:editable="false"
         android:hint="@string/hint_new_email"
-        android:inputType="textEmailAddress"
+        android:inputType="none"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toStartOf="@+id/imageButtonUserSettingsChangeEmail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsUsername"
+        tools:ignore="Deprecated,TextFields" />
 
     <!-- Change email -->
     <ImageButton
@@ -84,12 +88,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/edit_text_layout_marginStart"
         android:autofillHints="false"
+        android:editable="false"
         android:hint="@string/hint_new_password"
-        android:inputType="textPassword"
+        android:inputType="none"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toStartOf="@+id/imageButtonUserSettingsChangePassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsEmail"
+        tools:ignore="Deprecated,TextFields" />
 
     <!-- Change password -->
     <ImageButton
@@ -114,9 +120,11 @@
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/editTextUserSettingsPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsPassword"
+        tools:visibility="visible" />
 
     <!-- Update user settings button -->
     <Button
@@ -126,7 +134,7 @@
         android:layout_gravity="start"
         android:text="@string/button_update"
         app:layout_constraintEnd_toEndOf="@+id/imageButtonUserSettingsChangePassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextUserSettingsPasswordConfirm"
+        app:layout_constraintStart_toStartOf="@+id/editTextUserSettingsPassword"
         app:layout_constraintTop_toBottomOf="@+id/editTextUserSettingsPasswordConfirm" />
 
     <!-- Update user settings progress -->
