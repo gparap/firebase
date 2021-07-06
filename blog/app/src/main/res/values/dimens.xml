@@ -5,8 +5,8 @@
     <dimen name="edit_text_layout_marginStart">24dp</dimen>
     <dimen name="edit_text_layout_marginTop">32dp</dimen>
     <dimen name="edit_text_layout_marginEnd">24dp</dimen>
-    <dimen name="image_button_min_width">144dp</dimen>
-    <dimen name="image_button_min_height">144dp</dimen>
+    <dimen name="image_button_max_width">144dp</dimen>
+    <dimen name="image_button_max_height">144dp</dimen>
     <dimen name="image_button_layout_marginTop">32dp</dimen>
     <dimen name="image_button_layout_marginStart">8dp</dimen>
     <dimen name="image_button_layout_marginEnd">24dp</dimen>

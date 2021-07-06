@@ -51,4 +51,7 @@ dependencies {
 
     //PICASSO
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    //ANDROID IMAGE CROPPER
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 }
