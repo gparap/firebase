@@ -43,13 +43,13 @@ public class AddBlogPostActivity extends AppCompatActivity {
 
         //add an image to post
         buttonAdd.setOnClickListener(v ->
-                addPostImage()
+                addBlogPostImage()
         );
 
         //save post
         buttonSave.setOnClickListener(v -> {
-            if (isPostValidated()) {
-                savePost();
+            if (isBlogPostValidated()) {
+                saveBlogPost();
             }
         });
     }
@@ -66,48 +66,28 @@ public class AddBlogPostActivity extends AppCompatActivity {
     }
 
     /**
-     * Saves a user's blog post to the cloud.
-     * Firstly, it saves the image to cloud storage and
-     * secondly, it saves the post to the database.
+     * Saves an authenticated user's blog post to the cloud.
+     * First, it saves the image to cloud storage and
+     * then, it saves the post to the database.
      */
-    private void savePost() {
+    private void saveBlogPost() {
         FirebaseUser user = FirebaseUtils.getInstance().getUser();
         if (user != null) {
+
+            //create blog post object
+            BlogPostModel blogPost = new BlogPostModel("",
+                    postTitle.getText().toString().trim(),
+                    postDetails.getText().toString().trim(), user.getUid(),
+                    user.getDisplayName()
+            );
+
             //user is authenticated
             if (!user.isAnonymous()) {
                 progressBar.setVisibility(View.VISIBLE);
-
-                //create blog post object
-                BlogPostModel blogPost = new BlogPostModel("",
-                        postTitle.getText().toString().trim(),
-                        postDetails.getText().toString().trim(), user.getUid()
-                );
-
-                //save post without image
                 if (imageUri == null) {
-                    FirebaseUtils.getInstance().saveBlogPostToDatabase(blogPost);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    gotoMainActivity();
-
+                    saveBlogPostWithoutImage(blogPost);
                 } else {
-                    StorageTask<UploadTask.TaskSnapshot> saveImageTask =
-                            FirebaseUtils.getInstance().saveBlogPostImageToCloudStorage(
-                                    AddBlogPostActivity.this, imageUri, user.getUid()
-                            );
-                    saveImageTask.addOnCompleteListener(task -> task.addOnSuccessListener(taskSnapshot -> {
-                        Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl();
-                        downloadURL.addOnCompleteListener(task1 ->
-                                task1.addOnSuccessListener(uri -> {
-                                    //update blog post with image url
-                                    blogPost.setImageUrl(uri.toString().trim());
-
-                                    FirebaseUtils.getInstance().saveBlogPostToDatabase(blogPost);
-                                }).addOnCompleteListener(task2 -> {
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    gotoMainActivity();
-                                })
-                        );
-                    }));
+                    saveBlogPostWithImage(blogPost, user.getUid());
                 }
 
             } else if (user.isAnonymous()) {
@@ -118,8 +98,35 @@ public class AddBlogPostActivity extends AppCompatActivity {
         }
     }
 
+    private void saveBlogPostWithImage(BlogPostModel blogPost, String userId) {
+        StorageTask<UploadTask.TaskSnapshot> saveImageTask =
+                FirebaseUtils.getInstance().saveBlogPostImageToCloudStorage(
+                        AddBlogPostActivity.this, imageUri, userId
+                );
+        saveImageTask.addOnCompleteListener(task -> task.addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl();
+            downloadURL.addOnCompleteListener(task1 ->
+                    task1.addOnSuccessListener(uri -> {
+                        //update blog post with image url
+                        blogPost.setImageUrl(uri.toString().trim());
+
+                        FirebaseUtils.getInstance().saveBlogPostToDatabase(blogPost);
+                    }).addOnCompleteListener(task2 -> {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        gotoMainActivity();
+                    })
+            );
+        }));
+    }
+
+    private void saveBlogPostWithoutImage(BlogPostModel blogPost) {
+        FirebaseUtils.getInstance().saveBlogPostToDatabase(blogPost);
+        progressBar.setVisibility(View.INVISIBLE);
+        gotoMainActivity();
+    }
+
     @SuppressWarnings("deprecation")
-    private void addPostImage() {
+    private void addBlogPostImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, ACTION_GET_CONTENT_RESULT_CODE);
@@ -130,7 +137,7 @@ public class AddBlogPostActivity extends AppCompatActivity {
      *
      * @return boolean
      */
-    private boolean isPostValidated() {
+    private boolean isBlogPostValidated() {
         if (postTitle.getText().toString().isEmpty()) {
             Toast.makeText(this, R.string.toast_empty_post_title, Toast.LENGTH_SHORT).show();
             return false;

@@ -17,28 +17,20 @@ package gparap.apps.blog.utils;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-
-import org.jetbrains.annotations.NotNull;
 
 import gparap.apps.blog.model.BlogPostModel;
 import gparap.apps.blog.model.BlogUserModel;
@@ -64,11 +56,6 @@ public class FirebaseUtils {
     private FirebaseUtils() {
     }
 
-    /**
-     * Returns the currently signed-in FirebaseUser.
-     *
-     * @return FirebaseUser
-     */
     public FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -108,43 +95,18 @@ public class FirebaseUtils {
     }
 
     public void saveBlogPostToDatabase(BlogPostModel model) {
-        getUsernameQuery(model.getUserId()).addValueEventListener(new ValueEventListener() {
-            @SuppressWarnings("ConstantConditions")
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                //get all users from the database and find the user who is posting
-                for (DataSnapshot task : snapshot.getChildren()) {
-                    if (task.child("userId").getValue().equals(model.getUserId())) {
-                        //update blog post object with username
-                        model.setUsername(task.child("username").getValue().toString());
+        //get the FirebaseDatabase instance for the specified URL
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(databaseURL);
 
-                        //get the FirebaseDatabase instance for the specified URL
-                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(databaseURL);
+        //get the DatabaseReference for the database root node
+        DatabaseReference blogRef = firebaseDatabase.getReference().push();
 
-                        //get the DatabaseReference for the database root node
-                        DatabaseReference postsRef = firebaseDatabase.getReference().child("posts");
-
-                        //get the DatabaseReference for an auto-generated node
-                        DatabaseReference postRef = postsRef.push();
-
-                        //write data to the database
-                        postRef.child("title").setValue(model.getTitle());
-                        postRef.child("details").setValue(model.getDetails());
-                        postRef.child("image").setValue(model.getImageUrl());
-                        postRef.child("userId").setValue(model.getUserId());
-                        postRef.child("username").setValue(model.getUsername());
-
-                        //user who is posting is found
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                Log.e("DatabaseError", error.getDetails());
-            }
-        });
+        //write data to the database
+        blogRef.child("title").setValue(model.getTitle());
+        blogRef.child("details").setValue(model.getDetails());
+        blogRef.child("image").setValue(model.getImageUrl());
+        blogRef.child("userId").setValue(model.getUserId());
+        blogRef.child("username").setValue(model.getUsername());
     }
 
     public StorageTask<UploadTask.TaskSnapshot> saveBlogPostImageToCloudStorage(

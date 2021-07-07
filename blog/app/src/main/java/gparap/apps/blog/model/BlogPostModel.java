@@ -66,11 +66,11 @@ public class BlogPostModel {
     public BlogPostModel() {
     }
 
-    public BlogPostModel(String imageUrl, String title, String details, String userId) {
+    public BlogPostModel(String imageUrl, String title, String details, String userId, String username) {
         this.imageUrl = imageUrl;
         this.title = title;
         this.details = details;
         this.userId = userId;
-        this.username = ""; //set after searching for user before posting
+        this.username = username;
     }
 }
