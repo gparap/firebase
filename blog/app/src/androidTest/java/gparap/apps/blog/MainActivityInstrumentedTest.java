@@ -114,6 +114,5 @@ public class MainActivityInstrumentedTest {
 
         onView(withId(R.id.editTextUserSettingsUsername)).check(matches(withText(username)));
         onView(withId(R.id.editTextUserSettingsEmail)).check(matches(withText(email)));
-        onView(withId(R.id.editTextUserSettingsPassword)).check(matches(withText(password)));
     }
 }

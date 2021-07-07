@@ -3,23 +3,17 @@ package gparap.apps.blog.ui.settings;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseUser;
 import com.theartofdev.edmodo.cropper.CropImage;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -44,35 +38,19 @@ public class UserSettingsActivity extends AppCompatActivity {
         getWidgets();
         setListenersToMakeInputWidgetsEditable();
 
+        //display authenticated user's profile from database
+        FirebaseUser firebaseUser = FirebaseUtils.getInstance().getUser();
+        if (firebaseUser != null) {
+            createBlogUser(firebaseUser);
+            displayUserProfile();
+        }
+
         //pick an image from user device gallery
         buttonSetUserImage.setOnClickListener(v -> {
             Intent intentGetContent = new Intent();
             intentGetContent.setType("image/*");
             intentGetContent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intentGetContent, ACTION_GET_CONTENT_RESULT_CODE);
-        });
-
-        //get user from database
-        String userId = FirebaseUtils.getInstance().getUser().getUid();
-        FirebaseUtils.getInstance().getUsernameQuery(userId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                //get current based on their id
-                for (DataSnapshot task : snapshot.getChildren()) {
-                    if (Objects.equals(task.child("userId").getValue(), userId)) {
-                        createBlogUser(task);
-                        displayUserSettings();
-
-                        //user is found
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-                Log.e("DatabaseError", error.getDetails());
-            }
         });
     }
 
@@ -104,18 +82,16 @@ public class UserSettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void displayUserSettings() {
+    private void displayUserProfile() {
         username.setText(user.getUsername());
         email.setText(user.getEmail());
-        password.setText(user.getPassword());
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private void createBlogUser(DataSnapshot task) {
+    private void createBlogUser(FirebaseUser firebaseUser) {
         user = new BlogUserModel(
-                task.child("username").getValue().toString(),
-                task.child("email").getValue().toString(),
-                task.child("password").getValue().toString()
+                firebaseUser.getDisplayName(),
+                firebaseUser.getEmail(),
+                ""
         );
     }
 

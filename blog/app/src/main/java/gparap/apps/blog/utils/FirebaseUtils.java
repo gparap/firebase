@@ -35,6 +35,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Objects;
 
 import gparap.apps.blog.model.BlogPostModel;
+import gparap.apps.blog.model.BlogUserModel;
 
 /**
  * Utilities for Firebase authentication, storage and database operations.
@@ -135,20 +136,11 @@ public class FirebaseUtils {
     }
 
     /**
-     * Returns a Firebase query for a username based on userId.
-     *
-     * @return query
-     */
-    public Query getUsernameQuery(@SuppressWarnings("unused") String userId) {
-        return FirebaseDatabase.getInstance(databaseURL).getReference("users");
-    }
-
-    /**
      * Returns a Firebase query for blog posts.
      *
      * @return query
      */
     private Query getBlogPostsQuery() {
-        return FirebaseDatabase.getInstance(databaseURL).getReference().child("posts");
+        return FirebaseDatabase.getInstance(databaseURL).getReference().getRoot();
     }
 }
