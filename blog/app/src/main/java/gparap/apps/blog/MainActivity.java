@@ -79,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FirebaseUtils.getInstance().deleteAnonymousUser();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
@@ -101,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signOutUserAndReturnToLoginActivity() {
+        FirebaseUtils.getInstance().deleteAnonymousUser();
         FirebaseUtils.getInstance().signOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();

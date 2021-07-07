@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+
 import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
 import gparap.apps.blog.model.BlogUserModel;
@@ -40,11 +42,9 @@ public class RegisterActivity extends AppCompatActivity {
                             user.setUserId(task.getResult().getUser().getUid());
                         }
 
-                        //save user to database
-                        FirebaseUtils.getInstance().saveBlogUserToDatabase(user);
-                        Toast.makeText(RegisterActivity.this, getString(R.string.toast_welcome) + user.getUsername(), Toast.LENGTH_SHORT).show();
-
-                        //redirect to blog
+                        //greet user and redirect to blog
+                        Toast.makeText(RegisterActivity.this, getString(R.string.toast_welcome)
+                                + Objects.requireNonNull(task.getResult().getUser()).getDisplayName(), Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         finish();
                     } else {
