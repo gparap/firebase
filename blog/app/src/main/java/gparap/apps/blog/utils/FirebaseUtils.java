@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -35,7 +36,6 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Objects;
 
 import gparap.apps.blog.model.BlogPostModel;
-import gparap.apps.blog.model.BlogUserModel;
 
 /**
  * Utilities for Firebase authentication, storage and database operations.
@@ -89,6 +89,13 @@ public class FirebaseUtils {
         if (user != null && user.isAnonymous()) {
             Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).delete();
         }
+    }
+
+    public UserProfileChangeRequest updateUserProfile(String displayName, Uri photoUri) {
+        return new UserProfileChangeRequest.Builder()
+                .setDisplayName(displayName)
+                .setPhotoUri(photoUri)
+                .build();
     }
 
     public void saveBlogPostToDatabase(BlogPostModel model) {

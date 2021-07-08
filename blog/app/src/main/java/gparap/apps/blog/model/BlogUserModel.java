@@ -15,11 +15,15 @@
  */
 package gparap.apps.blog.model;
 
+import android.net.Uri;
+
 /**
  * Model class for a blog user.
  */
+@SuppressWarnings("unused")
 public class BlogUserModel {
-    private String username, email, password, imageUrl, userId;
+    private String username, email, password, userId;
+    private Uri imageUrl;
 
     public String getUsername() {
         return username;
@@ -45,11 +49,11 @@ public class BlogUserModel {
         this.password = password;
     }
 
-    public String getImageUrl() {
+    public Uri getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(Uri imageUrl) {
         this.imageUrl = imageUrl;
     }
 
@@ -69,7 +73,7 @@ public class BlogUserModel {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.imageUrl = ""; //set in settings
-        this.userId = "";   //set after user successful registration
+        this.imageUrl = null;   //set in settings
+        this.userId = "";       //set after user successful registration
     }
 }

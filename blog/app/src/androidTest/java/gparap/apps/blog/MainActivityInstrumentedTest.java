@@ -94,6 +94,56 @@ public class MainActivityInstrumentedTest {
         String email = "test_user_0@mail.com";
         String password = "123456";
 
+        logoutAndLoginWithTestUser(email, password);
+        openMainMenuSettings();
+
+        onView(withId(R.id.editTextUserSettingsUsername)).check(matches(withText(username)));
+        onView(withId(R.id.editTextUserSettingsEmail)).check(matches(withText(email)));
+    }
+
+    @Test
+    @LargeTest
+    public void clickMainMenuSettings_changeAuthenticatedUserSettings() throws InterruptedException {
+        //!!! before the test we should make sure that a test-user must exist in Firebase,
+        //!!!   with the following settings:
+        String username = "test_user_0";
+        String email = "test_user_0@mail.com";
+        String password = "123456";
+
+        //changed user settings
+        String usernameChanged = "test_user_changed";
+        String emailChanged = "test_user_changed@mail.com";
+
+        logoutAndLoginWithTestUser(email, password);
+        openMainMenuSettings();
+
+        //change user settings (username, email) and wait for Firebase
+        onView(withId(R.id.imageButtonUserSettingsChangeUsername)).perform(click());
+        onView(withId(R.id.editTextUserSettingsUsername)).perform(typeText(usernameChanged));
+        closeSoftKeyboard();
+        onView(withId(R.id.imageButtonUserSettingsChangeEmail)).perform(click());
+        onView(withId(R.id.editTextUserSettingsEmail)).perform(typeText(emailChanged));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonUserSettingsUpdate)).perform(click());
+        Thread.sleep(1667);
+
+        openMainMenuSettings();
+
+        onView(withId(R.id.editTextUserSettingsUsername)).check(matches(withText(usernameChanged)));
+        onView(withId(R.id.editTextUserSettingsEmail)).check(matches(withText(emailChanged)));
+
+        //restore test user
+        onView(withId(R.id.imageButtonUserSettingsChangeUsername)).perform(click());
+        onView(withId(R.id.editTextUserSettingsUsername)).perform(typeText(username));
+        closeSoftKeyboard();
+        onView(withId(R.id.imageButtonUserSettingsChangeEmail)).perform(click());
+        onView(withId(R.id.editTextUserSettingsEmail)).perform(typeText(email));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonUserSettingsUpdate)).perform(click());
+        Thread.sleep(1667);
+    }
+
+    private void logoutAndLoginWithTestUser(String email, String password) throws InterruptedException {
         //log-out current user and wait for Firebase
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText(R.string.log_out)).perform(click());
@@ -106,13 +156,14 @@ public class MainActivityInstrumentedTest {
         closeSoftKeyboard();
         onView(withId(R.id.buttonLogin)).perform(click());
         Thread.sleep(1667);
+    }
 
+    private void openMainMenuSettings() throws InterruptedException {
         //goto menu settings and wait for Firebase
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText(R.string.user_settings)).perform(click());
         Thread.sleep(1667);
-
-        onView(withId(R.id.editTextUserSettingsUsername)).check(matches(withText(username)));
-        onView(withId(R.id.editTextUserSettingsEmail)).check(matches(withText(email)));
     }
+
+
 }

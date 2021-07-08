@@ -8,7 +8,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Objects;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
@@ -40,18 +41,23 @@ public class RegisterActivity extends AppCompatActivity {
                         //update userId after user successful registration
                         if (task.getResult() != null && task.getResult().getUser() != null) {
                             user.setUserId(task.getResult().getUser().getUid());
+
+                            //update user profile
+                            UserProfileChangeRequest userProfile = FirebaseUtils.getInstance()
+                                    .updateUserProfile(username.getText().toString().trim(), null);
+                            FirebaseUser firebaseUser = FirebaseUtils.getInstance().getUser();
+                            firebaseUser.updateProfile(userProfile);
                         }
 
                         //greet user and redirect to blog
                         Toast.makeText(RegisterActivity.this, getString(R.string.toast_welcome)
-                                + Objects.requireNonNull(task.getResult().getUser()).getDisplayName(), Toast.LENGTH_SHORT).show();
+                                + username.getText().toString(), Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                         finish();
                     } else {
                         Toast.makeText(RegisterActivity.this, getString(R.string.toast_registration_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
     private boolean validateUserInput() {

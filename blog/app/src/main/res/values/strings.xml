@@ -52,4 +52,5 @@
     <string name="toast_empty_post_title">Please, enter post title.</string>
     <string name="toast_empty_post_details">Please, enter post details.</string>
     <string name="toast_user_must_authenticate">Please, login and/or register to post.</string>
+    <string name="toast_user_settings_updated">User setting updated..</string>
 </resources>
