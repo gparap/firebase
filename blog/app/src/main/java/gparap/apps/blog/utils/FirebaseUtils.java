@@ -58,6 +58,10 @@ public class FirebaseUtils {
     private FirebaseUtils() {
     }
 
+    public FirebaseAuth getAuth() {
+        return FirebaseAuth.getInstance();
+    }
+
     public FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }

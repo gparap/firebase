@@ -7,7 +7,7 @@
 
     <!--buttons-->
     <string name="fab_add_post">Add Blog Post</string>
-    <string name="button_login">Login</string>
+    <string name="button_login">Sign In</string>
     <string name="button_register">Register</string>
     <string name="button_guest">Continue as guest</string>
     <string name="button_save">Save</string>

@@ -65,6 +65,11 @@ public class LoginActivityInstrumentedTest {
     }
 
     @Test
+    public void isVisible_buttonLoginWithGoogle() {
+        onView(withId(R.id.buttonLoginWithGoogle)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void isVisible_buttonLogin() {
         onView(withId(R.id.buttonLogin)).check(matches(isDisplayed()));
     }

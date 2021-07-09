@@ -50,17 +50,26 @@
         app:layout_constraintStart_toStartOf="@+id/editTextLoginEmail"
         app:layout_constraintTop_toBottomOf="@+id/editTextLoginEmail" />
 
+    <!-- Login with google button -->
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/buttonLoginWithGoogle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/editTextLoginEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextLoginEmail"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLoginPassword" />
+
     <!-- Login button -->
     <Button
         android:id="@+id/buttonLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/layout_marginTop"
         android:text="@string/button_login"
         app:layout_constraintEnd_toEndOf="@+id/editTextLoginEmail"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLoginEmail"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLoginPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginWithGoogle" />
 
     <!-- Register button -->
     <Button
@@ -69,6 +78,7 @@
         android:layout_height="wrap_content"
         android:text="@string/button_register"
         app:layout_constraintEnd_toEndOf="@+id/editTextLoginEmail"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLoginEmail"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
 
@@ -88,12 +98,12 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/layout_marginTop"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonGuest"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
