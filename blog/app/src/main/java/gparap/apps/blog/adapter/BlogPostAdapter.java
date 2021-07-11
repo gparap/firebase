@@ -61,7 +61,6 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
     protected void onBindViewHolder(@NonNull @NotNull BlogPostAdapter.BlogPostViewHolder blogPostViewHolder, int i, @NonNull @NotNull BlogPostModel model) {
         blogPostViewHolder.setPostImage(model.getImageUrl(), context);
         blogPostViewHolder.setPostTitle(model.getTitle());
-        blogPostViewHolder.setPostDetails(model.getDetails());
         blogPostViewHolder.setPostblogger(model.getUsername());
     }
 
@@ -80,7 +79,6 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
     public static class BlogPostViewHolder extends RecyclerView.ViewHolder {
         private final ImageView postImage;
         private final TextView postTitle;
-        private final TextView postDetails;
         private final TextView postblogger;
 
         public BlogPostViewHolder(@NonNull @NotNull View itemView) {
@@ -89,7 +87,6 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
             //get item views
             postImage = itemView.findViewById(R.id.cardview_post_image);
             postTitle = itemView.findViewById(R.id.cardview_post_title);
-            postDetails = itemView.findViewById(R.id.cardview_post_details);
             postblogger = itemView.findViewById(R.id.cardview_post_username);
         }
 
@@ -101,10 +98,6 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
 
         public void setPostTitle(String title) {
             postTitle.setText(title);
-        }
-
-        public void setPostDetails(String details) {
-            postDetails.setText(details);
         }
 
         public void setPostblogger(String blogger) {

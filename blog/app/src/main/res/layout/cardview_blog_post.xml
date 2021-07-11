@@ -14,11 +14,9 @@
         <!--Blog post image-->
         <ImageView
             android:id="@+id/cardview_post_image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/image_cardview_width"
+            android:layout_height="@dimen/image_cardview_height"
             android:contentDescription="@string/description_blog_post_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
@@ -26,38 +24,25 @@
         <!--Post's title-->
         <TextView
             android:id="@+id/cardview_post_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/cardview_post_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview_post_image"
+            app:layout_constraintHorizontal_bias="0.386"
+            app:layout_constraintStart_toEndOf="@+id/cardview_post_image"
+            app:layout_constraintTop_toTopOf="@+id/cardview_post_image"
             tools:text="@string/hint_enter_title_here" />
 
         <!--Blogger-->
         <TextView
             android:id="@+id/cardview_post_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardview_post_image"
             app:layout_constraintTop_toBottomOf="@+id/cardview_post_title"
             tools:text="by blogger" />
-
-        <!--Post's details-->
-        <TextView
-            android:id="@+id/cardview_post_details"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview_post_username"
-            tools:text="@string/hint_enter_details_here" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

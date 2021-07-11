@@ -112,7 +112,7 @@ public class FirebaseUtils {
         //write data to the database
         blogRef.child("title").setValue(model.getTitle());
         blogRef.child("details").setValue(model.getDetails());
-        blogRef.child("image").setValue(model.getImageUrl());
+        blogRef.child("imageUrl").setValue(model.getImageUrl());
         blogRef.child("userId").setValue(model.getUserId());
         blogRef.child("username").setValue(model.getUsername());
     }
