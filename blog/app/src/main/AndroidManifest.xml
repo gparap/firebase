@@ -20,7 +20,8 @@
         <activity android:name=".ui.post.AddBlogPostActivity" />
         <activity android:name=".auth.RegisterActivity" />
         <activity android:name=".auth.LoginActivity" />
-        <activity android:name=".ui.SplashActivity">
+        <activity android:name=".ui.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
