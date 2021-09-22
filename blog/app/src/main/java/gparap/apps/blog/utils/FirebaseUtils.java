@@ -107,7 +107,7 @@ public class FirebaseUtils {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(databaseURL);
 
         //get the DatabaseReference for the database root node
-        DatabaseReference blogRef = firebaseDatabase.getReference().push();
+        DatabaseReference blogRef = firebaseDatabase.getReference("posts").push();
 
         //write data to the database
         blogRef.child("title").setValue(model.getTitle());
@@ -152,6 +152,6 @@ public class FirebaseUtils {
      * @return query
      */
     private Query getBlogPostsQuery() {
-        return FirebaseDatabase.getInstance(databaseURL).getReference().getRoot();
+        return FirebaseDatabase.getInstance(databaseURL).getReference("posts");
     }
 }
