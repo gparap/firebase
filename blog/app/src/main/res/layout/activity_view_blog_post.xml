@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.post.ViewBlogPostActivity">
+
+    <!-- Blog post image placeholder -->
+    <ImageView
+        android:id="@+id/imageButtonViewPost"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/login_logo_placeholder"
+        android:gravity="center|top"
+        app:layout_constraintBottom_toTopOf="@+id/editTextViewPostTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/browser_actions_bg_grey" />
+
+    <!-- Blog post title -->
+    <EditText
+        android:id="@+id/editTextViewPostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="false"
+        android:background="@drawable/outline_edit_text"
+        android:gravity="center"
+        android:hint="@string/hint_enter_title_here"
+        android:inputType="text"
+        android:minHeight="@dimen/edit_text_minHeight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Blog Post Title" />
+
+    <!-- Blog post details -->
+    <EditText
+        android:id="@+id/editTextViewPostDetails"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autofillHints="false"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="top|start"
+        android:hint="@string/hint_enter_details_here"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/imageButtonThumbUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextViewPostTitle"
+        tools:text="Blog Post Details" />
+
+    <!--Thumb Up-->
+    <ImageButton
+        android:id="@+id/imageButtonThumbUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_thumb_up"
+        android:minHeight="@dimen/image_button_thumb_minHeight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_thumb_up_black_24" />
+
+    <!--Thumb Down-->
+    <ImageButton
+        android:id="@+id/imageButtonThumbDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_thumb_down"
+        android:minHeight="@dimen/image_button_thumb_minHeight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonThumbUp"
+        app:srcCompat="@drawable/ic_thumb_down_black_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
