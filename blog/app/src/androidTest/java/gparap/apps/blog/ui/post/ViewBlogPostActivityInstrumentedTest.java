@@ -36,17 +36,17 @@ public class ViewBlogPostActivityInstrumentedTest {
 
     @Test
     public void isVisible_imageButtonViewPost() {
-        onView(withId(R.id.imageButtonViewPost)).check(matches(isDisplayed()));
+        onView(withId(R.id.imageViewBlogPost)).check(matches(isDisplayed()));
     }
 
     @Test
     public void isVisible_editTextViewPostTitle() {
-        onView(withId(R.id.editTextViewPostTitle)).check(matches(isDisplayed()));
+        onView(withId(R.id.textViewPostTitle)).check(matches(isDisplayed()));
     }
 
     @Test
     public void isVisible_editTextViewPostDetails() {
-        onView(withId(R.id.editTextViewPostDetails)).check(matches(isDisplayed()));
+        onView(withId(R.id.textViewPostDetails)).check(matches(isDisplayed()));
     }
 
     @Test

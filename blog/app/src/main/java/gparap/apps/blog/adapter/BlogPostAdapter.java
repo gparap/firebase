@@ -16,6 +16,7 @@
 package gparap.apps.blog.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 
 import gparap.apps.blog.R;
 import gparap.apps.blog.model.BlogPostModel;
+import gparap.apps.blog.ui.post.ViewBlogPostActivity;
 
 public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, BlogPostAdapter.BlogPostViewHolder> {
     private Context context;
@@ -62,6 +64,13 @@ public class BlogPostAdapter extends FirebaseRecyclerAdapter<BlogPostModel, Blog
         blogPostViewHolder.setPostImage(model.getImageUrl(), context);
         blogPostViewHolder.setPostTitle(model.getTitle());
         blogPostViewHolder.setPostblogger(model.getUsername());
+
+        //handle click to open blog post
+        blogPostViewHolder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), ViewBlogPostActivity.class);
+            intent.putExtra("blog_post_title", model.getTitle());
+            view.getContext().startActivity(intent);
+        });
     }
 
     @NonNull

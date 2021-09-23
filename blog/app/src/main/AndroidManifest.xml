@@ -17,6 +17,7 @@
         android:theme="@style/Theme.Blog"
         tools:ignore="AllowBackup">
         <activity android:name=".ui.settings.UserSettingsActivity" />
+        <activity android:name=".ui.post.ViewBlogPostActivity" />
         <activity android:name=".ui.post.AddBlogPostActivity" />
         <activity android:name=".auth.RegisterActivity" />
         <activity android:name=".auth.LoginActivity" />

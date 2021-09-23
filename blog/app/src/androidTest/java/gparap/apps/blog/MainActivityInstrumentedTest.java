@@ -15,26 +15,35 @@
  */
 package gparap.apps.blog;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static androidx.test.espresso.Espresso.closeSoftKeyboard;
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class MainActivityInstrumentedTest {
     @Before
@@ -143,6 +152,45 @@ public class MainActivityInstrumentedTest {
         Thread.sleep(1667);
     }
 
+    @Test
+    @LargeTest
+    public void clickRecyclerViewItem_openBlogPost() throws InterruptedException {
+        //make sure there is at least on test blog post
+        logoutAndLoginWithTestUser("test_user_0@mail.com", "123456");
+        onView(withId(R.id.fab_addPost)).perform(click());
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText("test title"));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextAddPostDetails)).perform(typeText("test details"));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        pressBack();
+        Thread.sleep(1667);
+
+        //click test blog post
+        onView(withId(R.id.recyclerViewBlogPosts))
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText("test title")), click()));
+
+        onView(withText("test title")).check(matches(isDisplayed()));
+
+        //remove test blog post from database
+        final String databaseURL = "https://blog-d6918-default-rtdb.europe-west1.firebasedatabase.app/";
+        Query query = FirebaseDatabase.getInstance(databaseURL).getReference("posts")
+                .orderByChild("title").equalTo("test title");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    child.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void logoutAndLoginWithTestUser(String email, String password) throws InterruptedException {
         //log-out current user and wait for Firebase
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
@@ -164,6 +212,4 @@ public class MainActivityInstrumentedTest {
         onView(withText(R.string.user_settings)).perform(click());
         Thread.sleep(1667);
     }
-
-
 }

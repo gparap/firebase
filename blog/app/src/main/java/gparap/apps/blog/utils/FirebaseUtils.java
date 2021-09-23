@@ -147,11 +147,21 @@ public class FirebaseUtils {
     }
 
     /**
-     * Returns a Firebase query for blog posts.
+     * Returns a Firebase query for all blog posts.
      *
      * @return query
      */
     private Query getBlogPostsQuery() {
         return FirebaseDatabase.getInstance(databaseURL).getReference("posts");
+    }
+
+    /**
+     * Returns a Firebase query for a blog post (search by title).
+     *
+     * @return query
+     */
+    public Query getBlogPostQueryByTitle(String title) {
+        return FirebaseDatabase.getInstance(databaseURL).getReference("posts")
+                .orderByChild("title").equalTo(title);
     }
 }

@@ -8,12 +8,12 @@
 
     <!-- Blog post image placeholder -->
     <ImageView
-        android:id="@+id/imageButtonViewPost"
+        android:id="@+id/imageViewBlogPost"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/login_logo_placeholder"
         android:gravity="center|top"
-        app:layout_constraintBottom_toTopOf="@+id/editTextViewPostTitle"
+        app:layout_constraintBottom_toTopOf="@+id/textViewPostTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,15 +21,13 @@
         tools:background="@color/browser_actions_bg_grey" />
 
     <!-- Blog post title -->
-    <EditText
-        android:id="@+id/editTextViewPostTitle"
+    <TextView
+        android:id="@+id/textViewPostTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints="false"
         android:background="@drawable/outline_edit_text"
         android:gravity="center"
-        android:hint="@string/hint_enter_title_here"
-        android:inputType="text"
         android:minHeight="@dimen/edit_text_minHeight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,22 +37,29 @@
         tools:text="Blog Post Title" />
 
     <!-- Blog post details -->
-    <EditText
-        android:id="@+id/editTextViewPostDetails"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:autofillHints="false"
-        android:background="@null"
-        android:ems="10"
-        android:gravity="top|start"
-        android:hint="@string/hint_enter_details_here"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/imageButtonThumbUp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextViewPostTitle"
-        tools:text="Blog Post Details" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewPostTitle">
+
+        <TextView
+            android:id="@+id/textViewPostDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="false"
+            android:background="@null"
+            android:ems="10"
+            android:gravity="top|start"
+            app:layout_constraintBottom_toTopOf="@+id/imageButtonThumbUp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewPostTitle"
+            tools:text="Blog Post Details" />
+    </ScrollView>
 
     <!--Thumb Up-->
     <ImageButton
