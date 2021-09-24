@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +34,9 @@ import gparap.apps.blog.utils.FirebaseUtils;
 
 public class ViewBlogPostActivity extends AppCompatActivity {
     private BlogPostModel blogPost;
+    private String blogPostKey;
+    private ImageView thumbUp;
+    private boolean isThumbUp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +52,39 @@ public class ViewBlogPostActivity extends AppCompatActivity {
                         //get the blog post (it's ok, we only have one child)
                         for (DataSnapshot child : snapshot.getChildren()) {
                             blogPost = child.getValue(BlogPostModel.class);
-                            break;
+                            blogPostKey = child.getKey();
+
+                            //display the blog post
+                            ImageView image = findViewById(R.id.imageViewBlogPost);
+                            if (!blogPost.getImageUrl().isEmpty()) {
+                                Picasso.with(ViewBlogPostActivity.this).load(blogPost.getImageUrl()).into(image);
+                            }
+                            TextView title = findViewById(R.id.textViewPostTitle);
+                            title.setText(blogPost.getTitle());
+                            TextView details = findViewById(R.id.textViewPostDetails);
+                            details.setText(blogPost.getDetails());
+
+                            //set blog post's thumb-up image color for the current user
+                            thumbUp = findViewById(R.id.imageButtonThumbUp);
+                            FirebaseUtils.getInstance().getThumbUpInfo(blogPostKey, FirebaseUtils.getInstance().getUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    setThumbUpState(snapshot.getValue() != null);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                            //handle this post's thumb-up info
+                            thumbUp.setOnClickListener(view -> {
+                                        FirebaseUtils.getInstance().saveThumbUpInfoToDatabase(blogPostKey, FirebaseUtils.getInstance().getUser().getUid());
+                                        setThumbUpState(!isThumbUp);
+                                    }
+                            );
                         }
-                        //display the blog post
-                        ImageView image = findViewById(R.id.imageViewBlogPost);
-                        if (!blogPost.getImageUrl().isEmpty()) {
-                            Picasso.with(ViewBlogPostActivity.this).load(blogPost.getImageUrl()).into(image);
-                        }
-                        TextView title = findViewById(R.id.textViewPostTitle);
-                        title.setText(blogPost.getTitle());
-                        TextView details = findViewById(R.id.textViewPostDetails);
-                        details.setText(blogPost.getDetails());
                     }
 
                     @Override
@@ -67,5 +93,16 @@ public class ViewBlogPostActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void setThumbUpState(boolean isActive) {
+        if (isActive) {
+            thumbUp.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_thumb_up_activated_24));
+            isThumbUp = true;
+        }
+        else {
+            thumbUp.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_thumb_up_default_24));
+            isThumbUp = false;
+        }
     }
 }

@@ -53,9 +53,4 @@ public class ViewBlogPostActivityInstrumentedTest {
     public void isVisible_imageButtonThumbUp() {
         onView(withId(R.id.imageButtonThumbUp)).check(matches(isDisplayed()));
     }
-
-    @Test
-    public void isVisible_imageButtonThumbDown() {
-        onView(withId(R.id.imageButtonThumbDown)).check(matches(isDisplayed()));
-    }
 }

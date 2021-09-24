@@ -19,15 +19,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -163,5 +168,48 @@ public class FirebaseUtils {
     public Query getBlogPostQueryByTitle(String title) {
         return FirebaseDatabase.getInstance(databaseURL).getReference("posts")
                 .orderByChild("title").equalTo(title);
+    }
+
+    /**
+     * Saves the current user's thumb-up info of the specific blog post in the database.
+     * -if there is no user's thumb-up yet, it creates one.
+     * -if the user has already thumbed-up this post, it removes it.
+     *
+     * @param postId the blog post id that is being thumbed-up/unthumbed-up
+     * @param userId the user id that performs the thumb-up/unthumbed-up action
+     */
+    public Query getThumbUpInfo(String postId, String userId) {
+         return FirebaseDatabase.getInstance(databaseURL).getReference("thumbs_up").child(postId).child(userId);
+    }
+
+    /**
+     * Saves the current user's thumb-up info of the specific blog post in the database.
+     * -if there is no user's thumb-up yet, it creates one.
+     * -if the user has already thumbed-up this post, it removes it.
+     *
+     * @param postId the blog post id that is being thumbed-up/unthumbed-up
+     * @param userId the user id that performs the thumb-up/unthumbed-up action
+     */
+    public void saveThumbUpInfoToDatabase(String postId, String userId) {
+        //get a reference to the "thumbs-up" database
+        DatabaseReference thumbUpRef = FirebaseDatabase.getInstance(databaseURL).getReference("thumbs_up");
+
+        //handle thumb-up updating
+        Query query = thumbUpRef.child(postId).child(userId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    thumbUpRef.child(postId).child(FirebaseUtils.getInstance().getUser().getUid()).removeValue();
+                }else {
+                    thumbUpRef.child(postId).child(FirebaseUtils.getInstance().getUser().getUid()).setValue("thumb up!");   //value in non-important( as long as it exists)
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
