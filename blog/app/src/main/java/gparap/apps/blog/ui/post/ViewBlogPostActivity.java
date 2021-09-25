@@ -15,7 +15,10 @@
  */
 package gparap.apps.blog.ui.post;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import gparap.apps.blog.MainActivity;
 import gparap.apps.blog.R;
 import gparap.apps.blog.model.BlogPostModel;
 import gparap.apps.blog.utils.FirebaseUtils;
@@ -35,13 +39,20 @@ import gparap.apps.blog.utils.FirebaseUtils;
 public class ViewBlogPostActivity extends AppCompatActivity {
     private BlogPostModel blogPost;
     private String blogPostKey;
-    private ImageView thumbUp;
+    private ImageButton thumbUp;
     private boolean isThumbUp = false;
+    private ImageButton deleteBlogPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_blog_post);
+
+        //hide both image buttons
+        thumbUp = findViewById(R.id.imageButtonThumbUp);
+        thumbUp.setVisibility(View.GONE);
+        deleteBlogPost = findViewById(R.id.imageButtonDeleteBlogPost);
+        deleteBlogPost.setVisibility(View.GONE);
 
         //get the blog post from firebase and display it
         String blogPostTitle = getIntent().getStringExtra("blog_post_title");
@@ -64,26 +75,41 @@ public class ViewBlogPostActivity extends AppCompatActivity {
                             TextView details = findViewById(R.id.textViewPostDetails);
                             details.setText(blogPost.getDetails());
 
-                            //set blog post's thumb-up image color for the current user
-                            thumbUp = findViewById(R.id.imageButtonThumbUp);
-                            FirebaseUtils.getInstance().getThumbUpInfo(blogPostKey, FirebaseUtils.getInstance().getUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    setThumbUpState(snapshot.getValue() != null);
-                                }
+                            //based on the current user, display the thumb-up or the delete button
+                            //(if current user is the blog post's writer display the delete button)
+                            //(if current user is the not blog post's writer display the thumb up button)
+                            if (blogPost.getUserId().equals(FirebaseUtils.getInstance().getUser().getUid())) {
+                                //delete the blog post and return to blog
+                                deleteBlogPost.setVisibility(View.VISIBLE);
+                                thumbUp.setVisibility(View.GONE);
+                                deleteBlogPost.setOnClickListener(view -> {
+                                    FirebaseUtils.getInstance().deleteBlogPost(blogPostKey);
+                                    startActivity(new Intent(ViewBlogPostActivity.this, MainActivity.class));
+                                });
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
-                            //handle this post's thumb-up info
-                            thumbUp.setOnClickListener(view -> {
-                                        FirebaseUtils.getInstance().saveThumbUpInfoToDatabase(blogPostKey, FirebaseUtils.getInstance().getUser().getUid());
-                                        setThumbUpState(!isThumbUp);
+                            } else {
+                                //set blog post's thumb-up image color for the current user
+                                thumbUp.setVisibility(View.VISIBLE);
+                                deleteBlogPost.setVisibility(View.GONE);
+                                FirebaseUtils.getInstance().getThumbUpInfo(blogPostKey, FirebaseUtils.getInstance().getUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        setThumbUpState(snapshot.getValue() != null);
                                     }
-                            );
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                                //handle this post's thumb-up info
+                                thumbUp.setOnClickListener(view -> {
+                                            FirebaseUtils.getInstance().saveThumbUpInfoToDatabase(blogPostKey, FirebaseUtils.getInstance().getUser().getUid());
+                                            setThumbUpState(!isThumbUp);
+                                        }
+                                );
+                            }
                         }
                     }
 
@@ -99,8 +125,7 @@ public class ViewBlogPostActivity extends AppCompatActivity {
         if (isActive) {
             thumbUp.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_thumb_up_activated_24));
             isThumbUp = true;
-        }
-        else {
+        } else {
             thumbUp.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_thumb_up_default_24));
             isThumbUp = false;
         }

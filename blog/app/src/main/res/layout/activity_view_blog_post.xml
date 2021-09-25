@@ -61,15 +61,27 @@
             tools:text="Blog Post Details" />
     </ScrollView>
 
-    <!--Thumb Up-->
+    <!--Thumb Up button-->
     <ImageButton
         android:id="@+id/imageButtonThumbUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/description_thumb_up"
-        android:minHeight="@dimen/image_button_thumb_minHeight"
+        android:minHeight="@dimen/image_button_minHeight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_thumb_up_default_24" />
+
+    <!--Delete button-->
+    <ImageButton
+        android:id="@+id/imageButtonDeleteBlogPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_delete_blog_post"
+        android:minHeight="@dimen/image_button_minHeight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_delete_black_24"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

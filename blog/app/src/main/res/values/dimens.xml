@@ -10,7 +10,7 @@
     <dimen name="image_button_max_height">144dp</dimen>
     <dimen name="image_button_layout_marginTop">32dp</dimen>
     <dimen name="image_button_layout_marginEnd">24dp</dimen>
-    <dimen name="image_button_thumb_minHeight">48dp</dimen>
+    <dimen name="image_button_minHeight">48dp</dimen>
     <dimen name="image_cardview_width">172dp</dimen>
     <dimen name="image_cardview_height">144dp</dimen>
 </resources>

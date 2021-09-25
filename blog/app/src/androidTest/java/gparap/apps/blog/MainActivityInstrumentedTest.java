@@ -27,6 +27,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static org.hamcrest.core.IsNot.not;
+
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
@@ -172,23 +174,44 @@ public class MainActivityInstrumentedTest {
 
         onView(withText("test title")).check(matches(isDisplayed()));
 
-        //remove test blog post from database
-        final String databaseURL = "https://blog-d6918-default-rtdb.europe-west1.firebasedatabase.app/";
-        Query query = FirebaseDatabase.getInstance(databaseURL).getReference("posts")
-                .orderByChild("title").equalTo("test title");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    child.getRef().removeValue();
-                }
-            }
+        //!!! important
+        deleteTestBlogPostFromDatabase("test title");
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+    @Test
+    @LargeTest
+    public void deleteBlogPost() throws InterruptedException {
+        String title = "test post to delete";
 
+        //make sure there is at least on test blog post
+        logoutAndLoginWithTestUser("test_user_0@mail.com", "123456");
+        onView(withId(R.id.fab_addPost)).perform(click());
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText(title));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextAddPostDetails)).perform(typeText("test post to delete"));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        Thread.sleep(1667);
+
+        //click test blog post
+        onView(withId(R.id.recyclerViewBlogPosts))
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(title)), click()));
+
+        //delete test blog post
+        onView(withId(R.id.imageButtonDeleteBlogPost)).perform(click());
+        Thread.sleep(1667);
+
+        try {
+            onView(withText(title)).check(matches(not(isDisplayed())));
+        } catch (Exception exception) {
+            if (exception instanceof androidx.test.espresso.NoMatchingViewException) {
+                assert true;
+            } else {
+                //!!! important
+                deleteTestBlogPostFromDatabase(title);
+                assert false;
             }
-        });
+        }
     }
 
     private void logoutAndLoginWithTestUser(String email, String password) throws InterruptedException {
@@ -211,5 +234,24 @@ public class MainActivityInstrumentedTest {
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText(R.string.user_settings)).perform(click());
         Thread.sleep(1667);
+    }
+
+    private void deleteTestBlogPostFromDatabase(String title) {
+        final String databaseURL = "https://blog-d6918-default-rtdb.europe-west1.firebasedatabase.app/";
+        Query query = FirebaseDatabase.getInstance(databaseURL).getReference("posts")
+                .orderByChild("title").equalTo(title);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    child.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

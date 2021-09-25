@@ -179,7 +179,7 @@ public class FirebaseUtils {
      * @param userId the user id that performs the thumb-up/unthumbed-up action
      */
     public Query getThumbUpInfo(String postId, String userId) {
-         return FirebaseDatabase.getInstance(databaseURL).getReference("thumbs_up").child(postId).child(userId);
+        return FirebaseDatabase.getInstance(databaseURL).getReference("thumbs_up").child(postId).child(userId);
     }
 
     /**
@@ -201,7 +201,7 @@ public class FirebaseUtils {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     thumbUpRef.child(postId).child(FirebaseUtils.getInstance().getUser().getUid()).removeValue();
-                }else {
+                } else {
                     thumbUpRef.child(postId).child(FirebaseUtils.getInstance().getUser().getUid()).setValue("thumb up!");   //value in non-important( as long as it exists)
                 }
             }
@@ -211,5 +211,14 @@ public class FirebaseUtils {
 
             }
         });
+    }
+
+    /**
+     * Deletes a blog post from the database.
+     *
+     * @param postId the blog post id that is to be deleted
+     */
+    public void deleteBlogPost(String postId) {
+        FirebaseDatabase.getInstance(databaseURL).getReference("posts").child(postId).removeValue();
     }
 }
