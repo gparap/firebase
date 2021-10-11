@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "698408174604",
+    "project_id": "social-c3823",
+    "storage_bucket": "social-c3823.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698408174604:android:cfcfc4c9773ae3ac9c9a29",
+        "android_client_info": {
+          "package_name": "gparap.apps.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "698408174604-8t3iibm61mnj111rae83obrnpj1ki54n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa-m8qmNu3m-Mlmhd9wVfIod3n5kjuoZ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "698408174604-8t3iibm61mnj111rae83obrnpj1ki54n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
