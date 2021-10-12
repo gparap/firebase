@@ -11,7 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chat">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login"/>
+        <activity
+            android:name=".ui.SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,6 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
