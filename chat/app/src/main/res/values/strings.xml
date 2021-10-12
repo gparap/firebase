@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Chat</string>
+    <string name="desc_app_logo">Application Logo</string>
+    <string name="title_activity_login">Login</string>
 </resources>
