@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import gparap.apps.chat.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -27,5 +29,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setupToolbar();
+    }
+
+    private void setupToolbar() {
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_login);
+        toolbar.setTitle(getResources().getString(R.string.title_activity_login));
     }
 }

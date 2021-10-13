@@ -2,4 +2,7 @@
     <string name="app_name">Chat</string>
     <string name="desc_app_logo">Application Logo</string>
     <string name="title_activity_login">Login</string>
+    <string name="hint_email">e-mail</string>
+    <string name="hint_password">password</string>
+    <string name="button_login">Login</string>
 </resources>
