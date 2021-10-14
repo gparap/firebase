@@ -5,4 +5,7 @@
     <string name="hint_email">e-mail</string>
     <string name="hint_password">password</string>
     <string name="button_login">Login</string>
+    <string name="toast_empty_login_email">Please enter your e-mail..</string>
+    <string name="toast_empty_login_password">Please enter your password..</string>
+    <string name="toast_invalid_credentials">Invalid creadentials, please try again..</string>
 </resources>
