@@ -15,21 +15,86 @@
  */
 package gparap.apps.chat.ui;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import gparap.apps.chat.MainActivity;
 import gparap.apps.chat.R;
+import gparap.apps.chat.data.model.UserModel;
 
 public class LoginActivity extends AppCompatActivity {
+    private EditText email, password;
+    private Button buttonLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setupToolbar();
+        getWidgets();
+
+        //login
+        buttonLogin.setOnClickListener(v -> {
+            if (validateUserInput()) {
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                Task<AuthResult> authResult = firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString());
+                authResult.addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        //get user details
+                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+                        //create user model
+                        assert firebaseUser != null;
+                        UserModel userModel = new UserModel();
+                        userModel.setId(firebaseUser.getUid());
+                        userModel.setEmail(email.getText().toString());
+                        userModel.setPassword(password.getText().toString());
+                        userModel.setDisplayName(firebaseUser.getDisplayName());
+
+                        //greet user
+                        String displayName = firebaseUser.getDisplayName() == null ? firebaseUser.getDisplayName() : "";
+                        Toast.makeText(this, "Welcome " + displayName, Toast.LENGTH_SHORT).show();
+
+                        //redirect to chat
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.putExtra("current_user", userModel);
+                        startActivity(intent);
+
+                    }else {
+                        Toast.makeText(this, getResources().getString(R.string.toast_invalid_credentials), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private boolean validateUserInput() {
+        if (email.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_login_email), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (password.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_login_password), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void getWidgets() {
+        email = findViewById(R.id.edit_text_login_email);
+        password = findViewById(R.id.edit_text_login_password);
+        buttonLogin = findViewById(R.id.button_login);
     }
 
     private void setupToolbar() {

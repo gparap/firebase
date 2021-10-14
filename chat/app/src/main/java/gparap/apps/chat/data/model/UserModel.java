@@ -15,31 +15,54 @@
  */
 package gparap.apps.chat.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /*
  * Model for logged-in user data
  */
-public class UserModel {
-    private int id;
-    private String username;
+public class UserModel implements Parcelable {
+    private String id;
+    private String email;
     private String password;
     private String displayName;
 
-    public UserModel(){}
+    public UserModel() {
+    }
 
-    public int getId() {
+    protected UserModel(Parcel in) {
+        id = in.readString();
+        email = in.readString();
+        password = in.readString();
+        displayName = in.readString();
+    }
+
+    public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
+        @Override
+        public UserModel createFromParcel(Parcel in) {
+            return new UserModel(in);
+        }
+
+        @Override
+        public UserModel[] newArray(int size) {
+            return new UserModel[size];
+        }
+    };
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -56,5 +79,18 @@ public class UserModel {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(email);
+        dest.writeString(password);
+        dest.writeString(displayName);
     }
 }
