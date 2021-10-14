@@ -17,8 +17,10 @@ package gparap.apps.chat.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +38,7 @@ import gparap.apps.chat.data.model.UserModel;
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private Button buttonLogin;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,16 @@ public class LoginActivity extends AppCompatActivity {
         setupToolbar();
         getWidgets();
 
+        //hide progress
+        progressBar.setVisibility(View.INVISIBLE);
+
         //login
         buttonLogin.setOnClickListener(v -> {
             if (validateUserInput()) {
+                //show progress
+                progressBar.setVisibility(View.VISIBLE);
+
+                //log-in user
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 Task<AuthResult> authResult = firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString());
                 authResult.addOnCompleteListener(task -> {
@@ -63,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                         userModel.setDisplayName(firebaseUser.getDisplayName());
 
                         //greet user
-                        String displayName = firebaseUser.getDisplayName() == null ? firebaseUser.getDisplayName() : "";
+                        String displayName = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName() : "";
                         Toast.makeText(this, "Welcome " + displayName, Toast.LENGTH_SHORT).show();
 
                         //redirect to chat
@@ -74,6 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(this, getResources().getString(R.string.toast_invalid_credentials), Toast.LENGTH_SHORT).show();
                     }
+
+                    //hide progress
+                    progressBar.setVisibility(View.INVISIBLE);
                 });
             }
         });
@@ -95,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.edit_text_login_email);
         password = findViewById(R.id.edit_text_login_password);
         buttonLogin = findViewById(R.id.button_login);
+        progressBar = findViewById(R.id.progress_login);
     }
 
     private void setupToolbar() {
