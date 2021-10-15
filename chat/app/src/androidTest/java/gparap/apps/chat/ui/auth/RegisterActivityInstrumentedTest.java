@@ -31,6 +31,10 @@ import static org.hamcrest.core.IsNot.not;
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.filters.LargeTest;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -181,6 +185,48 @@ public class RegisterActivityInstrumentedTest {
                 .check(matches(isDisplayed()));
 
         delayForToastMessageToDisappear();
+    }
+
+    @Test
+    @LargeTest
+    public void registerNewUserSuccessfully() throws InterruptedException {
+        String testUserDisplayName = "test_user_display_name";
+        String testUserEmail = "test_user@gmail.com";
+        String testUserPassword = "123456";
+
+        //clear input fields first
+        onView(withId(R.id.edit_text_register_display_name)).perform(clearText());
+        onView(withId(R.id.edit_text_register_email)).perform(clearText());
+        onView(withId(R.id.edit_text_register_password)).perform(clearText());
+        onView(withId(R.id.edit_text_register_confirm_password)).perform(clearText());
+
+        //register a new user - fill input fields
+        onView(withId(R.id.edit_text_register_display_name)).perform(typeText(testUserDisplayName));
+        closeSoftKeyboard();
+        onView(withId(R.id.edit_text_register_email)).perform(typeText(testUserEmail));
+        closeSoftKeyboard();
+        onView(withId(R.id.edit_text_register_password)).perform(typeText(testUserPassword));
+        closeSoftKeyboard();
+        onView(withId(R.id.edit_text_register_confirm_password)).perform(typeText(testUserPassword));
+        closeSoftKeyboard();
+
+        //register a new user - click register button and wait for response
+        onView(withId(R.id.button_register)).perform(click());
+        Thread.sleep(1667L);    //!!! if this test fails, increase sleep time
+
+        //get current user from Firebase and wait a little
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        Thread.sleep(1667L);
+
+        //noinspection ConstantConditions
+        assert (testUserDisplayName.equals(firebaseUser.getDisplayName()));
+        assert (testUserEmail.equals(firebaseUser.getEmail()));
+
+        //remove user from database
+        firebaseAuth.signOut();
+        firebaseUser.delete();
+        Thread.sleep(1667L);
     }
 
     private void delayForToastMessageToDisappear() {
