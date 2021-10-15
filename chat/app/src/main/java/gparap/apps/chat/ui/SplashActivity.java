@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.chat.MainActivity;
 import gparap.apps.chat.R;
+import gparap.apps.chat.ui.auth.LoginActivity;
 
 //TODO: animation
 @SuppressLint("CustomSplashScreen")
