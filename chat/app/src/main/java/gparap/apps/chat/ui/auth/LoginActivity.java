@@ -94,11 +94,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateUserInput() {
         if (email.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_login_email), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_email), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (password.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_login_password), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_password), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

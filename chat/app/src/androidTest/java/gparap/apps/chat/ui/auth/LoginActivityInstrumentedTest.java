@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.chat.ui;
+package gparap.apps.chat.ui.auth;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
@@ -104,7 +104,7 @@ public class LoginActivityInstrumentedTest {
         //attempt login
         onView(withId(R.id.button_login)).perform(click());
 
-        onView(withText(R.string.toast_empty_login_email))
+        onView(withText(R.string.toast_empty_email))
                 .inRoot(withDecorView(not(decorView)))
                 .check(matches(isDisplayed()));
     }
@@ -119,7 +119,7 @@ public class LoginActivityInstrumentedTest {
         //attempt login
         onView(withId(R.id.button_login)).perform(click());
 
-        onView(withText(R.string.toast_empty_login_password))
+        onView(withText(R.string.toast_empty_password))
                 .inRoot(withDecorView(not(decorView)))
                 .check(matches(isDisplayed()));
     }

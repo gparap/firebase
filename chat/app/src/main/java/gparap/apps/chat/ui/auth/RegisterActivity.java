@@ -15,21 +15,69 @@
  */
 package gparap.apps.chat.ui.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
 import gparap.apps.chat.R;
 
 public class RegisterActivity extends AppCompatActivity {
+    private EditText displayName, email, password, confirmPassword;
+    private Button buttonRegister;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         setupToolbar();
+        getWidgets();
+
+        //register new user
+        buttonRegister.setOnClickListener(v -> {
+            if (validateRegistration()) {
+                //TODO: register
+            }
+        });
+    }
+
+    private boolean validateRegistration() {
+        if (displayName.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_display_name), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (email.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_email), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (password.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_password), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (confirmPassword.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_confirm_password), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!password.getText().toString().equals(confirmPassword.getText().toString())) {
+            Toast.makeText(this, getResources().getString(R.string.toast_unmatched_passwords), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void getWidgets() {
+        displayName = findViewById(R.id.edit_text_register_display_name);
+        email = findViewById(R.id.edit_text_register_email);
+        password = findViewById(R.id.edit_text_register_password);
+        confirmPassword = findViewById(R.id.edit_text_register_confirm_password);
+        buttonRegister = findViewById(R.id.button_register);
+        progressBar = findViewById(R.id.progress_register);
     }
 
     private void setupToolbar() {
