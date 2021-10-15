@@ -20,12 +20,14 @@ import org.junit.runners.Suite;
 
 import gparap.apps.chat.ui.LoginActivityInstrumentedTest;
 import gparap.apps.chat.ui.SplashActivityInstrumentedTest;
+import gparap.apps.chat.ui.auth.RegisterActivityInstrumentedTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         MainActivityInstrumentedTest.class,
         SplashActivityInstrumentedTest.class,
-        LoginActivityInstrumentedTest.class
+        LoginActivityInstrumentedTest.class,
+        RegisterActivityInstrumentedTest.class
 })
 public class AppTestSuite {
 }

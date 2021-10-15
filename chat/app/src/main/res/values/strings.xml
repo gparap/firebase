@@ -2,6 +2,7 @@
     <string name="app_name">Chat</string>
     <string name="desc_app_logo">Application Logo</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
     <string name="hint_email">e-mail</string>
     <string name="hint_password">password</string>
     <string name="button_login">Login</string>
@@ -11,4 +12,6 @@
     <string name="toast_invalid_credentials">Invalid creadentials, please try again..</string>
     <string name="text_forgotten_password">I forgot my password!</string>
     <string name="text_user_not_registered">Not registered yet?</string>
+    <string name="hint_display_name">display name</string>
+    <string name="hint_confirm_password">confirm password</string>
 </resources>
