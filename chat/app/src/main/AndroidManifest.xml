@@ -11,9 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chat">
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.auth.LoginActivity"
             android:exported="false"
-            android:label="@string/title_activity_login"/>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".ui.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

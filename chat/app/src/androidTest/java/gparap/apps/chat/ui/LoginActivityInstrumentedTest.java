@@ -38,6 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gparap.apps.chat.R;
+import gparap.apps.chat.ui.auth.LoginActivity;
 
 public class LoginActivityInstrumentedTest {
     private View decorView; //top-level window decor view
@@ -56,6 +57,11 @@ public class LoginActivityInstrumentedTest {
     }
 
     @Test
+    public void isVisible_image_view_login_logo() {
+        onView(withId(R.id.image_view_login)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void isVisible_edit_text_login_email() {
         onView(withId(R.id.edit_text_login_email)).check(matches(isDisplayed()));
     }
@@ -66,13 +72,28 @@ public class LoginActivityInstrumentedTest {
     }
 
     @Test
-    public void isVisible_button_login() {
-        onView(withId(R.id.button_login)).check(matches(isDisplayed()));
+    public void isVisible_text_view_forgot_password() {
+        onView(withId(R.id.text_view_forgot_password)).check(matches(isDisplayed()));
     }
 
     @Test
     public void isNotVisible_progress_login() {
         onView(withId(R.id.progress_login)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void isVisible_button_login() {
+        onView(withId(R.id.button_login)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void isVisible_text_view_user_not_registered() {
+        onView(withId(R.id.text_view_user_not_registered)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void isVisible_button_register() {
+        onView(withId(R.id.button_register)).check(matches(isDisplayed()));
     }
 
     @Test

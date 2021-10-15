@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.chat.ui;
+package gparap.apps.chat.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("current_user", userModel);
                         startActivity(intent);
 
-                    }else {
+                    } else {
                         Toast.makeText(this, getResources().getString(R.string.toast_invalid_credentials), Toast.LENGTH_SHORT).show();
                     }
 
