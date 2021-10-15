@@ -37,7 +37,7 @@ import gparap.apps.chat.data.model.UserModel;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
-    private Button buttonLogin;
+    private Button buttonLogin, buttonRegister;
     private ProgressBar progressBar;
 
     @Override
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         //hide progress
         progressBar.setVisibility(View.INVISIBLE);
 
-        //login
+        //login existing user
         buttonLogin.setOnClickListener(v -> {
             if (validateUserInput()) {
                 //show progress
@@ -90,6 +90,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+
+        //register new user
+        buttonRegister.setOnClickListener(v->{
+            startActivity(new Intent(this, RegisterActivity.class));
+            //TODO: Don't finish activity here (user maybe already registered).
+            // Update activity_register.xml instead.
+        });
     }
 
     private boolean validateUserInput() {
@@ -108,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.edit_text_login_email);
         password = findViewById(R.id.edit_text_login_password);
         buttonLogin = findViewById(R.id.button_login);
+        buttonRegister = findViewById(R.id.button_goto_register);
         progressBar = findViewById(R.id.progress_login);
     }
 

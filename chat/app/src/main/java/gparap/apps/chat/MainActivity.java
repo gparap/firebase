@@ -21,6 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.chat.adapters.ViewPagerAdapter;
 
@@ -38,5 +39,9 @@ public class MainActivity extends AppCompatActivity {
         //setup the TabLayout with the ViewPager
         TabLayout tabLayout = findViewById(R.id.tabs_main);
         tabLayout.setupWithViewPager(viewPager);
+
+        try {
+            FirebaseAuth.getInstance().signOut();
+        }catch (Exception e){}
     }
 }
