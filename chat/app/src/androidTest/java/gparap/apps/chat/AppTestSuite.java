@@ -18,7 +18,7 @@ package gparap.apps.chat;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import gparap.apps.chat.ui.LoginActivityInstrumentedTest;
+import gparap.apps.chat.ui.auth.LoginActivityInstrumentedTest;
 import gparap.apps.chat.ui.SplashActivityInstrumentedTest;
 import gparap.apps.chat.ui.auth.RegisterActivityInstrumentedTest;
 
