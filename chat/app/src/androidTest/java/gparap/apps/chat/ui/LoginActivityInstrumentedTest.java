@@ -93,7 +93,7 @@ public class LoginActivityInstrumentedTest {
 
     @Test
     public void isVisible_button_register() {
-        onView(withId(R.id.button_register)).check(matches(isDisplayed()));
+        onView(withId(R.id.button_goto_register)).check(matches(isDisplayed()));
     }
 
     @Test

@@ -128,7 +128,7 @@
 
             <!--Register Button-->
             <Button
-                android:id="@+id/button_register"
+                android:id="@+id/button_goto_register"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/button_register"
