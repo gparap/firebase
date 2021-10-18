@@ -16,11 +16,17 @@
 package gparap.apps.chat;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,5 +41,20 @@ public class MainActivityInstrumentedTest {
     @Test
     public void isVisible_Toolbar() {
         onView(withId(R.id.toolbar_main)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void signOutCurrentUserAndReturnToLoginActivity() throws InterruptedException {
+        //login
+        FirebaseAuth.getInstance().signInAnonymously();
+        Thread.sleep(1667);
+
+        //logout
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText(R.string.title_logout)).perform(click());
+        Thread.sleep(1667);
+
+        onView(withId(R.id.layout_activity_login)).check(matches(isDisplayed()));
+        assert (FirebaseAuth.getInstance().getCurrentUser() == null);
     }
 }
