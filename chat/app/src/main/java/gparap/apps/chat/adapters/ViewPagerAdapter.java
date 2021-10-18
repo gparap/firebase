@@ -15,20 +15,26 @@
  */
 package gparap.apps.chat.adapters;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import gparap.apps.chat.R;
 import gparap.apps.chat.ui.private_chat.PrivateChatFragment;
 import gparap.apps.chat.ui.public_chat.PublicChatFragment;
+import gparap.apps.chat.ui.settings.SettingsFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-    private static final int FRAGMENTS_COUNT = 2;
+    private static final int FRAGMENTS_COUNT = 3;
+    private final Context context;
 
-    public ViewPagerAdapter(@NonNull FragmentManager fm) {
+    public ViewPagerAdapter(@NonNull FragmentManager fm, Context context) {
         super(fm);
+        this.context = context;
     }
 
     @NonNull
@@ -39,6 +45,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return PrivateChatFragment.newInstance();
             case 1:
                 return PublicChatFragment.newInstance();
+            case 2:
+                return SettingsFragment.newInstance();
             default:
                 throw new IllegalStateException("DEBUG: this shouldn't have happened..");
         }
@@ -54,9 +62,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Private Chat";
+                return context.getResources().getString(R.string.title_private_chat);
             case 1:
-                return "Public Chat";
+                return context.getResources().getString(R.string.title_public_chat);
+            case 2:
+                return context.getResources().getString(R.string.title_settings);
             default:
                 throw new IllegalStateException("DEBUG: this shouldn't have happened..");
         }
