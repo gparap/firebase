@@ -18,4 +18,5 @@
     <string name="text_user_not_registered">Not registered yet?</string>
     <string name="hint_display_name">display name</string>
     <string name="hint_confirm_password">confirm password</string>
+    <string name="title_logout">Logout</string>
 </resources>

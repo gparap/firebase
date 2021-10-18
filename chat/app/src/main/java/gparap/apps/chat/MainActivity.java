@@ -15,15 +15,18 @@
  */
 package gparap.apps.chat;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Bundle;
-
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.chat.adapters.ViewPagerAdapter;
+import gparap.apps.chat.ui.auth.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +35,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //setup the options menu
+        MaterialToolbar toolbar = findViewById(R.id.toolbar_main);
+        toolbar.inflateMenu(R.menu.menu_main);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.menu_item_logout) {
+                //sign-out current user
+                FirebaseAuth.getInstance().signOut();
+
+                //goto login activity
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+            return false;
+        });
+
         //setup the ViewPager
         ViewPager viewPager = findViewById(R.id.view_pager_main);
         viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()));
@@ -39,9 +57,5 @@ public class MainActivity extends AppCompatActivity {
         //setup the TabLayout with the ViewPager
         TabLayout tabLayout = findViewById(R.id.tabs_main);
         tabLayout.setupWithViewPager(viewPager);
-
-        try {
-            FirebaseAuth.getInstance().signOut();
-        }catch (Exception e){}
     }
 }

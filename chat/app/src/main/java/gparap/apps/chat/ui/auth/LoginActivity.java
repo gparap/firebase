@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.putExtra("current_user", userModel);
                         startActivity(intent);
+                        finish();
 
                     } else {
                         Toast.makeText(this, getResources().getString(R.string.toast_invalid_credentials), Toast.LENGTH_SHORT).show();
