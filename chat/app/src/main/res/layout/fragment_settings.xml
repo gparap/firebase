@@ -1,13 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context=".ui.settings.SettingsFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello from SettingsFragment" />
+    <!--Toolbar-->
+    <include
+        android:id="@+id/toolbar_settings"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <!--Placeholder for user profile image-->
+    <ImageView
+        android:id="@+id/image_view_user_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/desc_app_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_settings"
+        app:srcCompat="@drawable/app_logo" />
+
+    <ScrollView
+        android:id="@+id/scroll_view_settings"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_user_profile">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--Display name-->
+            <EditText
+                android:id="@+id/edit_text_settings_display_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_person_24"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="center"
+                android:hint="@string/hint_display_name"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:minHeight="@dimen/default_minHeight"
+                android:textColorHint="@color/textColorHint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Edit user display name-->
+            <ImageView
+                android:id="@+id/image_view_edit_user_display_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:contentDescription="@string/desc_edit_user_display_name"
+                android:src="@drawable/ic_edit_24"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintStart_toEndOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintTop_toTopOf="@+id/edit_text_settings_display_name" />
+
+            <!--E-mail-->
+            <EditText
+                android:id="@+id/edit_text_settings_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_email_24"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="center"
+                android:hint="@string/hint_email"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:minHeight="@dimen/default_minHeight"
+                android:textColorHint="@color/textColorHint"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_settings_display_name" />
+
+            <!--Edit user email-->
+            <ImageView
+                android:id="@+id/image_view_edit_user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:contentDescription="@string/desc_edit_user_email"
+                android:src="@drawable/ic_edit_24"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_settings_email"
+                app:layout_constraintStart_toEndOf="@+id/edit_text_settings_email"
+                app:layout_constraintTop_toTopOf="@+id/edit_text_settings_email" />
+
+            <!--Password-->
+            <EditText
+                android:id="@+id/edit_text_settings_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_password_24"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="center"
+                android:hint="@string/hint_password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:minHeight="@dimen/default_minHeight"
+                android:textColorHint="@color/textColorHint"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_settings_email" />
+
+            <!--Edit user password-->
+            <ImageView
+                android:id="@+id/image_view_edit_password"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:contentDescription="@string/desc_edit_user_password"
+                android:src="@drawable/ic_edit_24"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_settings_password"
+                app:layout_constraintStart_toEndOf="@+id/edit_text_settings_password"
+                app:layout_constraintTop_toTopOf="@+id/edit_text_settings_password" />
+
+            <!--Confirm Password-->
+            <EditText
+                android:id="@+id/edit_text_settings_confirm_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_password_24"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/hint_confirm_password"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:minHeight="@dimen/default_minHeight"
+                android:textColorHint="@color/textColorHint"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_settings_password"
+                tools:visibility="visible" />
+
+            <!--Update user profile button-->
+            <Button
+                android:id="@+id/button_update_user_profile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/button_update_user_profile"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintTop_toBottomOf="@id/edit_text_settings_confirm_password" />
+
+            <!--Updating progress-->
+            <ProgressBar
+                android:id="@+id/progress_update_user_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintTop_toBottomOf="@id/button_update_user_profile"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
