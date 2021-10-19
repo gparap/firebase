@@ -1,14 +1,13 @@
-package gparap.apps.chat.ui.settings;
+package gparap.apps.chat.ui.user_profile;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
 import static org.hamcrest.core.IsNot.not;
 
-import androidx.fragment.app.testing.FragmentScenario;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
@@ -16,16 +15,16 @@ import org.junit.Test;
 
 import gparap.apps.chat.R;
 
-public class SettingsFragmentInstrumentedTest {
+public class UserProfileActivityInstrumentedTest {
 
     @Before
     public void setUp() {
-        FragmentScenario.launchInContainer(SettingsFragment.class, null, R.style.Theme_Chat);
+        ActivityScenario.launch(UserProfileActivity.class);
     }
 
     @Test
-    public void isVisible_toolbar_settings() {
-        onView(withId(R.id.toolbar_settings)).check(matches(isDisplayed()));
+    public void isVisible_toolbar_user_profile() {
+        onView(withId(R.id.toolbar_user_profile)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -35,8 +34,8 @@ public class SettingsFragmentInstrumentedTest {
     }
 
     @Test
-    public void isVisible_edit_text_settings_display_name() {
-        onView(withId(R.id.edit_text_settings_display_name)).check(matches(isDisplayed()));
+    public void isVisible_edit_text_user_profile_display_name() {
+        onView(withId(R.id.edit_text_user_profile_display_name)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -45,8 +44,8 @@ public class SettingsFragmentInstrumentedTest {
     }
 
     @Test
-    public void isVisible_edit_text_settings_email() {
-        onView(withId(R.id.edit_text_settings_email)).check(matches(isDisplayed()));
+    public void isVisible_edit_text_user_profile_email() {
+        onView(withId(R.id.edit_text_user_profile_email)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -55,8 +54,8 @@ public class SettingsFragmentInstrumentedTest {
     }
 
     @Test
-    public void isVisible_edit_text_settings_password() {
-        onView(withId(R.id.edit_text_settings_password)).check(matches(isDisplayed()));
+    public void isVisible_edit_text_user_profile_password() {
+        onView(withId(R.id.edit_text_user_profile_password)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -65,8 +64,8 @@ public class SettingsFragmentInstrumentedTest {
     }
 
     @Test
-    public void isNotVisible_edit_text_settings_confirm_password() {
-        onView(withId(R.id.edit_text_settings_confirm_password)).check(matches(not(isDisplayed())));
+    public void isNotVisible_edit_text_user_profile_confirm_password() {
+        onView(withId(R.id.edit_text_user_profile_confirm_password)).check(matches(not(isDisplayed())));
     }
 
     @Test

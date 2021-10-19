@@ -26,10 +26,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import gparap.apps.chat.R;
 import gparap.apps.chat.ui.private_chat.PrivateChatFragment;
 import gparap.apps.chat.ui.public_chat.PublicChatFragment;
-import gparap.apps.chat.ui.settings.SettingsFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-    private static final int FRAGMENTS_COUNT = 3;
+    private static final int FRAGMENTS_COUNT = 2;
     private final Context context;
 
     public ViewPagerAdapter(@NonNull FragmentManager fm, Context context) {
@@ -45,8 +44,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return PrivateChatFragment.newInstance();
             case 1:
                 return PublicChatFragment.newInstance();
-            case 2:
-                return SettingsFragment.newInstance();
             default:
                 throw new IllegalStateException("DEBUG: this shouldn't have happened..");
         }
@@ -65,8 +62,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 return context.getResources().getString(R.string.title_private_chat);
             case 1:
                 return context.getResources().getString(R.string.title_public_chat);
-            case 2:
-                return context.getResources().getString(R.string.title_settings);
             default:
                 throw new IllegalStateException("DEBUG: this shouldn't have happened..");
         }

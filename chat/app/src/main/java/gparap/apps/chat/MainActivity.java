@@ -15,6 +15,7 @@
  */
 package gparap.apps.chat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,9 +28,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.chat.adapters.ViewPagerAdapter;
 import gparap.apps.chat.ui.auth.LoginActivity;
+import gparap.apps.chat.ui.user_profile.UserProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +42,23 @@ public class MainActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.menu_item_logout) {
-                //sign-out current user
-                FirebaseAuth.getInstance().signOut();
+            switch (item.getItemId()) {
+                //open user profile
+                case R.id.menu_item_user_profile:
+                    startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                    break;
 
-                //goto login activity
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
+                //logout current user
+                case R.id.menu_item_logout:
+                    //sign-out current user
+                    FirebaseAuth.getInstance().signOut();
+
+                    //goto login activity
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                    break;
+                default:
+                    throw new IllegalStateException("DEBUG: this shouldn't have happened..");
             }
             return false;
         });
