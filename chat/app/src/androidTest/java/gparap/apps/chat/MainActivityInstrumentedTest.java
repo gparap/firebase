@@ -44,6 +44,13 @@ public class MainActivityInstrumentedTest {
     }
 
     @Test
+    public void onClickMainMenuUserProfile_openUserProfileActivity() {
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText(R.string.title_menu_user_profile)).perform(click());
+        onView(withId(R.id.layout_activity_user_profile));
+    }
+
+    @Test
     public void signOutCurrentUserAndReturnToLoginActivity() throws InterruptedException {
         //login
         FirebaseAuth.getInstance().signInAnonymously();
@@ -51,7 +58,7 @@ public class MainActivityInstrumentedTest {
 
         //logout
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
-        onView(withText(R.string.title_logout)).perform(click());
+        onView(withText(R.string.title_menu_logout)).perform(click());
         Thread.sleep(1667);
 
         onView(withId(R.id.layout_activity_login)).check(matches(isDisplayed()));
