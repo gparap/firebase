@@ -30,7 +30,6 @@
         app:srcCompat="@drawable/app_logo" />
 
     <ScrollView
-        android:id="@+id/scroll_view_login"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"

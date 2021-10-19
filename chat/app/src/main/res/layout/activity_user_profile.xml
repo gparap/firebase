@@ -2,22 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
-    tools:context=".ui.settings.SettingsFragment">
+    tools:context=".ui.user_profile.UserProfileActivity">
 
     <!--Toolbar-->
     <include
-        android:id="@+id/toolbar_settings"
+        android:id="@+id/toolbar_user_profile"
         layout="@layout/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Placeholder for user profile image-->
+    <!--Placeholder for user user_profile image-->
     <ImageView
         android:id="@+id/image_view_user_profile"
         android:layout_width="wrap_content"
@@ -26,11 +23,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_settings"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_user_profile"
         app:srcCompat="@drawable/app_logo" />
 
     <ScrollView
-        android:id="@+id/scroll_view_settings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -46,7 +42,7 @@
 
             <!--Display name-->
             <EditText
-                android:id="@+id/edit_text_settings_display_name"
+                android:id="@+id/edit_text_user_profile_display_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_person_24"
@@ -69,13 +65,13 @@
                 android:layout_height="0dp"
                 android:contentDescription="@string/desc_edit_user_display_name"
                 android:src="@drawable/ic_edit_24"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintStart_toEndOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintTop_toTopOf="@+id/edit_text_settings_display_name" />
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintStart_toEndOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintTop_toTopOf="@+id/edit_text_user_profile_display_name" />
 
             <!--E-mail-->
             <EditText
-                android:id="@+id/edit_text_settings_email"
+                android:id="@+id/edit_text_user_profile_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_email_24"
@@ -87,9 +83,9 @@
                 android:inputType="textEmailAddress"
                 android:minHeight="@dimen/default_minHeight"
                 android:textColorHint="@color/textColorHint"
-                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintTop_toBottomOf="@+id/edit_text_settings_display_name" />
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_user_profile_display_name" />
 
             <!--Edit user email-->
             <ImageView
@@ -98,13 +94,13 @@
                 android:layout_height="0dp"
                 android:contentDescription="@string/desc_edit_user_email"
                 android:src="@drawable/ic_edit_24"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_text_settings_email"
-                app:layout_constraintStart_toEndOf="@+id/edit_text_settings_email"
-                app:layout_constraintTop_toTopOf="@+id/edit_text_settings_email" />
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_user_profile_email"
+                app:layout_constraintStart_toEndOf="@+id/edit_text_user_profile_email"
+                app:layout_constraintTop_toTopOf="@+id/edit_text_user_profile_email" />
 
             <!--Password-->
             <EditText
-                android:id="@+id/edit_text_settings_password"
+                android:id="@+id/edit_text_user_profile_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_password_24"
@@ -116,9 +112,9 @@
                 android:inputType="textPassword"
                 android:minHeight="@dimen/default_minHeight"
                 android:textColorHint="@color/textColorHint"
-                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintTop_toBottomOf="@+id/edit_text_settings_email" />
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_user_profile_email" />
 
             <!--Edit user password-->
             <ImageView
@@ -127,13 +123,13 @@
                 android:layout_height="0dp"
                 android:contentDescription="@string/desc_edit_user_password"
                 android:src="@drawable/ic_edit_24"
-                app:layout_constraintBottom_toBottomOf="@+id/edit_text_settings_password"
-                app:layout_constraintStart_toEndOf="@+id/edit_text_settings_password"
-                app:layout_constraintTop_toTopOf="@+id/edit_text_settings_password" />
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_user_profile_password"
+                app:layout_constraintStart_toEndOf="@+id/edit_text_user_profile_password"
+                app:layout_constraintTop_toTopOf="@+id/edit_text_user_profile_password" />
 
             <!--Confirm Password-->
             <EditText
-                android:id="@+id/edit_text_settings_confirm_password"
+                android:id="@+id/edit_text_user_profile_confirm_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_password_24"
@@ -145,20 +141,20 @@
                 android:minHeight="@dimen/default_minHeight"
                 android:textColorHint="@color/textColorHint"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintTop_toBottomOf="@+id/edit_text_settings_password"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_user_profile_password"
                 tools:visibility="visible" />
 
-            <!--Update user profile button-->
+            <!--Update user user_profile button-->
             <Button
                 android:id="@+id/button_update_user_profile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/button_update_user_profile"
-                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintTop_toBottomOf="@id/edit_text_settings_confirm_password" />
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintTop_toBottomOf="@id/edit_text_user_profile_confirm_password" />
 
             <!--Updating progress-->
             <ProgressBar
@@ -166,8 +162,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="@+id/edit_text_settings_display_name"
-                app:layout_constraintStart_toStartOf="@+id/edit_text_settings_display_name"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_user_profile_display_name"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_user_profile_display_name"
                 app:layout_constraintTop_toBottomOf="@id/button_update_user_profile"
                 tools:visibility="visible" />
 

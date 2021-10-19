@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Chat">
         <activity
+            android:name=".ui.user_profile.UserProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.auth.RegisterActivity"
             android:exported="false" />
         <activity
