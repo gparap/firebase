@@ -21,7 +21,8 @@
     <string name="text_user_not_registered">Not registered yet?</string>
     <string name="hint_display_name">display name</string>
     <string name="hint_confirm_password">confirm password</string>
-    <string name="title_logout">Logout</string>
+    <string name="title_menu_user_profile">My Profile</string>
+    <string name="title_menu_logout">Logout</string>
     <string name="desc_edit_user_display_name">Edit user display name</string>
     <string name="desc_edit_user_email">Edit user email</string>
     <string name="desc_edit_user_password">Edit user password</string>
