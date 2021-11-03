@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/shape_gradient"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     tools:context=".ui.auth.RegisterActivity">
@@ -115,6 +116,7 @@
                 android:id="@+id/button_register"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/shape_round"
                 android:text="@string/button_register"
                 app:layout_constraintEnd_toEndOf="@+id/edit_text_register_display_name"
                 app:layout_constraintStart_toStartOf="@+id/edit_text_register_display_name"
@@ -125,11 +127,11 @@
                 android:id="@+id/progress_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@+id/edit_text_register_display_name"
                 app:layout_constraintStart_toStartOf="@+id/edit_text_register_display_name"
                 app:layout_constraintTop_toBottomOf="@id/button_register"
-                android:visibility="invisible"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
