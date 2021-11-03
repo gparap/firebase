@@ -2,4 +2,5 @@
 <resources>
     <!--Design dimensions-->
     <dimen name="default_minHeight">48dp</dimen>
+    <dimen name="side_imageViewUserProfile">160dp</dimen>
 </resources>
