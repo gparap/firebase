@@ -30,6 +30,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
@@ -63,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                 user.setEmail(email.getText().toString().trim());
                 user.setPassword(password.getText().toString().trim());
                 user.setDisplayName(displayName.getText().toString().trim());
+                user.setProfileImageUrl("");
 
                 //create a new Firebase user
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -97,6 +99,10 @@ public class RegisterActivity extends AppCompatActivity {
                                         }
                                     }
                             );
+
+                            //insert new user to the users database
+                            FirebaseDatabase database = FirebaseDatabase.getInstance(AppConstants.DATABASE_URL);
+                            database.getReference(AppConstants.DATABASE_PATH_USERS + user.getId()).setValue(user);
                         });
                     }
 

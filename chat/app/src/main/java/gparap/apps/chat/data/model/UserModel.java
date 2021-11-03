@@ -26,7 +26,7 @@ public class UserModel implements Parcelable {
     private String email;
     private String password;
     private String displayName;
-    private String profileImage;
+    private String profileImageUrl;
 
     public UserModel() {
     }
@@ -36,7 +36,7 @@ public class UserModel implements Parcelable {
         email = in.readString();
         password = in.readString();
         displayName = in.readString();
-        profileImage = in.readString();
+        profileImageUrl = in.readString();
     }
 
     public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
@@ -83,12 +83,12 @@ public class UserModel implements Parcelable {
         this.displayName = displayName;
     }
 
-    public String getProfileImage() {
-        return profileImage;
+    public String getProfileImageUrl() {
+        return profileImageUrl;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     @Override
@@ -102,6 +102,6 @@ public class UserModel implements Parcelable {
         dest.writeString(email);
         dest.writeString(password);
         dest.writeString(displayName);
-        dest.writeString(profileImage);
+        dest.writeString(profileImageUrl);
     }
 }
