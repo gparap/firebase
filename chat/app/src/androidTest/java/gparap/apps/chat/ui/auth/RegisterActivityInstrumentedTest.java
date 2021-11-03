@@ -222,6 +222,8 @@ public class RegisterActivityInstrumentedTest {
         //noinspection ConstantConditions
         assert (testUserDisplayName.equals(firebaseUser.getDisplayName()));
         assert (testUserEmail.equals(firebaseUser.getEmail()));
+        onView(withId(R.id.edit_text_login_email)).check(matches(withText(firebaseUser.getEmail())));
+        onView(withId(R.id.edit_text_login_email)).check(matches(withText(testUserEmail)));
 
         //remove user from database
         firebaseAuth.signOut();

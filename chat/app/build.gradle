@@ -53,4 +53,7 @@ dependencies {
 
     //Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics'
+
+    //Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-database:20.0.2'
 }
