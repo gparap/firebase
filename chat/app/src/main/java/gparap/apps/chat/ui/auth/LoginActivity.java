@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
 import gparap.apps.chat.MainActivity;
 import gparap.apps.chat.R;
 import gparap.apps.chat.data.model.UserModel;
+import gparap.apps.chat.utils.AppConstants;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
@@ -46,6 +47,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setupToolbar();
         getWidgets();
+
+        //display user's e-mail if they're just registered
+        email.setText(getIntent().getStringExtra(AppConstants.REGISTERED_USER_EMAIL));
 
         //hide progress
         progressBar.setVisibility(View.INVISIBLE);
@@ -93,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         //register new user
-        buttonRegister.setOnClickListener(v->{
+        buttonRegister.setOnClickListener(v -> {
             startActivity(new Intent(this, RegisterActivity.class));
             //TODO: Don't finish activity here (user maybe already registered).
             // Update activity_register.xml instead.

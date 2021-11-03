@@ -18,14 +18,15 @@ package gparap.apps.chat.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/*
- * Model for logged-in user data
+/**
+ * Model for logged-in user data.
  */
 public class UserModel implements Parcelable {
     private String id;
     private String email;
     private String password;
     private String displayName;
+    private String profileImage;
 
     public UserModel() {
     }
@@ -35,6 +36,7 @@ public class UserModel implements Parcelable {
         email = in.readString();
         password = in.readString();
         displayName = in.readString();
+        profileImage = in.readString();
     }
 
     public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
@@ -81,6 +83,14 @@ public class UserModel implements Parcelable {
         this.displayName = displayName;
     }
 
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -92,5 +102,6 @@ public class UserModel implements Parcelable {
         dest.writeString(email);
         dest.writeString(password);
         dest.writeString(displayName);
+        dest.writeString(profileImage);
     }
 }

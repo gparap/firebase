@@ -15,6 +15,7 @@
  */
 package gparap.apps.chat.ui.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import java.util.Objects;
 
 import gparap.apps.chat.R;
+import gparap.apps.chat.data.model.UserModel;
+import gparap.apps.chat.utils.AppConstants;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText displayName, email, password, confirmPassword;
@@ -55,27 +58,42 @@ public class RegisterActivity extends AppCompatActivity {
                 //show progress
                 progress.setVisibility(View.VISIBLE);
 
-                //create a new user
+                //create a new UserModel object
+                UserModel user = new UserModel();
+                user.setEmail(email.getText().toString().trim());
+                user.setPassword(password.getText().toString().trim());
+                user.setDisplayName(displayName.getText().toString().trim());
+
+                //create a new Firebase user
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.createUserWithEmailAndPassword(
-                        email.getText().toString().trim(),
-                        password.getText().toString().trim()).addOnCompleteListener(taskCreate -> {
+                        user.getEmail(),
+                        user.getPassword()).addOnCompleteListener(taskCreate -> {
                     //new user created
                     if (taskCreate.isSuccessful()) {
                         //sign-in user
-                        firebaseAuth.signInWithEmailAndPassword(email.getText().toString().trim(),
-                                password.getText().toString().trim()).addOnCompleteListener(taskLogin -> {
-                            //update user's display name
+                        firebaseAuth.signInWithEmailAndPassword(user.getEmail(),
+                                user.getPassword()).addOnCompleteListener(taskLogin -> {
+
+                            //get currently signed-in user
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            if (firebaseUser == null) {
+                                return;
+                            }
+
+                            //update user id
+                            user.setId(firebaseUser.getUid());
+
+                            //update user's display name
                             UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(displayName.getText().toString().trim())
+                                    .setDisplayName(user.getDisplayName())
                                     .build();
-                            assert firebaseUser != null;
                             firebaseUser.updateProfile(profileChangeRequest).addOnCompleteListener(
                                     taskUpdate -> {
                                         if (taskUpdate.isSuccessful()) {
                                             progress.setVisibility(View.INVISIBLE); //hide progress
                                             Toast.makeText(this, getResources().getString(R.string.toast_register_success), Toast.LENGTH_SHORT).show();
+                                            gotoLoginActivity(user.getEmail());
                                         }
                                     }
                             );
@@ -85,11 +103,18 @@ public class RegisterActivity extends AppCompatActivity {
                     //cannot create new user
                     else {
                         progress.setVisibility(View.INVISIBLE); //hide progress
-                        Log.d("CANNOT_CREATE_NEW_USER", Objects.requireNonNull(taskCreate.getException()).toString());
+                        Log.d(AppConstants.TAG_CANNOT_CREATE_USER, Objects.requireNonNull(taskCreate.getException()).toString());
                     }
                 });
             }
         });
+    }
+
+    private void gotoLoginActivity(String registeredEmail) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(AppConstants.REGISTERED_USER_EMAIL, registeredEmail);
+        startActivity(intent);
+        finish();
     }
 
     private boolean validateRegistration() {
