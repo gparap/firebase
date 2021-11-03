@@ -5,6 +5,7 @@
     android:id="@+id/layout_activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/shape_gradient"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     tools:context=".ui.auth.LoginActivity">
@@ -108,6 +109,7 @@
                 android:id="@+id/button_login"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/shape_round"
                 android:text="@string/button_login"
                 app:layout_constraintEnd_toEndOf="@+id/edit_text_login_email"
                 app:layout_constraintStart_toStartOf="@+id/edit_text_login_email"
@@ -130,6 +132,7 @@
                 android:id="@+id/button_goto_register"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/shape_round"
                 android:text="@string/button_register"
                 app:layout_constraintEnd_toEndOf="@+id/button_login"
                 app:layout_constraintStart_toStartOf="@+id/button_login"
