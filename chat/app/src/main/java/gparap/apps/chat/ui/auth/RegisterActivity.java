@@ -15,7 +15,6 @@
  */
 package gparap.apps.chat.ui.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,23 +24,19 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.Objects;
 
 import gparap.apps.chat.R;
-import gparap.apps.chat.data.model.UserModel;
+import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.utils.AppConstants;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText displayName, email, password, confirmPassword;
     private Button buttonRegister;
     private ProgressBar progress;
+    private RegisterActivityViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,101 +45,67 @@ public class RegisterActivity extends AppCompatActivity {
         setupToolbar();
         getWidgets();
 
+        //create ViewModel for this activity
+        viewModel = new ViewModelProvider(this).get(RegisterActivityViewModel.class);
+
         //hide progress
         progress.setVisibility(View.INVISIBLE);
 
-        //register new user
+        //register a new user
         buttonRegister.setOnClickListener(v -> {
-            if (validateRegistration()) {
+            if (viewModel.validateRegistration(
+                    displayName.getText().toString().trim(),
+                    email.getText().toString().trim(),
+                    password.getText().toString().trim(),
+                    confirmPassword.getText().toString().trim()
+            )) {
                 //show progress
                 progress.setVisibility(View.VISIBLE);
 
-                //create a new UserModel object
-                UserModel user = new UserModel();
-                user.setEmail(email.getText().toString().trim());
-                user.setPassword(password.getText().toString().trim());
-                user.setDisplayName(displayName.getText().toString().trim());
-                user.setProfileImageUrl("");
-
-                //create a new Firebase user
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                firebaseAuth.createUserWithEmailAndPassword(
-                        user.getEmail(),
-                        user.getPassword()).addOnCompleteListener(taskCreate -> {
-                    //new user created
+                //create a new user
+                viewModel.createUserWithEmailAndPassword(email.getText().toString().trim(),
+                        password.getText().toString().trim()).addOnCompleteListener(taskCreate -> {
                     if (taskCreate.isSuccessful()) {
-                        //sign-in user
-                        firebaseAuth.signInWithEmailAndPassword(user.getEmail(),
-                                user.getPassword()).addOnCompleteListener(taskLogin -> {
-
-                            //get currently signed-in user
-                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                            if (firebaseUser == null) {
-                                return;
-                            }
-
-                            //update user id
-                            user.setId(firebaseUser.getUid());
-
-                            //update user's display name
-                            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(user.getDisplayName())
-                                    .build();
-                            firebaseUser.updateProfile(profileChangeRequest).addOnCompleteListener(
-                                    taskUpdate -> {
+                        //create a user model
+                        UserModel user = viewModel.getCurrentUser(
+                                displayName.getText().toString().trim(),
+                                email.getText().toString().trim(),
+                                password.getText().toString().trim()
+                        );
+                        //sign-in currently created user
+                        viewModel.signInWithEmailAndPassword(user.getEmail(), user.getPassword()).addOnCompleteListener(taskLogin -> {
+                            //update new user's profile
+                            viewModel.updateUserDisplayName(user.getDisplayName()).addOnCompleteListener(taskUpdate -> {
                                         if (taskUpdate.isSuccessful()) {
-                                            progress.setVisibility(View.INVISIBLE); //hide progress
+                                            progress.setVisibility(View.INVISIBLE);
                                             Toast.makeText(this, getResources().getString(R.string.toast_register_success), Toast.LENGTH_SHORT).show();
-                                            gotoLoginActivity(user.getEmail());
+                                            viewModel.redirectToLogin(user.getEmail());
+                                            finish();
                                         }
                                     }
                             );
-
-                            //insert new user to the users database
-                            FirebaseDatabase database = FirebaseDatabase.getInstance(AppConstants.DATABASE_URL);
-                            database.getReference(AppConstants.DATABASE_PATH_USERS + user.getId()).setValue(user);
+                            //add new user to the "users" database
+                            viewModel.insertNewUserToTheDatabase(user);
                         });
                     }
 
                     //cannot create new user
                     else {
-                        progress.setVisibility(View.INVISIBLE); //hide progress
-                        Log.d(AppConstants.TAG_CANNOT_CREATE_USER, Objects.requireNonNull(taskCreate.getException()).toString());
+                        progress.setVisibility(View.INVISIBLE);
+
+                        //debug log
+                        if (taskCreate.getException() != null) {
+                            Log.d(AppConstants.TAG_CANNOT_CREATE_USER, taskCreate.getException().toString());
+
+                            //inform user that the e-mail they entered is invalid
+                            if (taskCreate.getException() instanceof com.google.firebase.auth.FirebaseAuthInvalidCredentialsException) {
+                                Toast.makeText(this, this.getResources().getString(R.string.toast_email_badly_formatted), Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
                 });
             }
         });
-    }
-
-    private void gotoLoginActivity(String registeredEmail) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra(AppConstants.REGISTERED_USER_EMAIL, registeredEmail);
-        startActivity(intent);
-        finish();
-    }
-
-    private boolean validateRegistration() {
-        if (displayName.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_display_name), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (email.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_email), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (password.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_password), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (confirmPassword.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_confirm_password), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!password.getText().toString().equals(confirmPassword.getText().toString())) {
-            Toast.makeText(this, getResources().getString(R.string.toast_unmatched_passwords), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
     private void getWidgets() {

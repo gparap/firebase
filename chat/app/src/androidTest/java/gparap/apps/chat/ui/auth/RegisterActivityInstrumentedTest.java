@@ -188,6 +188,32 @@ public class RegisterActivityInstrumentedTest {
     }
 
     @Test
+    public void validateUserInput_emailAddressBadlyFormatted_showErrorMessage() {
+        String password = "123456";
+
+        //make sure all fields except email are filled correctly
+        onView(withId(R.id.edit_text_register_display_name)).perform(typeText("displayName"));
+        closeSoftKeyboard();
+        onView(withId(R.id.edit_text_register_password)).perform(typeText(password));
+        closeSoftKeyboard();
+        onView(withId(R.id.edit_text_register_confirm_password)).perform(typeText(password));
+        closeSoftKeyboard();
+
+        //enter a badly formetted email address
+        onView(withId(R.id.edit_text_register_email)).perform(typeText("invalid"));
+        closeSoftKeyboard();
+
+        //attempt registration
+        onView(withId(R.id.button_register)).perform(click());
+
+        onView(withText(R.string.toast_email_badly_formatted))
+                .inRoot(withDecorView(Matchers.not(decorView)))
+                .check(matches(isDisplayed()));
+
+        delayForToastMessageToDisappear();
+    }
+
+    @Test
     @LargeTest
     public void registerNewUserSuccessfully() throws InterruptedException {
         String testUserDisplayName = "test_user_display_name";

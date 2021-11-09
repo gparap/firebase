@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gparap.apps.chat.R;
+import gparap.apps.chat.ui.splash.SplashActivity;
 
 public class SplashActivityInstrumentedTest {
 

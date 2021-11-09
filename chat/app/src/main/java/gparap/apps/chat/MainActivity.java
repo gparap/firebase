@@ -15,7 +15,6 @@
  */
 package gparap.apps.chat;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -32,7 +31,6 @@ import gparap.apps.chat.ui.user_profile.UserProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,23 +40,18 @@ public class MainActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar_main);
         toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(item -> {
-            switch (item.getItemId()) {
-                //open user profile
-                case R.id.menu_item_user_profile:
-                    startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
-                    break;
+            //open user profile
+            if (item.getItemId() == R.id.menu_item_user_profile) {
+                startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+            }
+            //logout current user
+            if (item.getItemId() == R.id.menu_item_logout) {
+                //sign-out current user
+                FirebaseAuth.getInstance().signOut();
 
-                //logout current user
-                case R.id.menu_item_logout:
-                    //sign-out current user
-                    FirebaseAuth.getInstance().signOut();
-
-                    //goto login activity
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                    break;
-                default:
-                    throw new IllegalStateException("DEBUG: this shouldn't have happened..");
+                //goto login activity
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
             }
             return false;
         });

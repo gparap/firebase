@@ -16,9 +16,11 @@
     <string name="toast_empty_confirm_password">Please confirm your password..</string>
     <string name="toast_invalid_credentials">Invalid creadentials, please try again..</string>
     <string name="toast_unmatched_passwords">Passwords do not match, please try again..</string>
+    <string name="toast_email_badly_formatted">Please enter a valid e-mail address..</string>
     <string name="toast_register_success">Registration is successful!</string>
     <string name="text_forgotten_password">I forgot my password!</string>
     <string name="text_user_not_registered">Not registered yet?</string>
+    <string name="text_greet_user">Welcome </string>
     <string name="hint_display_name">display name</string>
     <string name="hint_confirm_password">confirm password</string>
     <string name="title_menu_user_profile">My Profile</string>

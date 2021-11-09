@@ -24,16 +24,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import gparap.apps.chat.MainActivity;
 import gparap.apps.chat.R;
-import gparap.apps.chat.data.model.UserModel;
+import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.utils.AppConstants;
 
 public class LoginActivity extends AppCompatActivity {
@@ -48,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         setupToolbar();
         getWidgets();
 
+        //create ViewModel for this activity
+        LoginActivityViewModel viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
+
         //display user's e-mail if they're just registered
         email.setText(getIntent().getStringExtra(AppConstants.REGISTERED_USER_EMAIL));
 
@@ -56,64 +55,36 @@ public class LoginActivity extends AppCompatActivity {
 
         //login existing user
         buttonLogin.setOnClickListener(v -> {
-            if (validateUserInput()) {
+            if (viewModel.validateUserInput(email.getText().toString(), password.getText().toString())) {
                 //show progress
                 progressBar.setVisibility(View.VISIBLE);
 
-                //log-in user
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                Task<AuthResult> authResult = firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString());
-                authResult.addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        //get user details
-                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                //sign-in user
+                viewModel.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                UserModel user = viewModel.getSignedInUser(
+                                        email.getText().toString(),
+                                        password.getText().toString()
+                                );
+                                viewModel.greetSignedInUser(user);
+                                viewModel.redirectToChat(user);
+                                finish();
 
-                        //create user model
-                        assert firebaseUser != null;
-                        UserModel userModel = new UserModel();
-                        userModel.setId(firebaseUser.getUid());
-                        userModel.setEmail(email.getText().toString());
-                        userModel.setPassword(password.getText().toString());
-                        userModel.setDisplayName(firebaseUser.getDisplayName());
+                            } else {
+                                Toast.makeText(this, getResources().getString(R.string.toast_invalid_credentials), Toast.LENGTH_SHORT).show();
+                            }
 
-                        //greet user
-                        String displayName = firebaseUser.getDisplayName() != null ? firebaseUser.getDisplayName() : "";
-                        Toast.makeText(this, "Welcome " + displayName, Toast.LENGTH_SHORT).show();
-
-                        //redirect to chat
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra("current_user", userModel);
-                        startActivity(intent);
-                        finish();
-
-                    } else {
-                        Toast.makeText(this, getResources().getString(R.string.toast_invalid_credentials), Toast.LENGTH_SHORT).show();
-                    }
-
-                    //hide progress
-                    progressBar.setVisibility(View.INVISIBLE);
-                });
+                            //hide progress
+                            progressBar.setVisibility(View.INVISIBLE);
+                        });
             }
         });
 
         //register new user
-        buttonRegister.setOnClickListener(v -> {
-            startActivity(new Intent(this, RegisterActivity.class));
-            //TODO: Don't finish activity here (user maybe already registered).
-            // Update activity_register.xml instead.
-        });
-    }
-
-    private boolean validateUserInput() {
-        if (email.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_email), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (password.getText().toString().isEmpty()) {
-            Toast.makeText(this, getResources().getString(R.string.toast_empty_password), Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
+        buttonRegister.setOnClickListener(v ->
+                startActivity(new Intent(this, RegisterActivity.class))
+        );
     }
 
     private void getWidgets() {

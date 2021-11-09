@@ -38,7 +38,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gparap.apps.chat.R;
-import gparap.apps.chat.ui.auth.LoginActivity;
 
 public class LoginActivityInstrumentedTest {
     private View decorView; //top-level window decor view

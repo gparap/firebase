@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.chat.data.model;
+package gparap.apps.chat.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -26,6 +26,7 @@ public class UserModel implements Parcelable {
     private String email;
     private String password;
     private String displayName;
+    private String profileImageUri;
     private String profileImageUrl;
 
     public UserModel() {
@@ -36,6 +37,7 @@ public class UserModel implements Parcelable {
         email = in.readString();
         password = in.readString();
         displayName = in.readString();
+        profileImageUri = in.readString();
         profileImageUrl = in.readString();
     }
 
@@ -91,6 +93,14 @@ public class UserModel implements Parcelable {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public String getProfileImageUri() {
+        return profileImageUri;
+    }
+
+    public void setProfileImageUri(String profileImageUri) {
+        this.profileImageUri = profileImageUri;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -102,6 +112,7 @@ public class UserModel implements Parcelable {
         dest.writeString(email);
         dest.writeString(password);
         dest.writeString(displayName);
+        dest.writeString(profileImageUri);
         dest.writeString(profileImageUrl);
     }
 }
