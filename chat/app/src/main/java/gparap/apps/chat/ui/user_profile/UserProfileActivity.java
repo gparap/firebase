@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,11 +12,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.MaterialToolbar;
+
+import java.util.Objects;
 
 import gparap.apps.chat.R;
 import gparap.apps.chat.data.UserModel;
@@ -74,6 +78,15 @@ public class UserProfileActivity extends AppCompatActivity {
                 viewModel.updateUserPassword(password.getText().toString().trim(), user, isProfileImageChanged, progressUpdate);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            viewModel.redirectToChat(user);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -163,5 +176,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private void setupToolbar() {
         MaterialToolbar toolbar = findViewById(R.id.toolbar_user_profile);
         toolbar.setTitle(getResources().getString(R.string.title_activity_user_profile));
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 }

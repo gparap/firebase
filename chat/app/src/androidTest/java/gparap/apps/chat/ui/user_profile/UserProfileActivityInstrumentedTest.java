@@ -7,6 +7,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.IsNot.not;
@@ -18,6 +19,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
+import androidx.test.filters.SmallTest;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -135,6 +137,13 @@ public class UserProfileActivityInstrumentedTest {
     public void onClickEditPassword_showPasswordConfirmation() {
         onView(withId(R.id.image_view_edit_password)).perform(click());
         onView(withId(R.id.edit_text_user_profile_confirm_password)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @SmallTest
+    public void onHomeButtonClicked_redirectToChat() {
+        onView(withContentDescription("Navigate up")).perform(click());
+        onView(withId(R.id.layout_activity_main)).check(matches(isDisplayed()));
     }
 
     @Test

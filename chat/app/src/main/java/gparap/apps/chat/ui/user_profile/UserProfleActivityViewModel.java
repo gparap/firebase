@@ -17,6 +17,7 @@ package gparap.apps.chat.ui.user_profile;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -43,6 +44,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import gparap.apps.chat.MainActivity;
 import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.utils.AppConstants;
 
@@ -232,5 +234,12 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
             isProfileImageChanged.set(true);
         });
         return isProfileImageChanged.get();
+    }
+
+    public void redirectToChat(UserModel user) {
+        Intent intent = new Intent(context.get(), MainActivity.class);
+        intent.putExtra("current_user", user);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.get().startActivity(intent);
     }
 }
