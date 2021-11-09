@@ -21,9 +21,12 @@ public class AppConstants {
     For a us-central1 default database, you can call getInstance() (or database) without arguments.*/
     public static final String DATABASE_URL = "https://social-c3823-default-rtdb.europe-west1.firebasedatabase.app/";
 
-    public static final String DATABASE_PATH_USERS = "users/";
-
-    public static final String DATABASE_STORAGE_LOCATION = "images/";
+    public static final String DATABASE_PATH_USERS                  = "users/";
+    public static final String DATABASE_STORAGE_LOCATION            = "images/";
+    public static final String DATABASE_CHILD_PROFILE_IMAGE_URL     = "profileImageUrl";
+    public static final String DATABASE_CHILD_USER_DISPLAY_NAME     = "displayName";
+    public static final String DATABASE_CHILD_USER_EMAIL            = "email";
+    public static final String DATABASE_CHILD_USER_PASSWORD         = "password";
 
     public static final int ACTION_PICK_REQUEST_CODE = 999;
 }

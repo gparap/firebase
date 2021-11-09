@@ -16,18 +16,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Placeholder for user user_profile image-->
-    <ImageView
-        android:scaleType="centerCrop"
-        android:id="@+id/image_view_user_profile"
+    <!--Placeholder for user user profile image-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_user_profile"
         android:layout_width="@dimen/side_imageViewUserProfile"
         android:layout_height="@dimen/side_imageViewUserProfile"
-        android:contentDescription="@string/desc_app_logo"
+        app:cardCornerRadius="90dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_user_profile"
-        app:srcCompat="@drawable/ic_account_24" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_user_profile">
+
+        <ImageView
+            android:id="@+id/image_view_user_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/desc_app_logo"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_account_24" />
+    </androidx.cardview.widget.CardView>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -37,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_user_profile">
+        app:layout_constraintTop_toBottomOf="@+id/card_view_user_profile">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
