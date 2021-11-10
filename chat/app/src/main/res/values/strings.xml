@@ -29,4 +29,6 @@
     <string name="desc_edit_user_email">Edit user email</string>
     <string name="desc_edit_user_password">Edit user password</string>
     <string name="button_update_user_profile">Update Profile</string>
+    <string name="title_chat_list">CHAT LIST</string>
+    <string name="desc_chat_list_user_image">Chat list user profile image</string>
 </resources>
