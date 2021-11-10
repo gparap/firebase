@@ -6,5 +6,7 @@
     <dimen name="side_imageViewChatListUser">48dp</dimen>
     <dimen name="cardview_layout_margin">8dp</dimen>
     <dimen name="cardview_cardCornerRadius">45dp</dimen>
-    <dimen name="textSize_chat_list_user_name">18sp</dimen>
+    <dimen name="cardview_constraintlayout_padding">4dp</dimen>
+    <dimen name="layout_size_chatListUserImage">48dp</dimen>
+    <dimen name="textSize_chatListUserName">18sp</dimen>
 </resources>

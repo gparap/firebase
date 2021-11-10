@@ -163,4 +163,62 @@ public class MainActivityInstrumentedTest {
             Thread.sleep(1667);
         }
     }
+
+    @Test
+    @LargeTest
+    public void onAppLoad_fetchUsersFromTheDatabase() throws InterruptedException {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = null;
+
+        //sign-out previous user (if any)
+        try {
+            firebaseAuth.signOut();
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+            onView(withText(R.string.title_menu_logout)).perform(click());
+            Thread.sleep(1667);
+        } catch (Exception ignored) {
+        }
+
+        //create a test user profile
+        String testUserDisplayName = "test_user_display_name";
+        String testUserEmail = "test_user@email.com";
+        String testUserPassword = "123456";
+
+        try{
+            //register test user
+            onView(withId(R.id.button_goto_register)).perform(click());
+            onView(withId(R.id.edit_text_register_display_name)).perform(typeText(testUserDisplayName));
+            closeSoftKeyboard();
+            onView(withId(R.id.edit_text_register_email)).perform(typeText(testUserEmail));
+            closeSoftKeyboard();
+            onView(withId(R.id.edit_text_register_password)).perform(typeText(testUserPassword));
+            closeSoftKeyboard();
+            onView(withId(R.id.edit_text_register_confirm_password)).perform(typeText(testUserPassword));
+            closeSoftKeyboard();
+            onView(withId(R.id.button_register)).perform(click());
+            Thread.sleep(1667);
+
+            //login with test user
+            onView(withId(R.id.edit_text_login_password)).perform(typeText(testUserPassword));
+            closeSoftKeyboard();
+            onView(withId(R.id.button_login)).perform(click());
+            Thread.sleep(1667);
+
+            //test here
+            onView(withText(testUserDisplayName)).check(matches(isDisplayed()));
+
+        }catch (Exception e) {
+            assert false;
+        }
+        finally {
+            //remove test user from database
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            assert firebaseUser != null;
+            FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
+                    .getReference(AppConstants.DATABASE_PATH_USERS + firebaseUser.getUid())
+                    .removeValue();
+            firebaseUser.delete();
+            Thread.sleep(1667);
+        }
+    }
 }
