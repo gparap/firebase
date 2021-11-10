@@ -15,6 +15,7 @@
  */
 package gparap.apps.chat.ui.user_profile;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -23,10 +24,12 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,16 +45,21 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import gparap.apps.chat.MainActivity;
+import gparap.apps.chat.R;
 import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.utils.AppConstants;
 
 public class UserProfleActivityViewModel extends AndroidViewModel {
     private final WeakReference<Context> context;
 
-    public String getDisplayName() {
+    public UserProfleActivityViewModel(@NonNull Application application) {
+        super(application);
+        context = new WeakReference<>(application.getApplicationContext());
+    }
+
+    public String displayProfileName() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             return firebaseUser.getDisplayName();
@@ -59,17 +67,12 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
         return "";
     }
 
-    public String getEmail() {
+    public String displayProfileEmail() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             return firebaseUser.getEmail();
         }
         return "";
-    }
-
-    public UserProfleActivityViewModel(@NonNull Application application) {
-        super(application);
-        context = new WeakReference<>(application.getApplicationContext());
     }
 
     public Bitmap getUserProfileImageBitmap(Uri uri) {
@@ -155,7 +158,7 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
                             .getReference(AppConstants.DATABASE_PATH_USERS + firebaseUser.getUid());
 
                     //!!!   hold the value of the old password in case something goes terribly wrong
-                    userRef.addValueEventListener(getValueEventListener(user));
+                    userRef.addValueEventListener(getPasswordEventListener(user));
 
                     //update user's password in users database reference
                     userRef.child(AppConstants.DATABASE_CHILD_USER_PASSWORD).setValue(password).addOnCompleteListener(taskPassword -> {
@@ -185,7 +188,7 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
     }
 
     @NonNull
-    private ValueEventListener getValueEventListener(UserModel user) {
+    private ValueEventListener getPasswordEventListener(UserModel user) {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -199,8 +202,7 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
         };
     }
 
-    public boolean updateUserProfileImage(Uri profileImageUri, View progressUpdate) {
-        AtomicBoolean isProfileImageChanged = new AtomicBoolean(false);
+    public void updateUserProfileImage(Uri profileImageUri, View progressUpdate) {
         FirebaseStorage.getInstance().getReference(
                 AppConstants.DATABASE_STORAGE_LOCATION + UUID.randomUUID().toString())
                 .putFile(profileImageUri).addOnCompleteListener(taskUpload -> {
@@ -222,7 +224,6 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
                             }
                         }
                     });
-                    isProfileImageChanged.set(true);
                 }
 
             } else {
@@ -231,9 +232,7 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
                 }
             }
             progressUpdate.setVisibility(View.INVISIBLE);
-            isProfileImageChanged.set(true);
         });
-        return isProfileImageChanged.get();
     }
 
     public void redirectToChat(UserModel user) {
@@ -241,5 +240,28 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
         intent.putExtra("current_user", user);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.get().startActivity(intent);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void displayProfileImage(ImageView userProfileImage) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            //get "users" reference
+            DatabaseReference userRef = FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
+                    .getReference(AppConstants.DATABASE_PATH_USERS + firebaseUser.getUid());
+
+            //get "profileImageUrl" child
+            userRef.child(AppConstants.DATABASE_CHILD_PROFILE_IMAGE_URL).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    //get the user's profile image or the default placeholder if there is none
+                    if (task.getResult().getValue() == null || task.getResult().getValue().toString().isEmpty()) {
+                        userProfileImage.setImageDrawable(context.get().getResources().getDrawable(R.drawable.ic_account_24,null));
+
+                    } else {
+                        Glide.with(context.get()).load(task.getResult().getValue().toString()).into(userProfileImage);
+                    }
+                }
+            });
+        }
     }
 }

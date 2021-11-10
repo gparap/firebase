@@ -45,18 +45,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     debugImplementation 'androidx.fragment:fragment-testing:1.4.0-rc01'
 
-    //Firebase BoM (when using the BoM, don't specify versions in Firebase dependencies)
+    //Firebase (when using the BoM, don't specify versions)
     implementation platform('com.google.firebase:firebase-bom:28.4.2')
-
-    //Firebase Authentication
     implementation 'com.google.firebase:firebase-auth'
-
-    //Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-storage'
 
-    //Firebase Realtime Database
-    implementation 'com.google.firebase:firebase-database:20.0.2'
-
-    //Firebase Cloud Storage
-    implementation 'com.google.firebase:firebase-storage:20.0.0'
+    //Glide (for smooth image loading and caching)
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 }

@@ -55,17 +55,17 @@ public class LoginActivity extends AppCompatActivity {
 
         //login existing user
         buttonLogin.setOnClickListener(v -> {
-            if (viewModel.validateUserInput(email.getText().toString(), password.getText().toString())) {
+            if (viewModel.validateUserInput(email.getText().toString().trim(), password.getText().toString().trim())) {
                 //show progress
                 progressBar.setVisibility(View.VISIBLE);
 
                 //sign-in user
-                viewModel.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                viewModel.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 UserModel user = viewModel.getSignedInUser(
-                                        email.getText().toString(),
-                                        password.getText().toString()
+                                        email.getText().toString().trim(),
+                                        password.getText().toString().trim()
                                 );
                                 viewModel.greetSignedInUser(user);
                                 viewModel.redirectToChat(user);

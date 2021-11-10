@@ -46,9 +46,10 @@ public class UserProfileActivity extends AppCompatActivity {
         //create ViewModel for this activity
         viewModel = new ViewModelProvider(this).get(UserProfleActivityViewModel.class);
 
-        //display user profile details
-        displayName.setText(viewModel.getDisplayName());
-        email.setText(viewModel.getEmail());
+        //display user profile info
+        displayName.setText(viewModel.displayProfileName());
+        email.setText(viewModel.displayProfileEmail());
+        viewModel.displayProfileImage(userProfileImage);
 
         //pick and set user profile image
         userProfileImage = findViewById(R.id.image_view_user_profile);
@@ -56,28 +57,10 @@ public class UserProfileActivity extends AppCompatActivity {
                 pickUserProfileImage()
         );
 
-        //update user profile
-        buttonUpdate.setOnClickListener(view -> {
-            if (isProfileImageChanged) {
-                progressUpdate.setVisibility(View.VISIBLE);
-                if (viewModel.updateUserProfileImage(profileImageUri, progressUpdate)){
-                    isProfileImageChanged = true;
-                }
-            }
-            if (isDisplayNameChanged()) {
-                displayProgress();
-                viewModel.updateUserDisplayName(displayName.getText().toString().trim(), isProfileImageChanged, progressUpdate);
-                user.setDisplayName(displayName.getText().toString());
-            }
-            if (isEmailChanged()) {
-                displayProgress();
-                viewModel.updateUserEmail(email.getText().toString().trim(), user, isProfileImageChanged, progressUpdate);
-            }
-            if (password.isEnabled() && isPasswordConfirmed()) {
-                displayProgress();
-                viewModel.updateUserPassword(password.getText().toString().trim(), user, isProfileImageChanged, progressUpdate);
-            }
-        });
+        //update user profile details
+        buttonUpdate.setOnClickListener(view ->
+                updateUserProfile()
+        );
     }
 
     @Override
@@ -113,7 +96,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private boolean isEmailChanged() {
         //hold the old value of the email
-        user.setEmail(viewModel.getEmail());
+        user.setEmail(viewModel.displayProfileEmail());
 
         return user.getEmail() != null && !user.getEmail().equals(email.getText().toString());
     }
@@ -125,6 +108,26 @@ public class UserProfileActivity extends AppCompatActivity {
     private void displayProgress() {
         if (!isProfileImageChanged) {
             progressUpdate.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateUserProfile() {
+        if (isProfileImageChanged) {
+            progressUpdate.setVisibility(View.VISIBLE);
+            viewModel.updateUserProfileImage(profileImageUri, progressUpdate);
+        }
+        if (isDisplayNameChanged()) {
+            displayProgress();
+            viewModel.updateUserDisplayName(displayName.getText().toString().trim(), isProfileImageChanged, progressUpdate);
+            user.setDisplayName(displayName.getText().toString());
+        }
+        if (isEmailChanged()) {
+            displayProgress();
+            viewModel.updateUserEmail(email.getText().toString().trim(), user, isProfileImageChanged, progressUpdate);
+        }
+        if (password.isEnabled() && isPasswordConfirmed()) {
+            displayProgress();
+            viewModel.updateUserPassword(password.getText().toString().trim(), user, isProfileImageChanged, progressUpdate);
         }
     }
 
@@ -154,7 +157,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         //make change password editable and show password confirmation
         editPassword.setOnClickListener(v -> {
-            password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
             password.setEnabled(true);
             confirmPassword.setVisibility(View.VISIBLE);
         });
