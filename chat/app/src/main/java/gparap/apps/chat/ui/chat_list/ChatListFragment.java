@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import gparap.apps.chat.R;
 import gparap.apps.chat.adapters.ChatListAdapter;
@@ -53,5 +54,16 @@ public class ChatListFragment extends Fragment {
 
         //get chat list (users)
         viewModel.getChatList(adapterUsers, progressLoad);
+
+        //swipe to refresh chat list (users)
+        SwipeRefreshLayout swipeRefreshLayout = container.findViewById(R.id.layout_chat_list);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapterUsers.getUsers().clear();
+                viewModel.getChatList(adapterUsers, progressLoad);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 }

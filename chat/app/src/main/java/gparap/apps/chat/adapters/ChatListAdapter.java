@@ -63,6 +63,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
         //display user image if exists
         Glide.with(context).load(users.get(position).getProfileImageUrl())
                 .error(context.getResources().getDrawable(R.drawable.ic_account_24))
+                .placeholder(context.getResources().getDrawable(R.drawable.ic_account_24))
                 .into(holder.userImage);
 
         //display user name
