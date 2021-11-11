@@ -97,7 +97,7 @@ public class MainActivityInstrumentedTest {
         String testUserEmail = "test_user@email.com";
         String testUserPassword = "123456";
 
-        try{
+        try {
             //add test user to database and sign-in
             firebaseAuth.createUserWithEmailAndPassword(testUserEmail, testUserPassword);
             Thread.sleep(1667);
@@ -151,10 +151,9 @@ public class MainActivityInstrumentedTest {
             //test here
             onView(withId(R.id.layout_activity_main)).check(matches(isDisplayed()));
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             assert false;
-        }
-        finally {
+        } finally {
             //remove test user from database
             Objects.requireNonNull(firebaseUser).delete();
             FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
@@ -166,9 +165,9 @@ public class MainActivityInstrumentedTest {
 
     @Test
     @LargeTest
-    public void onAppLoad_fetchUsersFromTheDatabase() throws InterruptedException {
+    public void onAppLoad_fetchUsersFromTheDatabaseExceptSignedIn() throws InterruptedException {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = null;
+        FirebaseUser firebaseUser;
 
         //sign-out previous user (if any)
         try {
@@ -179,17 +178,34 @@ public class MainActivityInstrumentedTest {
         } catch (Exception ignored) {
         }
 
-        //create a test user profile
-        String testUserDisplayName = "test_user_display_name";
-        String testUserEmail = "test_user@email.com";
+        //create two test user profiles
         String testUserPassword = "123456";
+        // (not signed-in)
+        String testUserUnsignedInDisplayName = "not_signed_in";
+        String testUserUnsignedInEmail = "unsigned@email.com";
+        // (signed-in)
+        String testUserSignedInDisplayName = "signed_in";
+        String testUserSignedInEmail = "signed@email.com";
 
-        try{
-            //register test user
+        try {
+            //register unsigned-in test user
             onView(withId(R.id.button_goto_register)).perform(click());
-            onView(withId(R.id.edit_text_register_display_name)).perform(typeText(testUserDisplayName));
+            onView(withId(R.id.edit_text_register_display_name)).perform(typeText(testUserUnsignedInDisplayName));
             closeSoftKeyboard();
-            onView(withId(R.id.edit_text_register_email)).perform(typeText(testUserEmail));
+            onView(withId(R.id.edit_text_register_email)).perform(typeText(testUserUnsignedInEmail));
+            closeSoftKeyboard();
+            onView(withId(R.id.edit_text_register_password)).perform(typeText(testUserPassword));
+            closeSoftKeyboard();
+            onView(withId(R.id.edit_text_register_confirm_password)).perform(typeText(testUserPassword));
+            closeSoftKeyboard();
+            onView(withId(R.id.button_register)).perform(click());
+            Thread.sleep(1667);
+
+            //register signed-in test user
+            onView(withId(R.id.button_goto_register)).perform(click());
+            onView(withId(R.id.edit_text_register_display_name)).perform(typeText(testUserSignedInDisplayName));
+            closeSoftKeyboard();
+            onView(withId(R.id.edit_text_register_email)).perform(typeText(testUserSignedInEmail));
             closeSoftKeyboard();
             onView(withId(R.id.edit_text_register_password)).perform(typeText(testUserPassword));
             closeSoftKeyboard();
@@ -205,13 +221,40 @@ public class MainActivityInstrumentedTest {
             Thread.sleep(1667);
 
             //test here
-            onView(withText(testUserDisplayName)).check(matches(isDisplayed()));
+            onView(withText(testUserUnsignedInDisplayName)).check(matches(isDisplayed()));
+            Thread.sleep(1667);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
+            System.out.println(e.toString());
             assert false;
-        }
-        finally {
-            //remove test user from database
+        } finally {
+            //remove signed-in user from database
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            assert firebaseUser != null;
+            FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
+                    .getReference(AppConstants.DATABASE_PATH_USERS + firebaseUser.getUid())
+                    .removeValue();
+            firebaseUser.delete();
+            Thread.sleep(1667);
+
+            //sign-out test user (the signed-in one)
+            try {
+                firebaseAuth.signOut();
+                openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+                onView(withText(R.string.title_menu_logout)).perform(click());
+                Thread.sleep(1667);
+            } catch (Exception ignored) {
+            }
+
+            //login with the unsigned-in test user
+            onView(withId(R.id.edit_text_login_email)).perform(typeText(testUserUnsignedInEmail));
+            closeSoftKeyboard();
+            onView(withId(R.id.edit_text_login_password)).perform(typeText(testUserPassword));
+            closeSoftKeyboard();
+            onView(withId(R.id.button_login)).perform(click());
+            Thread.sleep(1667);
+
+            //remove user from database (the unsigned-in one)
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             assert firebaseUser != null;
             FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
