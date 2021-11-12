@@ -36,6 +36,7 @@ import gparap.apps.chat.data.UserModel;
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatListViewHolder> {
     private Context context;
     private ArrayList<UserModel> users;
+    private ChatListUserCallback userCallback;
 
     public ArrayList<UserModel> getUsers() {
         return users;
@@ -45,6 +46,10 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
     public void setUsers(ArrayList<UserModel> users) {
         this.users = users;
         notifyDataSetChanged();
+    }
+
+    public void setUserCallback(ChatListUserCallback userCallback) {
+        this.userCallback = userCallback;
     }
 
     @NonNull
@@ -68,6 +73,11 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
 
         //display user name
         holder.userName.setText(users.get(position).getDisplayName());
+
+        //setup a callback method for clicking a specific user
+        holder.itemView.setOnClickListener(view ->
+                userCallback.onClickChatListUser(users.get(holder.getAdapterPosition()))
+        );
     }
 
     @Override
@@ -84,5 +94,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
             userImage = itemView.findViewById(R.id.image_view_chat_list_user);
             userName = itemView.findViewById(R.id.image_view_chat_list_user_name);
         }
+    }
+
+    public interface ChatListUserCallback {
+        void onClickChatListUser(UserModel user);
     }
 }

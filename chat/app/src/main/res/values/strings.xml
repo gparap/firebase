@@ -1,15 +1,23 @@
 <resources>
     <string name="app_name">Chat</string>
-    <string name="desc_app_logo">Application Logo</string>
+
     <string name="title_activity_login">Login</string>
     <string name="title_activity_register">Register</string>
     <string name="title_activity_user_profile">My Profile</string>
     <string name="title_private_chat">Private Chat</string>
     <string name="title_public_chat">Public Chat</string>
+    <string name="title_menu_user_profile">My Profile</string>
+    <string name="title_menu_logout">Logout</string>
+
     <string name="hint_email">e-mail</string>
     <string name="hint_password">password</string>
+    <string name="hint_display_name">display name</string>
+    <string name="hint_confirm_password">confirm password</string>
+
     <string name="button_login">Login</string>
     <string name="button_register">Register</string>
+    <string name="button_update_user_profile">Update Profile</string>
+
     <string name="toast_empty_display_name">Please enter your display name..</string>
     <string name="toast_empty_email">Please enter your e-mail..</string>
     <string name="toast_empty_password">Please enter your password..</string>
@@ -18,15 +26,14 @@
     <string name="toast_unmatched_passwords">Passwords do not match, please try again..</string>
     <string name="toast_email_badly_formatted">Please enter a valid e-mail address..</string>
     <string name="toast_register_success">Registration is successful!</string>
+
     <string name="text_forgotten_password">I forgot my password!</string>
     <string name="text_user_not_registered">Not registered yet?</string>
     <string name="text_greet_user">Welcome </string>
-    <string name="hint_display_name">display name</string>
-    <string name="hint_confirm_password">confirm password</string>
-    <string name="title_menu_user_profile">My Profile</string>
-    <string name="title_menu_logout">Logout</string>
+
+    <string name="desc_app_logo">Application Logo</string>
     <string name="desc_edit_user_display_name">Edit user display name</string>
     <string name="desc_edit_user_email">Edit user email</string>
     <string name="desc_edit_user_password">Edit user password</string>
-    <string name="button_update_user_profile">Update Profile</string>
+    <string name="desc_close_private_chat">Close private chat</string>
 </resources>

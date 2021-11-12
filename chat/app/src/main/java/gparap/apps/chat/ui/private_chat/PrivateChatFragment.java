@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +21,10 @@ import gparap.apps.chat.adapters.ChatListAdapter;
 import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.utils.AppConstants;
 
-public class PrivateChatFragment extends Fragment {
+public class PrivateChatFragment extends Fragment implements ChatListAdapter.ChatListUserCallback {
     private ViewGroup container;
+    private RecyclerView recyclerViewUsers;
+    private ImageButton buttonCloseChat;
     private UserModel user;
 
     public static PrivateChatFragment newInstance() {
@@ -46,9 +50,10 @@ public class PrivateChatFragment extends Fragment {
         PrivateChatViewModel viewModel = new ViewModelProvider(this).get(PrivateChatViewModel.class);
 
         //setup chat list RecyclerView with adapter
-        RecyclerView recyclerViewUsers = container.findViewById(R.id.recycler_view_chat_list);
+        recyclerViewUsers = container.findViewById(R.id.recycler_view_chat_list);
         recyclerViewUsers.setLayoutManager(new LinearLayoutManager(this.getContext()));
         ChatListAdapter adapterUsers = new ChatListAdapter();
+        adapterUsers.setUserCallback(this);
         recyclerViewUsers.setAdapter(adapterUsers);
 
         //show loading progress
@@ -65,6 +70,13 @@ public class PrivateChatFragment extends Fragment {
             viewModel.getChatList(adapterUsers, progressLoad);
             swipeRefreshLayout.setRefreshing(false);
         });
+
+        //close private chat and diplay chat list
+        buttonCloseChat = container.findViewById(R.id.button_close_private_chat);
+        buttonCloseChat.setOnClickListener(view -> {
+            recyclerViewUsers.setVisibility(View.VISIBLE);
+            buttonCloseChat.setVisibility(View.INVISIBLE);
+        });
     }
 
     @Override
@@ -75,5 +87,15 @@ public class PrivateChatFragment extends Fragment {
         if (getActivity() != null && getActivity().getIntent() != null) {
             user = getActivity().getIntent().getParcelableExtra(AppConstants.SIGNED_IN_USER);
         }
+    }
+
+    @Override
+    public void onClickChatListUser(UserModel user) {
+        //hide chat list because we will be chatting with the selected user
+        recyclerViewUsers.setVisibility(View.INVISIBLE);
+        buttonCloseChat.setVisibility(View.VISIBLE);
+
+        //DEBUG
+        Toast.makeText(container.getContext(), user.getDisplayName(), Toast.LENGTH_SHORT).show();
     }
 }
