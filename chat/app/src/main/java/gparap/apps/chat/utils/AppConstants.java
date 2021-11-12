@@ -15,6 +15,7 @@ public class AppConstants {
     public static final String TAG_CHANGE_PASSWORD_ERROR        = "TAG_CHANGE_PASSWORD_ERROR";
 
     public static final String REGISTERED_USER_EMAIL = "registered_user_email";
+    public static final String SIGNED_IN_USER = "signed_in_user";
 
     /*Note from Firebase: To get a reference to a database other than a us-central1 default database,
     you must pass the database URL to getInstance() (or Kotlin+KTX database()).

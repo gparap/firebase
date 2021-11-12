@@ -33,6 +33,7 @@ import java.lang.ref.WeakReference;
 import gparap.apps.chat.MainActivity;
 import gparap.apps.chat.R;
 import gparap.apps.chat.data.UserModel;
+import gparap.apps.chat.utils.AppConstants;
 
 public class LoginActivityViewModel extends AndroidViewModel {
     private final WeakReference<Context> context;
@@ -79,7 +80,7 @@ public class LoginActivityViewModel extends AndroidViewModel {
 
     public void redirectToChat(UserModel user) {
         Intent intent = new Intent(context.get(), MainActivity.class);
-        intent.putExtra("current_user", user);
+        intent.putExtra(AppConstants.SIGNED_IN_USER, user);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.get().startActivity(intent);
     }

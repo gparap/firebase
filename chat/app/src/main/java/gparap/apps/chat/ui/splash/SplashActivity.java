@@ -28,7 +28,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.chat.MainActivity;
 import gparap.apps.chat.R;
+import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.ui.auth.LoginActivity;
+import gparap.apps.chat.utils.AppConstants;
 
 //TODO: animation
 @SuppressLint("CustomSplashScreen")
@@ -53,7 +55,16 @@ public class SplashActivity extends AppCompatActivity {
 
                 //if there is a signed-in FirebaseUser, create an intent for MainActivity
             } else {
+                //get signed-in user details
+                UserModel user = new UserModel();
+                user.setId(firebaseUser.getUid());
+                user.setEmail(firebaseUser.getEmail());
+                user.setPassword("");
+                user.setDisplayName(firebaseUser.getDisplayName());
+
+                //create intent
                 intent = new Intent(this, MainActivity.class);
+                intent.putExtra(AppConstants.SIGNED_IN_USER, user);
             }
 
             //start intent and close activity

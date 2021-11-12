@@ -16,9 +16,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import gparap.apps.chat.R;
 import gparap.apps.chat.adapters.ChatListAdapter;
+import gparap.apps.chat.data.UserModel;
+import gparap.apps.chat.utils.AppConstants;
 
 public class PrivateChatFragment extends Fragment {
     private ViewGroup container;
+    private UserModel user;
 
     public static PrivateChatFragment newInstance() {
         return new PrivateChatFragment();
@@ -62,5 +65,15 @@ public class PrivateChatFragment extends Fragment {
             viewModel.getChatList(adapterUsers, progressLoad);
             swipeRefreshLayout.setRefreshing(false);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //get signed-in user (if exists)
+        if (getActivity() != null && getActivity().getIntent() != null) {
+            user = getActivity().getIntent().getParcelableExtra(AppConstants.SIGNED_IN_USER);
+        }
     }
 }
