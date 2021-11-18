@@ -11,7 +11,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.nio.file.FileVisitResult;
 import java.util.ArrayList;
 
 import gparap.apps.chat.adapters.ChatListAdapter;
