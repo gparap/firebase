@@ -11,10 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--Chat list of possible users-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_chat_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:visibility="invisible" />
 
         <ProgressBar
             android:id="@+id/progress_load_chat_list"
@@ -27,6 +29,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
+
+        <!--User to user private chat-->
+        <include
+            layout="@layout/view_private_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

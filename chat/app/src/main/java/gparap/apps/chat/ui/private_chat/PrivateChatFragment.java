@@ -25,6 +25,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
     private RecyclerView recyclerViewUsers;
     private UserModel user;
     private boolean isUserChatting = false;
+    private View privateChatView;
 
     public static PrivateChatFragment newInstance() {
         return new PrivateChatFragment();
@@ -69,6 +70,10 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
             viewModel.getChatList(adapterUsers, progressLoad);
             swipeRefreshLayout.setRefreshing(false);
         });
+
+        //hide the private chat
+        privateChatView = container.findViewById(R.id.layout_view_private_chat);
+        privateChatView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -100,8 +105,10 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
 
     @Override
     public void onClickChatListUser(UserModel user) {
-        //hide chat list because we will be chatting with the selected user
+        //hide the users chat list and show the private chat
+        // because we will be chatting with the selected user
         recyclerViewUsers.setVisibility(View.INVISIBLE);
+        privateChatView.setVisibility(View.VISIBLE);
         isUserChatting = true;
 
         //DEBUG

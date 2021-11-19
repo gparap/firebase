@@ -9,4 +9,6 @@
     <dimen name="cardview_constraintlayout_padding">4dp</dimen>
     <dimen name="layout_size_chatListUserImage">48dp</dimen>
     <dimen name="textSize_chatListUserName">18sp</dimen>
+    <dimen name="layout_marginTop_recyclerViewPrivateChat">4dp</dimen>
+    <dimen name="layout_marginBottom_recyclerViewPrivateChat">4dp</dimen>
 </resources>
