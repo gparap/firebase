@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+
 import gparap.apps.chat.R;
 import gparap.apps.chat.adapters.ChatListAdapter;
 import gparap.apps.chat.data.UserModel;
@@ -23,9 +27,14 @@ import gparap.apps.chat.utils.AppConstants;
 public class PrivateChatFragment extends Fragment implements ChatListAdapter.ChatListUserCallback {
     private ViewGroup container;
     private RecyclerView recyclerViewUsers;
-    private UserModel user;
+    private UserModel signedInUser;
+    private UserModel selectedUser;
     private boolean isUserChatting = false;
     private View privateChatView;
+    private EditText signedInUserMessage;
+    private ImageView imageSendMessage;
+    private ImageView selectedUserImage;
+    private TextView selectedUserMessage;
 
     public static PrivateChatFragment newInstance() {
         return new PrivateChatFragment();
@@ -82,7 +91,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
 
         //get signed-in user (if exists)
         if (getActivity() != null && getActivity().getIntent() != null) {
-            user = getActivity().getIntent().getParcelableExtra(AppConstants.SIGNED_IN_USER);
+            signedInUser = getActivity().getIntent().getParcelableExtra(AppConstants.SIGNED_IN_USER);
         }
 
         //handle the back button based on if the user is actively chatting or not
@@ -94,6 +103,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
                     //close private chat and diplay chat list
                     recyclerViewUsers.setVisibility(View.VISIBLE);
                     isUserChatting = false;
+                    privateChatView.setVisibility(View.INVISIBLE);
                     return true;
 
                 } else {
@@ -101,6 +111,12 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
                 }
             });
         }
+
+        //get private chat view widgets
+        signedInUserMessage = container.findViewById(R.id.edit_text_private_chat_primary_user);
+        imageSendMessage = container.findViewById(R.id.image_view_private_chat_send_message);
+        selectedUserImage = container.findViewById(R.id.image_view_selected_user);
+        selectedUserMessage = container.findViewById(R.id.text_view_selected_user_message);
     }
 
     @Override
@@ -110,8 +126,10 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         recyclerViewUsers.setVisibility(View.INVISIBLE);
         privateChatView.setVisibility(View.VISIBLE);
         isUserChatting = true;
+        selectedUser = user;
 
-        //DEBUG
-        Toast.makeText(container.getContext(), user.getDisplayName(), Toast.LENGTH_SHORT).show();
+        //load selected user image
+        Glide.with(container.getContext()).load(selectedUser.getProfileImageUrl()).into(selectedUserImage);
+        selectedUserMessage.setText("This is a test text");
     }
 }
