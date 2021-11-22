@@ -34,7 +34,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
     private EditText signedInUserMessage;
     private ImageView imageSendMessage;
     private ImageView selectedUserImage;
-    private TextView selectedUserMessage;
+    private TextView selectedUserName;
 
     public static PrivateChatFragment newInstance() {
         return new PrivateChatFragment();
@@ -116,7 +116,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         signedInUserMessage = container.findViewById(R.id.edit_text_private_chat_primary_user);
         imageSendMessage = container.findViewById(R.id.image_view_private_chat_send_message);
         selectedUserImage = container.findViewById(R.id.image_view_selected_user);
-        selectedUserMessage = container.findViewById(R.id.text_view_selected_user_message);
+        selectedUserName = container.findViewById(R.id.text_view_selected_user_name);
     }
 
     @Override
@@ -128,8 +128,8 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         isUserChatting = true;
         selectedUser = user;
 
-        //load selected user image
+        //load selected user image and display name
         Glide.with(container.getContext()).load(selectedUser.getProfileImageUrl()).into(selectedUserImage);
-        selectedUserMessage.setText("This is a test text");
+        selectedUserName.setText(selectedUser.getDisplayName());
     }
 }

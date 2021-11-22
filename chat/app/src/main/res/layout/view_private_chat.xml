@@ -28,7 +28,7 @@
 
     <!--Selected user message-->
     <TextView
-        android:id="@+id/text_view_selected_user_message"
+        android:id="@+id/text_view_selected_user_name"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/layout_marginStart_selectedUserMessage"
