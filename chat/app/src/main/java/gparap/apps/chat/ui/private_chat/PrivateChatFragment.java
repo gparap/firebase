@@ -26,6 +26,7 @@ import gparap.apps.chat.utils.AppConstants;
 
 public class PrivateChatFragment extends Fragment implements ChatListAdapter.ChatListUserCallback {
     private ViewGroup container;
+    private PrivateChatViewModel viewModel;
     private RecyclerView recyclerViewUsers;
     private UserModel signedInUser;
     private UserModel selectedUser;
@@ -35,6 +36,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
     private ImageView imageSendMessage;
     private ImageView selectedUserImage;
     private TextView selectedUserName;
+    private ProgressBar progressSendMessage;
 
     public static PrivateChatFragment newInstance() {
         return new PrivateChatFragment();
@@ -56,7 +58,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         super.onActivityCreated(savedInstanceState);
 
         //create the ViewModel for this Fragment
-        PrivateChatViewModel viewModel = new ViewModelProvider(this).get(PrivateChatViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PrivateChatViewModel.class);
 
         //setup chat list RecyclerView with adapter
         recyclerViewUsers = container.findViewById(R.id.recycler_view_chat_list);
@@ -117,6 +119,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         imageSendMessage = container.findViewById(R.id.image_view_private_chat_send_message);
         selectedUserImage = container.findViewById(R.id.image_view_selected_user);
         selectedUserName = container.findViewById(R.id.text_view_selected_user_name);
+        progressSendMessage = container.findViewById(R.id.progress_send_private_message);
     }
 
     @Override
@@ -131,5 +134,13 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         //load selected user image and display name
         Glide.with(container.getContext()).load(selectedUser.getProfileImageUrl()).into(selectedUserImage);
         selectedUserName.setText(selectedUser.getDisplayName());
+
+        //send private message
+        imageSendMessage.setOnClickListener(view->{
+            if (!signedInUserMessage.getText().toString().isEmpty()){
+                progressSendMessage.setVisibility(View.VISIBLE);
+                viewModel.sendMessage(signedInUser, selectedUser, signedInUserMessage.getText().toString(), progressSendMessage);
+            }
+        });
     }
 }

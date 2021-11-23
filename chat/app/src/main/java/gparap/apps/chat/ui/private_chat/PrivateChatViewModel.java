@@ -12,8 +12,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import gparap.apps.chat.adapters.ChatListAdapter;
+import gparap.apps.chat.data.MessageModel;
 import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.utils.AppConstants;
 
@@ -39,7 +41,7 @@ public class PrivateChatViewModel extends ViewModel {
             if (task.isSuccessful() && task.getResult() != null) {
                 for (DataSnapshot snapshot : task.getResult().getChildren()) {
                     UserModel user = snapshot.getValue(UserModel.class);
-                    if (user != null && !user.getId().equals(signedInUserId)){
+                    if (user != null && !user.getId().equals(signedInUserId)) {
                         users.add(user);
                     }
                 }
@@ -47,5 +49,27 @@ public class PrivateChatViewModel extends ViewModel {
                 progressLoad.setVisibility(View.INVISIBLE);
             }
         });
+    }
+
+    /* Sends a private message from one user to another and stores it in the database */
+    public void sendMessage(UserModel signedInUser, UserModel selectedUser, String message, ProgressBar progress) {
+        //generate a pair between the chatting users (using their ids alphabetically)
+        String chatPairId = "";
+        if (signedInUser.getId().compareTo(selectedUser.getId()) > 0){
+            chatPairId = signedInUser.getId() + selectedUser.getId();
+        }else{
+            chatPairId = selectedUser.getId() + signedInUser.getId();
+        }
+
+        //create a message object
+        MessageModel messageObj = new MessageModel(signedInUser.getDisplayName(), selectedUser.getDisplayName(), message);
+
+        //get the private messages database reference
+        DatabaseReference msgRef = FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
+                .getReference(AppConstants.DATABASE_PATH_PRIVATE_MESSAGES);
+
+        //set the data using a Date object as a child
+        msgRef.child(chatPairId).child(new Date().toString()).setValue(messageObj)
+                .addOnCompleteListener(task -> progress.setVisibility(View.INVISIBLE));
     }
 }
