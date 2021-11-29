@@ -3,24 +3,32 @@ package gparap.apps.chat.ui.private_chat;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import gparap.apps.chat.adapters.ChatListAdapter;
+import gparap.apps.chat.adapters.PrivateMessageAdapter;
 import gparap.apps.chat.data.MessageModel;
 import gparap.apps.chat.data.UserModel;
 import gparap.apps.chat.utils.AppConstants;
 
 public class PrivateChatViewModel extends ViewModel {
-    String signedInUserId = "";
+    private String signedInUserId = "";
+    String chatPairId = "";
+    private ArrayList<MessageModel> messages = new ArrayList<>();
+    PrivateMessageAdapter messageAdapter = new PrivateMessageAdapter();
 
     /* Retrieves the possible-to-chat users from database */
     public void getChatList(ChatListAdapter chatListAdapter, ProgressBar progressLoad) {
@@ -51,10 +59,37 @@ public class PrivateChatViewModel extends ViewModel {
         });
     }
 
+    /* Gets the private chat messages for a specific chatting pair */
+    public void displayPrivateMessages(RecyclerView recyclerViewMessages) {
+        //get database reference for the chatting pair
+        DatabaseReference msgRef = FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
+                .getReference(AppConstants.DATABASE_PATH_PRIVATE_MESSAGES);
+        DatabaseReference pairRef = msgRef.child("/"
+                        +"JgRGQHemJFa5Z12G8wxn35NXsnA2GG2mhKK7b0U9N17UgrXDyyPyJvT2");//chatPairId);
+
+        //get the private messages of the chatting pair
+        pairRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messages.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    messages.add(dataSnapshot.getValue(MessageModel.class));
+                }
+                messageAdapter.setMessages(messages);
+                recyclerViewMessages.setAdapter(messageAdapter);
+                recyclerViewMessages.scrollToPosition(messages.size()-1);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     /* Sends a private message from one user to another and stores it in the database */
     public void sendMessage(UserModel signedInUser, UserModel selectedUser, String message, ProgressBar progress) {
         //generate a pair between the chatting users (using their ids alphabetically)
-        String chatPairId = "";
         if (signedInUser.getId().compareTo(selectedUser.getId()) > 0){
             chatPairId = signedInUser.getId() + selectedUser.getId();
         }else{

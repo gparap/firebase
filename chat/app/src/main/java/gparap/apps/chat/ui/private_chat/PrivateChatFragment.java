@@ -37,6 +37,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
     private ImageView selectedUserImage;
     private TextView selectedUserName;
     private ProgressBar progressSendMessage;
+    private RecyclerView recyclerViewMessages;
 
     public static PrivateChatFragment newInstance() {
         return new PrivateChatFragment();
@@ -120,6 +121,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         selectedUserImage = container.findViewById(R.id.image_view_selected_user);
         selectedUserName = container.findViewById(R.id.text_view_selected_user_name);
         progressSendMessage = container.findViewById(R.id.progress_send_private_message);
+        recyclerViewMessages = container.findViewById(R.id.recycler_view_private_chat_messages);
     }
 
     @Override
@@ -134,6 +136,12 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         //load selected user image and display name
         Glide.with(container.getContext()).load(selectedUser.getProfileImageUrl()).into(selectedUserImage);
         selectedUserName.setText(selectedUser.getDisplayName());
+
+        //display private messages on the RecyclerView
+        if (recyclerViewUsers.getVisibility() == View.INVISIBLE){
+            recyclerViewMessages.setLayoutManager(new LinearLayoutManager(container.getContext()));
+            viewModel.displayPrivateMessages(recyclerViewMessages);
+        }
 
         //send private message
         imageSendMessage.setOnClickListener(view->{
