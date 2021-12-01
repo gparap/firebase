@@ -3,16 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    tools:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text_view_private_message"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minWidth="@dimen/default_minHeight"
+        android:layout_margin="@dimen/cardview_layout_margin"
+        app:cardCornerRadius="@dimen/cardview_cardCornerRadius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="This is a private message" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/cardview_constraintlayout_padding">
+
+            <!--Placeholder for user image-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_private_chat_user_image"
+                android:layout_width="@dimen/layout_size_chatListUserImage"
+                android:layout_height="@dimen/layout_size_chatListUserImage"
+                android:visibility="invisible"
+                app:cardCornerRadius="@dimen/cardview_cardCornerRadius"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    android:id="@+id/image_view_private_chat_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/desc_app_logo"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/ic_account_24" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!--Chat list user display name-->
+            <TextView
+                android:id="@+id/text_view_private_message_receiver"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textSize_chatListUserName"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/card_view_private_chat_user_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/card_view_private_chat_user_image"
+                app:layout_constraintTop_toTopOf="@+id/card_view_private_chat_user_image"
+                tools:text="Receiver's message"
+                tools:visibility="visible" />
+
+            <!--Primary user's (sender) private message-->
+            <TextView
+                android:id="@+id/text_view_private_message_sender"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center|end"
+                android:minWidth="@dimen/default_minHeight"
+                android:textSize="@dimen/textSize_chatListUserName"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Senders's message"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

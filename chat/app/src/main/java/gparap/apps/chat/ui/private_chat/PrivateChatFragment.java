@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
-
 import gparap.apps.chat.R;
 import gparap.apps.chat.adapters.ChatListAdapter;
 import gparap.apps.chat.data.UserModel;
@@ -118,8 +116,7 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         //get private chat view widgets
         signedInUserMessage = container.findViewById(R.id.edit_text_private_chat_primary_user);
         imageSendMessage = container.findViewById(R.id.image_view_private_chat_send_message);
-        selectedUserImage = container.findViewById(R.id.image_view_selected_user);
-        selectedUserName = container.findViewById(R.id.text_view_selected_user_name);
+        selectedUserImage = container.findViewById(R.id.image_view_private_chat_user);
         progressSendMessage = container.findViewById(R.id.progress_send_private_message);
         recyclerViewMessages = container.findViewById(R.id.recycler_view_private_chat_messages);
     }
@@ -133,14 +130,10 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
         isUserChatting = true;
         selectedUser = user;
 
-        //load selected user image and display name
-        Glide.with(container.getContext()).load(selectedUser.getProfileImageUrl()).into(selectedUserImage);
-        selectedUserName.setText(selectedUser.getDisplayName());
-
         //display private messages on the RecyclerView
         if (recyclerViewUsers.getVisibility() == View.INVISIBLE){
             recyclerViewMessages.setLayoutManager(new LinearLayoutManager(container.getContext()));
-            viewModel.displayPrivateMessages(recyclerViewMessages);
+            viewModel.displayPrivateMessages(recyclerViewMessages, signedInUser, selectedUser);
         }
 
         //send private message

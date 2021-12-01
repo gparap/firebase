@@ -26,9 +26,9 @@ import gparap.apps.chat.utils.AppConstants;
 
 public class PrivateChatViewModel extends ViewModel {
     private String signedInUserId = "";
-    String chatPairId = "";
     private ArrayList<MessageModel> messages = new ArrayList<>();
-    PrivateMessageAdapter messageAdapter = new PrivateMessageAdapter();
+    private final PrivateMessageAdapter messageAdapter = new PrivateMessageAdapter();
+    private RecyclerView recyclerViewMessages;
 
     /* Retrieves the possible-to-chat users from database */
     public void getChatList(ChatListAdapter chatListAdapter, ProgressBar progressLoad) {
@@ -60,24 +60,34 @@ public class PrivateChatViewModel extends ViewModel {
     }
 
     /* Gets the private chat messages for a specific chatting pair */
-    public void displayPrivateMessages(RecyclerView recyclerViewMessages) {
+    public void displayPrivateMessages(RecyclerView recyclerViewMessages, UserModel signedInUser, UserModel selectedUser) {
+        this.recyclerViewMessages = recyclerViewMessages;
+
         //get database reference for the chatting pair
         DatabaseReference msgRef = FirebaseDatabase.getInstance(AppConstants.DATABASE_URL)
                 .getReference(AppConstants.DATABASE_PATH_PRIVATE_MESSAGES);
-        DatabaseReference pairRef = msgRef.child("/"
-                        +"JgRGQHemJFa5Z12G8wxn35NXsnA2GG2mhKK7b0U9N17UgrXDyyPyJvT2");//chatPairId);
+
+        //generate a pair between the chatting users (using their ids alphabetically)
+        String chatPairId = "";
+        if (signedInUser.getId().compareTo(selectedUser.getId()) > 0) {
+            chatPairId = signedInUser.getId() + selectedUser.getId();
+        } else {
+            chatPairId = selectedUser.getId() + signedInUser.getId();
+        }
 
         //get the private messages of the chatting pair
+        DatabaseReference pairRef = msgRef.child("/" + chatPairId);
         pairRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                messages.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                messages = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     messages.add(dataSnapshot.getValue(MessageModel.class));
                 }
+                messageAdapter.setMessageReceiver(selectedUser);
                 messageAdapter.setMessages(messages);
                 recyclerViewMessages.setAdapter(messageAdapter);
-                recyclerViewMessages.scrollToPosition(messages.size()-1);
+                recyclerViewMessages.scrollToPosition(messages.size() - 1);
             }
 
             @Override
@@ -90,9 +100,10 @@ public class PrivateChatViewModel extends ViewModel {
     /* Sends a private message from one user to another and stores it in the database */
     public void sendMessage(UserModel signedInUser, UserModel selectedUser, String message, ProgressBar progress) {
         //generate a pair between the chatting users (using their ids alphabetically)
-        if (signedInUser.getId().compareTo(selectedUser.getId()) > 0){
+        String chatPairId = "";
+        if (signedInUser.getId().compareTo(selectedUser.getId()) > 0) {
             chatPairId = signedInUser.getId() + selectedUser.getId();
-        }else{
+        } else {
             chatPairId = selectedUser.getId() + signedInUser.getId();
         }
 
@@ -105,6 +116,9 @@ public class PrivateChatViewModel extends ViewModel {
 
         //set the data using a Date object as a child
         msgRef.child(chatPairId).child(new Date().toString()).setValue(messageObj)
-                .addOnCompleteListener(task -> progress.setVisibility(View.INVISIBLE));
+                .addOnCompleteListener(task -> {
+                    progress.setVisibility(View.INVISIBLE);
+                    displayPrivateMessages(recyclerViewMessages, signedInUser, selectedUser);
+                });
     }
 }

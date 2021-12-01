@@ -6,50 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--Placeholder for selected user image-->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view_selected_user"
-        android:layout_width="@dimen/layout_size_chatListUserImage"
-        android:layout_height="@dimen/layout_size_chatListUserImage"
-        android:layout_margin="@dimen/cardview_layout_margin"
-        app:cardCornerRadius="@dimen/cardview_cardCornerRadius"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/image_view_selected_user"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/desc_app_logo"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/ic_account_24" />
-
-    </androidx.cardview.widget.CardView>
-
-    <!--Selected user message-->
-    <TextView
-        android:id="@+id/text_view_selected_user_name"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/layout_marginStart_selectedUserMessage"
-        android:gravity="center|start"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_view_private_chat_messages"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/card_view_selected_user"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Incoming chats" />
-
     <!--Private chat messages-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_private_chat_messages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/layout_marginTop_recyclerViewPrivateChat"
         android:layout_marginBottom="@dimen/layout_marginBottom_recyclerViewPrivateChat"
         app:layout_constraintBottom_toTopOf="@+id/edit_text_private_chat_primary_user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view_selected_user" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--Primary user message-->
     <EditText

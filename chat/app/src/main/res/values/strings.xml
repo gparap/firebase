@@ -38,4 +38,5 @@
     <string name="desc_edit_user_password">Edit user password</string>
     <string name="desc_close_private_chat">Close private chat</string>
     <string name="desc_private_chat_send_message">Private chat send message image</string>
+    <string name="desc_private_chat_user_image">Private chat user image</string>
 </resources>
