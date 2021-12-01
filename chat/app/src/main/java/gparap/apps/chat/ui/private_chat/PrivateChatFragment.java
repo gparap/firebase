@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,8 +31,6 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
     private View privateChatView;
     private EditText signedInUserMessage;
     private ImageView imageSendMessage;
-    private ImageView selectedUserImage;
-    private TextView selectedUserName;
     private ProgressBar progressSendMessage;
     private RecyclerView recyclerViewMessages;
 
@@ -95,7 +92,42 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
             signedInUser = getActivity().getIntent().getParcelableExtra(AppConstants.SIGNED_IN_USER);
         }
 
-        //handle the back button based on if the user is actively chatting or not
+        //get private chat view widgets
+        signedInUserMessage = container.findViewById(R.id.edit_text_private_chat_primary_user);
+        imageSendMessage = container.findViewById(R.id.image_view_private_chat_send_message);
+        progressSendMessage = container.findViewById(R.id.progress_send_private_message);
+        recyclerViewMessages = container.findViewById(R.id.recycler_view_private_chat_messages);
+    }
+
+    @Override
+    public void onClickChatListUser(UserModel user) {
+        handleBackButton();
+
+        //hide the users chat list and show the private chat
+        // because we will be chatting with the selected user
+        recyclerViewUsers.setVisibility(View.INVISIBLE);
+        privateChatView.setVisibility(View.VISIBLE);
+        isUserChatting = true;
+        selectedUser = user;
+
+        //display private messages on the RecyclerView
+        if (recyclerViewUsers.getVisibility() == View.INVISIBLE) {
+            recyclerViewMessages.setLayoutManager(new LinearLayoutManager(container.getContext()));
+            viewModel.displayPrivateMessages(recyclerViewMessages, signedInUser, selectedUser);
+        }
+
+        //send private message
+        imageSendMessage.setOnClickListener(view -> {
+            if (!signedInUserMessage.getText().toString().isEmpty()) {
+                progressSendMessage.setVisibility(View.VISIBLE);
+                viewModel.sendMessage(signedInUser, selectedUser, signedInUserMessage.getText().toString(), progressSendMessage);
+                handleBackButton();
+            }
+        });
+    }
+
+    /* Handles the back button based on if the user is actively chatting or not */
+    private void handleBackButton() {
         if (this.getView() != null) {
             this.getView().setFocusableInTouchMode(true);
             this.getView().requestFocus();
@@ -112,36 +144,5 @@ public class PrivateChatFragment extends Fragment implements ChatListAdapter.Cha
                 }
             });
         }
-
-        //get private chat view widgets
-        signedInUserMessage = container.findViewById(R.id.edit_text_private_chat_primary_user);
-        imageSendMessage = container.findViewById(R.id.image_view_private_chat_send_message);
-        selectedUserImage = container.findViewById(R.id.image_view_private_chat_user);
-        progressSendMessage = container.findViewById(R.id.progress_send_private_message);
-        recyclerViewMessages = container.findViewById(R.id.recycler_view_private_chat_messages);
-    }
-
-    @Override
-    public void onClickChatListUser(UserModel user) {
-        //hide the users chat list and show the private chat
-        // because we will be chatting with the selected user
-        recyclerViewUsers.setVisibility(View.INVISIBLE);
-        privateChatView.setVisibility(View.VISIBLE);
-        isUserChatting = true;
-        selectedUser = user;
-
-        //display private messages on the RecyclerView
-        if (recyclerViewUsers.getVisibility() == View.INVISIBLE){
-            recyclerViewMessages.setLayoutManager(new LinearLayoutManager(container.getContext()));
-            viewModel.displayPrivateMessages(recyclerViewMessages, signedInUser, selectedUser);
-        }
-
-        //send private message
-        imageSendMessage.setOnClickListener(view->{
-            if (!signedInUserMessage.getText().toString().isEmpty()){
-                progressSendMessage.setVisibility(View.VISIBLE);
-                viewModel.sendMessage(signedInUser, selectedUser, signedInUserMessage.getText().toString(), progressSendMessage);
-            }
-        });
     }
 }
