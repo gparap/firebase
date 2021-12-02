@@ -5,9 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.public_chat.PublicChatFragment">
 
-    <TextView
+    <!--Public chat-->
+    <include
+        layout="@layout/view_public_chat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello from PublicChatFragment" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

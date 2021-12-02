@@ -24,6 +24,7 @@ public class AppConstants {
 
     public static final String DATABASE_PATH_USERS                  = "users/";
     public static final String DATABASE_PATH_PRIVATE_MESSAGES       = "privateMessages/";
+    public static final String DATABASE_PATH_PUBLIC_MESSAGES        = "publicMessages/";
     public static final String DATABASE_STORAGE_LOCATION            = "images/";
     public static final String DATABASE_CHILD_PROFILE_IMAGE_URL     = "profileImageUrl";
     public static final String DATABASE_CHILD_USER_DISPLAY_NAME     = "displayName";
