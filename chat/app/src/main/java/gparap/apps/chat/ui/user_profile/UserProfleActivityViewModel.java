@@ -237,13 +237,13 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
 
     public void redirectToChat(UserModel user) {
         Intent intent = new Intent(context.get(), MainActivity.class);
-        intent.putExtra("current_user", user);
+        intent.putExtra(AppConstants.SIGNED_IN_USER, user);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.get().startActivity(intent);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void displayProfileImage(ImageView userProfileImage) {
+    public void displayProfileImage(ImageView userProfileImage, UserModel user) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             //get "users" reference
@@ -255,9 +255,10 @@ public class UserProfleActivityViewModel extends AndroidViewModel {
                 if (task.isSuccessful() && task.getResult() != null) {
                     //get the user's profile image or the default placeholder if there is none
                     if (task.getResult().getValue() == null || task.getResult().getValue().toString().isEmpty()) {
-                        userProfileImage.setImageDrawable(context.get().getResources().getDrawable(R.drawable.ic_account_24,null));
+                        userProfileImage.setImageDrawable(context.get().getResources().getDrawable(R.drawable.ic_account_24, null));
 
                     } else {
+                        user.setProfileImageUrl(task.getResult().getValue().toString());
                         Glide.with(context.get()).load(task.getResult().getValue().toString()).into(userProfileImage);
                     }
                 }

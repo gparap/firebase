@@ -49,7 +49,7 @@ public class UserProfileActivity extends AppCompatActivity {
         //display user profile info
         displayName.setText(viewModel.displayProfileName());
         email.setText(viewModel.displayProfileEmail());
-        viewModel.displayProfileImage(userProfileImage);
+        viewModel.displayProfileImage(userProfileImage, user);
 
         //pick and set user profile image
         userProfileImage = findViewById(R.id.image_view_user_profile);
