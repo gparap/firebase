@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="gparap.apps.social_photos.ui.home.HomeFragment"
+        android:label="@string/text_home"
+        tools:layout="@layout/home_fragment" />
+    <fragment
+        android:id="@+id/navigation_add"
+        android:name="gparap.apps.social_photos.ui.add.AddFragment"
+        android:label="@string/text_add"
+        tools:layout="@layout/add_fragment" />
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="gparap.apps.social_photos.ui.search.SearchFragment"
+        android:label="@string/text_search"
+        tools:layout="@layout/search_fragment" />
+</navigation>
