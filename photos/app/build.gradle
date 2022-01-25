@@ -42,4 +42,6 @@ dependencies {
     //Navigation component
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
+
+    debugImplementation "androidx.fragment:fragment-testing:1.4.0"
 }

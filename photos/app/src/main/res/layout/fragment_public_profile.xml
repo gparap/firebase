@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_user_profile_public"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.profile.PublicProfileFragment">
+
+    <!--Profile image-->
+    <ImageView
+        android:id="@+id/image_view_user_profile"
+        android:layout_width="@dimen/layout_width_image_view_user_profile"
+        android:layout_height="@dimen/layout_height_image_view_user_profile"
+        android:contentDescription="@string/desc_app_logo"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sharp_account_box_24" />
+
+    <!--Username label-->
+    <TextView
+        android:id="@+id/label_username_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/layout_marginStart_label_profile_public"
+        android:layout_marginTop="@dimen/layout_marginTop_label_profile_public"
+        android:text="@string/label_username"
+        app:layout_constraintStart_toEndOf="@+id/image_view_user_profile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--Username text-->
+    <TextView
+        android:id="@+id/text_view_username_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/label_username_profile_public"
+        app:layout_constraintStart_toEndOf="@+id/label_username_profile_public"
+        app:layout_constraintTop_toTopOf="@+id/label_username_profile_public"
+        tools:text="gparap" />
+
+    <!--Total posts label-->
+    <TextView
+        android:id="@+id/label_posts_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_marginTop_label_profile_public"
+        android:text="@string/label_posts"
+        app:layout_constraintEnd_toEndOf="@+id/label_username_profile_public"
+        app:layout_constraintTop_toBottomOf="@+id/label_username_profile_public" />
+
+    <!--Total posts-->
+    <TextView
+        android:id="@+id/text_view_posts_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_zero"
+        app:layout_constraintBottom_toBottomOf="@+id/label_posts_profile_public"
+        app:layout_constraintStart_toEndOf="@+id/label_posts_profile_public"
+        app:layout_constraintTop_toTopOf="@+id/label_posts_profile_public" />
+
+    <!--Starred posts label-->
+    <TextView
+        android:id="@+id/label_stars_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_marginTop_label_profile_public"
+        android:text="@string/label_stars"
+        app:layout_constraintEnd_toEndOf="@+id/label_username_profile_public"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_posts_profile_public" />
+
+    <!--Starred posts text-->
+    <TextView
+        android:id="@+id/text_view_stars_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_zero"
+        app:layout_constraintBottom_toBottomOf="@+id/label_stars_profile_public"
+        app:layout_constraintStart_toEndOf="@+id/label_stars_profile_public"
+        app:layout_constraintTop_toTopOf="@+id/label_stars_profile_public" />
+
+    <!--User's followers label-->
+    <TextView
+        android:id="@+id/label_followers_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_marginTop_label_profile_public"
+        android:text="@string/label_followers"
+        app:layout_constraintEnd_toEndOf="@+id/label_username_profile_public"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_stars_profile_public" />
+
+    <!--User's followers text-->
+    <TextView
+        android:id="@+id/text_view_followers_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_zero"
+        app:layout_constraintBottom_toBottomOf="@+id/label_followers_profile_public"
+        app:layout_constraintStart_toEndOf="@+id/label_followers_profile_public"
+        app:layout_constraintTop_toTopOf="@+id/label_followers_profile_public" />
+
+    <!--User following label-->
+    <TextView
+        android:id="@+id/label_follows_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_marginTop_label_profile_public"
+        android:text="@string/label_follows"
+        app:layout_constraintEnd_toEndOf="@+id/label_username_profile_public"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_followers_profile_public" />
+
+    <!--User following text-->
+    <TextView
+        android:id="@+id/text_view_follows_profile_public"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_zero"
+        app:layout_constraintBottom_toBottomOf="@+id/label_follows_profile_public"
+        app:layout_constraintStart_toEndOf="@+id/label_follows_profile_public"
+        app:layout_constraintTop_toTopOf="@+id/label_follows_profile_public" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

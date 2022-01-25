@@ -4,5 +4,11 @@
     <string name="text_search">Search</string>
     <string name="text_add">Add</string>
     <string name="desc_app_logo">App Logo</string>
-    <string name="hint_search">Search...</string>
+    <string name="hint_search">Search…</string>
+    <string name="label_username">Username:</string>
+    <string name="label_posts">Posts:</string>
+    <string name="label_stars">Stars:</string>
+    <string name="label_followers">Followers:</string>
+    <string name="label_follows">Follows:</string>
+    <string name="text_zero">0</string>
 </resources>
