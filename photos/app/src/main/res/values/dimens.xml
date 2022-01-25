@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Design dimensions (1080 x 1920, 420dpi)-->
+    <dimen name="paddingStart_edit_text_search">16dp</dimen>
+    <dimen name="paddingEnd_edit_text_search">16dp</dimen>
+    <dimen name="layout_width_image_view_search">36dp</dimen>
+    <dimen name="layout_width_image_view_profile">48dp</dimen>
+    <dimen name="textSize_edit_text_search">18sp</dimen>
+</resources>

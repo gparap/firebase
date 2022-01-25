@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_fragment_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.search.SearchFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--App logo-->
+            <ImageView
+                android:id="@+id/image_view_app_logo_search"
+                android:layout_width="100dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/desc_app_logo"
+                android:elevation="@dimen/cardview_default_elevation"
+                android:src="@drawable/app_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Search area-->
+            <EditText
+                android:id="@+id/edit_text_search"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:elevation="@dimen/cardview_default_elevation"
+                android:hint="@string/hint_search"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:paddingStart="@dimen/paddingStart_edit_text_search"
+                android:paddingEnd="@dimen/paddingEnd_edit_text_search"
+                android:src="@drawable/app_logo"
+                android:textSize="@dimen/textSize_edit_text_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/image_view_search"
+                app:layout_constraintStart_toEndOf="@+id/image_view_app_logo_search"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Search icon-->
+            <ImageView
+                android:id="@+id/image_view_search"
+                android:layout_width="@dimen/layout_width_image_view_search"
+                android:layout_height="0dp"
+                android:contentDescription="@string/desc_app_logo"
+                android:elevation="@dimen/cardview_default_elevation"
+                android:src="@drawable/ic_action_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Toolbar-->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!--Posts-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_posts_search"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout_search" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

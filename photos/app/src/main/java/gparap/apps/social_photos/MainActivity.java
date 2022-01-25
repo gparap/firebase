@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
             BottomNavigationView bottomNavView = findViewById(R.id.bottom_navigation_view);
             NavigationUI.setupWithNavController(bottomNavView, navController);
 
-            //setup toolbar with navController
-            Toolbar toolbar = findViewById(R.id.toolbar_main);
-            NavigationUI.setupWithNavController(toolbar, navController);
+//            //setup toolbar with navController
+//            Toolbar toolbar = findViewById(R.id.toolbar_main);
+//            NavigationUI.setupWithNavController(toolbar, navController);
         }
     }
 }

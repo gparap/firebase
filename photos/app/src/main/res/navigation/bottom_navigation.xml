@@ -9,15 +9,15 @@
         android:id="@+id/navigation_home"
         android:name="gparap.apps.social_photos.ui.home.HomeFragment"
         android:label="@string/text_home"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_add"
         android:name="gparap.apps.social_photos.ui.add.AddFragment"
         android:label="@string/text_add"
-        tools:layout="@layout/add_fragment" />
+        tools:layout="@layout/fragment_add" />
     <fragment
         android:id="@+id/navigation_search"
         android:name="gparap.apps.social_photos.ui.search.SearchFragment"
         android:label="@string/text_search"
-        tools:layout="@layout/search_fragment" />
+        tools:layout="@layout/fragment_search" />
 </navigation>
