@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Photos"
+        android:theme="@style/Theme.Photos.Splash"
         tools:ignore="AllowBackup">
         <activity
             android:name="gparap.apps.social_photos.MainActivity"

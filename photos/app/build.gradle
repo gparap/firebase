@@ -43,5 +43,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
 
+    //Fragment testing
     debugImplementation "androidx.fragment:fragment-testing:1.4.0"
+
+    //SplashScreen API
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
 }
