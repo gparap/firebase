@@ -5,10 +5,20 @@
     <string name="text_add">Add</string>
     <string name="desc_app_logo">App Logo</string>
     <string name="hint_search">Search…</string>
+
+    <!--user profile-->
     <string name="label_username">Username:</string>
     <string name="label_posts">Posts:</string>
     <string name="label_stars">Stars:</string>
     <string name="label_followers">Followers:</string>
     <string name="label_follows">Follows:</string>
     <string name="text_zero">0</string>
+    <string name="description_user_image">User Account Image</string>
+    <string name="hint_new_username">choose new username</string>
+    <string name="description_change_username">Change username</string>
+    <string name="hint_new_email">choose new e-mail address</string>
+    <string name="description_change_email">Change e-mail</string>
+    <string name="hint_new_password">choose new password</string>
+    <string name="hint_confirm_password">confirm password</string>
+    <string name="button_update">Update</string>
 </resources>
