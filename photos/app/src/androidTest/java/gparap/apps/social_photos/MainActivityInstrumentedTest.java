@@ -1,3 +1,18 @@
+/*
+ * Copyright 2022 gparap
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package gparap.apps.social_photos;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -10,7 +25,6 @@ import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.filters.SmallTest;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -19,11 +33,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class MainActivityInstrumentedTest {
-    ActivityScenario<MainActivity> activityScenario;
 
     @Before
     public void setUp() {
-        activityScenario = ActivityScenario.launch(MainActivity.class);
+        ActivityScenario.launch(MainActivity.class);
     }
 
     @Test
@@ -35,20 +48,8 @@ public class MainActivityInstrumentedTest {
 
     @Test
     @SmallTest
-    public void isVisible_mainToolbar() {
-        onView(withId(R.id.toolbar_main)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    @SmallTest
     public void isVisible_home() {
-        activityScenario.onActivity(activity -> {
-            Toolbar toolbar = activity.findViewById(R.id.toolbar_main);
-            assertEquals(
-                    toolbar.getTitle().toString(),
-                    activity.getBaseContext().getResources().getString(R.string.text_home)
-            );
-        });
+        onView(withId(R.id.app_bar_layout_home)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -61,26 +62,14 @@ public class MainActivityInstrumentedTest {
     @SmallTest
     public void onClickAdd_navigateToAddFragment() {
         onView(withId(R.id.navigation_add)).perform(click());
-        activityScenario.onActivity(activity -> {
-            Toolbar toolbar = activity.findViewById(R.id.toolbar_main);
-            assertEquals(
-                    toolbar.getTitle().toString(),
-                    activity.getBaseContext().getResources().getString(R.string.text_add)
-            );
-        });
+        onView(withId(R.id.app_bar_layout_add)).check(matches(isDisplayed()));
     }
 
     @Test
     @SmallTest
     public void onClickSearch_navigateToSearchFragment() {
         onView(withId(R.id.navigation_search)).perform(click());
-        activityScenario.onActivity(activity -> {
-            Toolbar toolbar = activity.findViewById(R.id.toolbar_main);
-            assertEquals(
-                    toolbar.getTitle().toString(),
-                    activity.getBaseContext().getResources().getString(R.string.text_search)
-            );
-        });
+        onView(withId(R.id.app_bar_layout_search)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -88,12 +77,6 @@ public class MainActivityInstrumentedTest {
     public void onClickBackButton_navigateToHomeFragment() {
         onView(withId(R.id.navigation_search)).perform(click());
         pressBack();
-        activityScenario.onActivity(activity -> {
-            Toolbar toolbar = activity.findViewById(R.id.toolbar_main);
-            assertEquals(
-                    toolbar.getTitle().toString(),
-                    activity.getBaseContext().getResources().getString(R.string.text_home)
-            );
-        });
+        onView(withId(R.id.app_bar_layout_home)).check(matches(isDisplayed()));
     }
 }
