@@ -21,4 +21,8 @@
     <string name="hint_new_password">choose new password</string>
     <string name="hint_confirm_password">confirm password</string>
     <string name="button_update">Update</string>
+    <string name="text_login">Login</string>
+    <string name="hint_email">Enter your e-mail</string>
+    <string name="hint_password">************</string>
+    <string name="text_password_forgotten">I forgot my password</string>
 </resources>

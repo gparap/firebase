@@ -13,7 +13,10 @@
         android:theme="@style/Theme.Photos.Splash"
         tools:ignore="AllowBackup">
         <activity
-            android:name="gparap.apps.photos.MainActivity"
+            android:name=".ui.auth.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
