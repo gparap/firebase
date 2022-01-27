@@ -1,4 +1,4 @@
-package gparap.apps.social_photos.ui.profile;
+package gparap.apps.photos.ui.profile;
 
 import androidx.lifecycle.ViewModel;
 

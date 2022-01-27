@@ -1,4 +1,4 @@
-package gparap.apps.social_photos;
+package gparap.apps.photos;
 
 import org.junit.Test;
 

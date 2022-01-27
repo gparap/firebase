@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="gparap.apps.social_photos">
+    package="gparap.apps.photos">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Photos.Splash"
         tools:ignore="AllowBackup">
         <activity
-            android:name="gparap.apps.social_photos.MainActivity"
+            android:name="gparap.apps.photos.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

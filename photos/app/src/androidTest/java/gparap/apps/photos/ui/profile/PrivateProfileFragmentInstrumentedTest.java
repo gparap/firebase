@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_photos.ui.profile;
+package gparap.apps.photos.ui.profile;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -28,7 +28,7 @@ import androidx.test.filters.SmallTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import gparap.apps.social_photos.R;
+import gparap.apps.photos.R;
 
 public class PrivateProfileFragmentInstrumentedTest {
 

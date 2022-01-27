@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_photos;
+package gparap.apps.photos;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import gparap.apps.social_photos.ui.profile.PrivateProfileFragmentInstrumentedTest;
-import gparap.apps.social_photos.ui.profile.PublicProfileFragmentInstrumentedTest;
+import gparap.apps.photos.ui.profile.PrivateProfileFragmentInstrumentedTest;
+import gparap.apps.photos.ui.profile.PublicProfileFragmentInstrumentedTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

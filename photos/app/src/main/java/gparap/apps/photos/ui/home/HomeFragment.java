@@ -1,4 +1,4 @@
-package gparap.apps.social_photos.ui.profile;
+package gparap.apps.photos.ui.home;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,26 +12,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import gparap.apps.social_photos.R;
+import gparap.apps.photos.R;
 
-public class PrivateProfileFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
-    private PrivateProfileViewModel mViewModel;
+    private HomeViewModel mViewModel;
 
-    public static PrivateProfileFragment newInstance() {
-        return new PrivateProfileFragment();
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_private_profile, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(PrivateProfileViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         // TODO: Use the ViewModel
     }
 

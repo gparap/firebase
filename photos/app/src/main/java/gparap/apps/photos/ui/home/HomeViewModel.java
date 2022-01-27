@@ -1,4 +1,4 @@
-package gparap.apps.social_photos.ui.home;
+package gparap.apps.photos.ui.home;
 
 import androidx.lifecycle.ViewModel;
 

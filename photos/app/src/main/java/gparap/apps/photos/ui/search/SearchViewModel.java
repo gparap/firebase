@@ -1,4 +1,4 @@
-package gparap.apps.social_photos.ui.search;
+package gparap.apps.photos.ui.search;
 
 import androidx.lifecycle.ViewModel;
 

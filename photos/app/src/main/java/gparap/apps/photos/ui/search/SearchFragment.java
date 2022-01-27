@@ -1,4 +1,4 @@
-package gparap.apps.social_photos.ui.home;
+package gparap.apps.photos.ui.search;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,26 +12,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import gparap.apps.social_photos.R;
+import gparap.apps.photos.R;
 
-public class HomeFragment extends Fragment {
+public class SearchFragment extends Fragment {
 
-    private HomeViewModel mViewModel;
+    private SearchViewModel mViewModel;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    public static SearchFragment newInstance() {
+        return new SearchFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         // TODO: Use the ViewModel
     }
 

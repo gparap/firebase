@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_photos;
+package gparap.apps.photos;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
@@ -43,7 +43,7 @@ public class MainActivityInstrumentedTest {
     @SmallTest
     public void useAppContext() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("gparap.apps.socials_photos", appContext.getPackageName());
+        assertEquals("gparap.apps.photos", appContext.getPackageName());
     }
 
     @Test

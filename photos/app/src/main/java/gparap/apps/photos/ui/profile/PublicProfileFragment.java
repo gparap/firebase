@@ -1,4 +1,4 @@
-package gparap.apps.social_photos.ui.profile;
+package gparap.apps.photos.ui.profile;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import gparap.apps.social_photos.R;
+import gparap.apps.photos.R;
 
 public class PublicProfileFragment extends Fragment {
 
