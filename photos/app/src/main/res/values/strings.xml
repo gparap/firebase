@@ -25,4 +25,8 @@
     <string name="hint_email">Enter your e-mail</string>
     <string name="hint_password">************</string>
     <string name="text_password_forgotten">I forgot my password</string>
+
+    <!--user authentication-->
+    <string name="toast_empty_email">Please, enter your e-mail</string>
+    <string name="toast_empty_password">Please, enter your password</string>
 </resources>

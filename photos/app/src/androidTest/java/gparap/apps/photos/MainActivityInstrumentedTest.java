@@ -26,8 +26,11 @@ import static org.junit.Assert.assertEquals;
 import android.content.Context;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.filters.MediumTest;
 import androidx.test.filters.SmallTest;
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,5 +81,15 @@ public class MainActivityInstrumentedTest {
         onView(withId(R.id.navigation_search)).perform(click());
         pressBack();
         onView(withId(R.id.app_bar_layout_home)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @MediumTest
+    public void userNotAuthenticated_redirectToLogin() throws InterruptedException {
+        //sign-out user (if signed-in)
+        FirebaseAuth.getInstance().signOut();
+        Thread.sleep(300);
+
+        onView(withId(R.id.layout_activity_login)).check(matches(isDisplayed()));
     }
 }
