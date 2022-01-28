@@ -29,4 +29,5 @@
     <!--user authentication-->
     <string name="toast_empty_email">Please, enter your e-mail</string>
     <string name="toast_empty_password">Please, enter your password</string>
+    <string name="toast_login_successful">Login successful</string>
 </resources>

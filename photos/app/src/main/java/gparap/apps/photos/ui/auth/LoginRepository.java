@@ -16,21 +16,22 @@
 package gparap.apps.photos.ui.auth;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginViewModel extends ViewModel {
-    private final LoginRepository repository = new LoginRepository();
+public class LoginRepository {
+    public LoginRepository() {
+    }
 
     /**
-     * Signs-in user to database with e-mail and password credentials.
+     * Signs-in user to Firebase with e-mail and password.
      *
-     * @param userEmail    user's email
-     * @param userPassword user's password
+     * @param email    user's email
+     * @param password user's password
      */
-    public Task<AuthResult> signInUser(@NonNull String userEmail, @NonNull String userPassword) {
-        return repository.signInWithEmailAndPassword(userEmail, userPassword);
+    public Task<AuthResult> signInWithEmailAndPassword(@NonNull String email, @NonNull String password) {
+        return FirebaseAuth.getInstance().signInWithEmailAndPassword(email.trim(), password.trim());
     }
 }

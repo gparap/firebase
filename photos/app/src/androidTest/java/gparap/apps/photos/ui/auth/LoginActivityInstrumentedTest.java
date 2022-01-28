@@ -31,7 +31,10 @@ import static org.hamcrest.core.IsNot.not;
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.filters.LargeTest;
 import androidx.test.filters.SmallTest;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +43,10 @@ import gparap.apps.photos.R;
 
 public class LoginActivityInstrumentedTest {
     private View decorView = null;
+
+    //use this default test user's credentials
+    private static final String TEST_USER_EMAIL = "gp@mail.com";
+    private static final String TEST_USER_PASSWORD = "123123";
 
     @Before
     public void setUp() {
@@ -115,5 +122,26 @@ public class LoginActivityInstrumentedTest {
         onView(withText(R.string.toast_empty_password))
                 .inRoot(withDecorView(not(is(decorView))))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    @LargeTest
+    public void signInUserWithEmailAndPassword() throws InterruptedException {
+        //sign-out test user first
+        FirebaseAuth.getInstance().signOut();
+        Thread.sleep(300);
+
+        //enter credentials and login
+        onView(withId(R.id.edit_text_login_email)).perform(typeText(TEST_USER_EMAIL));
+        onView(withId(R.id.edit_text_login_password)).perform(typeText(TEST_USER_PASSWORD));
+        closeSoftKeyboard();
+        onView(withId(R.id.button_login)).perform(click());
+        Thread.sleep(900);
+
+        //test here
+        onView(withId(R.id.app_bar_layout_home)).check(matches(isDisplayed()));
+
+        //sign-out test user again
+        FirebaseAuth.getInstance().signOut();
     }
 }
