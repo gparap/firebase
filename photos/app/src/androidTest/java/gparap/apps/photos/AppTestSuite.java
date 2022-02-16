@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import gparap.apps.photos.ui.auth.LoginActivityInstrumentedTest;
+import gparap.apps.photos.ui.auth.RegisterActivityInstrumentedTest;
 import gparap.apps.photos.ui.profile.PrivateProfileFragmentInstrumentedTest;
 import gparap.apps.photos.ui.profile.PublicProfileFragmentInstrumentedTest;
 
@@ -27,7 +28,8 @@ import gparap.apps.photos.ui.profile.PublicProfileFragmentInstrumentedTest;
         MainActivityInstrumentedTest.class,
         PublicProfileFragmentInstrumentedTest.class,
         PrivateProfileFragmentInstrumentedTest.class,
-        LoginActivityInstrumentedTest.class
+        LoginActivityInstrumentedTest.class,
+        RegisterActivityInstrumentedTest.class
 })
 public class AppTestSuite {
 }

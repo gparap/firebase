@@ -100,6 +100,18 @@ public class LoginActivityInstrumentedTest {
 
     @Test
     @SmallTest
+    public void isVisible_text_view_new_user() {
+        onView(withId(R.id.text_view_new_user)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @SmallTest
+    public void isVisible_button_register() {
+        onView(withId(R.id.button_register_redirect)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @SmallTest
     public void emptyEmail_showErrorMessage() {
         //make sure email is empty before login
         onView(withId(R.id.edit_text_login_email)).perform(clearText());

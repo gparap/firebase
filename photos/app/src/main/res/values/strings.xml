@@ -22,7 +22,7 @@
     <string name="hint_confirm_password">confirm password</string>
     <string name="button_update">Update</string>
     <string name="text_login">Login</string>
-    <string name="hint_email">Enter your e-mail</string>
+    <string name="hint_email">enter your e-mail</string>
     <string name="hint_password">************</string>
     <string name="text_password_forgotten">I forgot my password</string>
 
@@ -30,4 +30,7 @@
     <string name="toast_empty_email">Please, enter your e-mail</string>
     <string name="toast_empty_password">Please, enter your password</string>
     <string name="toast_login_successful">Login successful</string>
+    <string name="text_new_user">I am a new user</string>
+    <string name="text_register">Register</string>
+    <string name="hint_username">choose username</string>
 </resources>
