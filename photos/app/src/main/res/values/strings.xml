@@ -33,4 +33,10 @@
     <string name="text_new_user">I am a new user</string>
     <string name="text_register">Register</string>
     <string name="hint_username">choose username</string>
+    <string name="toast_exists_username">Username already exists</string>
+    <string name="toast_exists_email">E-mail already exists</string>
+    <string name="toast_error_passwords_match">Passwords do not match</string>
+    <string name="toast_error_password_special_chars">Password should contain special characters</string>
+    <string name="toast_error_password_digits">Password should contain numbers</string>
+    <string name="toast_error_password_length">Password should have minimum length</string>
 </resources>

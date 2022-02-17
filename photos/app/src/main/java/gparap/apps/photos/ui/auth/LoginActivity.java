@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import gparap.apps.photos.MainActivity;
 import gparap.apps.photos.R;
+import gparap.apps.photos.utils.AppConstants;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email = null;
@@ -35,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.edit_text_login_email);
         password = findViewById(R.id.edit_text_login_password);
 
-        //login user
+        //login existing user
         Button login = findViewById(R.id.button_login);
         login.setOnClickListener(v -> {
             if (isUserInputValidated()) {
@@ -50,6 +51,19 @@ public class LoginActivity extends AppCompatActivity {
                         //login has failed
                         .addOnFailureListener(e -> showUserMessage(e.getLocalizedMessage()));
             }
+        });
+
+        //register new user
+        Button register = findViewById(R.id.button_register_redirect);
+        register.setOnClickListener(v ->{
+            Intent intent = new Intent(this, RegisterActivity.class);
+
+            //if the user typed some information, don't make them type it again in registration
+            intent.putExtra(AppConstants.INTENT_EXTRA_EMAIL, email.getText().toString().trim());
+            intent.putExtra(AppConstants.INTENT_EXTRA_PASSWORD, password.getText().toString().trim());
+
+            //redirect to register activity
+            startActivity(intent);
         });
     }
 

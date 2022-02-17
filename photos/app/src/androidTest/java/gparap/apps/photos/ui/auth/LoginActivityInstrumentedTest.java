@@ -156,4 +156,11 @@ public class LoginActivityInstrumentedTest {
         //sign-out test user again
         FirebaseAuth.getInstance().signOut();
     }
+
+    @Test
+    @SmallTest
+    public void onButtonRegisterClick_redirectToRegisterActivity() {
+        onView(withId(R.id.button_register_redirect)).perform(click());
+        onView(withId(R.id.layout_activity_register)).check(matches(isDisplayed()));
+    }
 }
