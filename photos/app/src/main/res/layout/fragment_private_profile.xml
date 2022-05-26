@@ -139,7 +139,7 @@
         android:autofillHints="false"
         android:editable="false"
         android:hint="@string/hint_new_password"
-        android:inputType="none"
+        android:inputType="textPassword"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toStartOf="@+id/image_button_profile_private_change_password"
         app:layout_constraintStart_toStartOf="parent"

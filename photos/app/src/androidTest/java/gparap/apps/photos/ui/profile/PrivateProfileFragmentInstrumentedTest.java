@@ -19,11 +19,15 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.IsNot.not;
 
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.test.filters.LargeTest;
 import androidx.test.filters.SmallTest;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +36,12 @@ import gparap.apps.photos.R;
 
 public class PrivateProfileFragmentInstrumentedTest {
 
+    private FragmentScenario<PrivateProfileFragment> fragmentScenario;
+
     @Before
     public void setUp() {
-        FragmentScenario.launchInContainer(PrivateProfileFragment.class);
+        fragmentScenario = FragmentScenario.launchInContainer(PrivateProfileFragment.class, null,
+                R.style.Theme_Photos);
     }
 
     @Test
@@ -97,4 +104,29 @@ public class PrivateProfileFragmentInstrumentedTest {
         onView(withId(R.id.progress_bar_profile_private)).check(matches(not(isDisplayed())));
     }
 
+    @Test
+    @LargeTest
+    public void displayUserProfileDetails() throws InterruptedException {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //sign in with test user if needed
+        if (firebaseUser == null) {
+            com.google.android.gms.tasks.Task<com.google.firebase.auth.AuthResult> authResultTask =
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword("gp@mail.com", "123123");
+            if (authResultTask.isComplete()) {
+                //we need to refresh the layout
+                fragmentScenario.recreate();
+
+                //wait for database read
+                Thread.sleep(1667);
+
+                onView(withId(R.id.edit_text_profile_private_username)).check(matches(withText("gparap")));
+            }
+        } else {
+            //wait for database read
+            Thread.sleep(1667);
+
+            onView(withId(R.id.edit_text_profile_private_username)).check(matches(withText("gparap")));
+        }
+    }
 }
