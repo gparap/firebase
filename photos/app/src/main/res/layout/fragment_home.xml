@@ -31,20 +31,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--Profile-->
-            <ImageView
-                android:id="@+id/image_view_profile_home"
-                android:layout_width="@dimen/layout_width_image_view_profile"
-                android:layout_height="0dp"
-                android:contentDescription="@string/desc_app_logo"
-                android:elevation="@dimen/cardview_default_elevation"
-                android:src="@drawable/ic_baseline_person_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <!--Toolbar-->
-            <com.google.android.material.appbar.MaterialToolbar
+            <Toolbar
                 android:id="@+id/toolbar_home"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

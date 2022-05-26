@@ -5,6 +5,7 @@
     <string name="text_add">Add</string>
     <string name="desc_app_logo">App Logo</string>
     <string name="hint_search">Search…</string>
+    <string name="title_menu_item_profile">Profile</string>
 
     <!--user profile-->
     <string name="label_username">Username:</string>

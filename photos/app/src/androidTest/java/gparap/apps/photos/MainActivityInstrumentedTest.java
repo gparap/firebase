@@ -16,11 +16,13 @@
 package gparap.apps.photos;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
@@ -36,17 +38,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class MainActivityInstrumentedTest {
+    private Context context;
 
     @Before
     public void setUp() {
         ActivityScenario.launch(MainActivity.class);
+        context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     }
 
     @Test
     @SmallTest
     public void useAppContext() {
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("gparap.apps.photos", appContext.getPackageName());
+        assertEquals("gparap.apps.photos", context.getPackageName());
     }
 
     @Test
@@ -91,5 +94,13 @@ public class MainActivityInstrumentedTest {
         Thread.sleep(300);
 
         onView(withId(R.id.layout_activity_login)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    @SmallTest
+    public void onMenuIteProfileClick_redirectToPrivateProfile() {
+        openActionBarOverflowOrOptionsMenu(context);
+        onView(withText(context.getString(R.string.title_menu_item_profile))).perform(click());
+        onView(withId(R.id.layout_fragment_profile_private)).check(matches(isDisplayed()));
     }
 }
