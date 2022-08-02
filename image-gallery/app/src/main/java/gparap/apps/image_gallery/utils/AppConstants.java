@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.image_gallery;
+package gparap.apps.image_gallery.utils;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+public class AppConstants {
+    public static final String MIME_TYPE = "image/*";
+    public static final String STORAGE_CHILD_LOCATION = "/image_gallery_app/";
+    public static final String DOT_CHARACTER = ".";
 
-import gparap.apps.image_gallery.utils.UtilsInstrumentedTest;
-
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        MainActivityInstrumentedTest.class,
-        ImagePickerActivityInstrumentedTest.class,
-        UtilsInstrumentedTest.class
-})
-public class ImagePickerTestSuite {
 }

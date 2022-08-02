@@ -2,8 +2,11 @@
     <string name="app_name">Image Gallery</string>
     <string name="desc_upload_image">Upload Image</string>
     <string name="desc_image_picker_button">Image Picker Button</string>
-    <string name="text_image_file_name_here">image file name here...</string>
+    <string name="text_image_file_name_here">image file name here…</string>
     <string name="text_upload_image">Upload</string>
     <string name="desc_image_picked">Image Picked</string>
     <string name="desc_image_from_database">Image Fetched From Database</string>
+    <string name="toast_empty_image_filename">Please, enter a filename for the image</string>
+    <string name="toast_image_still_uploading">Image still uploading…</string>
+    <string name="toast_image_uploaded_success">Image upload successful…</string>
 </resources>

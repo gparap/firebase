@@ -15,16 +15,14 @@
  */
 package gparap.apps.image_gallery;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.junit.Test;
 
-import gparap.apps.image_gallery.utils.UtilsInstrumentedTest;
+import gparap.apps.image_gallery.utils.Utils;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        MainActivityInstrumentedTest.class,
-        ImagePickerActivityInstrumentedTest.class,
-        UtilsInstrumentedTest.class
-})
-public class ImagePickerTestSuite {
+public class UtilsUnitTest {
+    @Test
+    public void getPositiveRandomNumber() {
+        long number = Utils.getInstance().getRandomNumber();
+        assert (number > 0);
+    }
 }
