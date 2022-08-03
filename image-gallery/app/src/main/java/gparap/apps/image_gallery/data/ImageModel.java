@@ -13,12 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.image_gallery.utils;
+package gparap.apps.image_gallery.data;
 
-public class AppConstants {
-    public static final String MIME_TYPE = "image/*";
-    public static final String STORAGE_CHILD_LOCATION = "/image_gallery_app/";
-    public static final String DATABASE_REFERENCE_PATH = "image_gallery_app";
-    public static final String DOT_CHARACTER = ".";
+public class ImageModel {
+    private String name;
+    private String uri;
 
+    public ImageModel() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 }

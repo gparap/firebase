@@ -19,7 +19,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Random;
+
+import gparap.apps.image_gallery.data.ImageModel;
 
 public class Utils {
     private static Utils instance = null;
@@ -62,5 +67,18 @@ public class Utils {
         //return the filetype
         String[] fileType = mimeType.split("/");
         return fileType[1];
+    }
+
+    /**
+     * Upload image metadata to online database
+     * @param imageModel ImageModel holding image metadata
+     */
+    public void uploadImageMetadata(ImageModel imageModel) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = database.getReference(AppConstants.DATABASE_REFERENCE_PATH);
+        String key = databaseRef.push().getKey();
+        if (key != null) {
+            databaseRef.child(key).setValue(imageModel);
+        }
     }
 }

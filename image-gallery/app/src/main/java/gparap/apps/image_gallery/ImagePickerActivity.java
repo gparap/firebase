@@ -28,15 +28,17 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import gparap.apps.image_gallery.data.ImageModel;
 import gparap.apps.image_gallery.utils.AppConstants;
 import gparap.apps.image_gallery.utils.Utils;
 
 public class ImagePickerActivity extends AppCompatActivity {
-    private UploadTask uploadTask;
+    private UploadTask uploadTaskStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class ImagePickerActivity extends AppCompatActivity {
                         ImageView imagePicked = findViewById(R.id.imagePicked);
                         imagePicked.setImageURI(uri);
 
-                        //upload the picked image to the database
+                        //upload the picked image to cloud
                         Button buttonUploadImage = findViewById(R.id.buttonUploadImage);
                         buttonUploadImage.setOnClickListener(v -> {
                             //validate image filename
@@ -70,23 +72,39 @@ public class ImagePickerActivity extends AppCompatActivity {
                             }
 
                             //validate image uploading
-                            if (uploadTask != null && uploadTask.isInProgress()) {
+                            if (uploadTaskStorage != null && uploadTaskStorage.isInProgress()) {
                                 Toast.makeText(this,
                                         getResources().getString(R.string.toast_image_still_uploading),
                                         Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
-                            //upload image
-                            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                            uploadTask = (UploadTask) storageReference
-                                    .child(getChildLocation(uri))
-                                    .putFile(uri)
-                                    .addOnFailureListener(e -> System.out.println(e.getMessage()))
-                                    .addOnCompleteListener(task -> Toast.makeText(this,
-                                            getResources().getString(R.string.toast_image_uploaded_success),
-                                            Toast.LENGTH_SHORT).show()
-                                    );
+                            //upload image to cloud storage and image metadata to online database
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(getChildLocation(uri));
+                            uploadTaskStorage = (UploadTask) storageReference.putFile(uri);
+                            Task<Uri> uriTask = uploadTaskStorage.continueWithTask(task -> {
+                                System.out.println(storageReference.getDownloadUrl());
+                                return storageReference.getDownloadUrl();
+                            });
+                            uriTask.addOnFailureListener(e -> System.out.println(e.getMessage()))
+                                    .addOnCompleteListener(task -> {
+                                        //successfully uploaded to cloud storage
+                                        Toast.makeText(ImagePickerActivity.this,
+                                                getResources().getString(R.string.toast_image_uploaded_success),
+                                                Toast.LENGTH_SHORT).show();
+
+                                        //create model object that holds the image metadata
+                                        ImageModel imageModel = new ImageModel();
+                                        imageModel.setName(
+                                                imageFileName.getText().toString().trim()
+                                                        + AppConstants.DOT_CHARACTER
+                                                        + Utils.getInstance().getImageFiletype(ImagePickerActivity.this, uri)
+                                        );
+                                        imageModel.setUri(uriTask.getResult().toString());
+
+                                        //upload image metadata to online database
+                                        Utils.getInstance().uploadImageMetadata(imageModel);
+                                    });
                         });
                     });
 
