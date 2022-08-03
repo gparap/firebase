@@ -17,10 +17,12 @@ package gparap.apps.image_gallery;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -39,11 +41,16 @@ import gparap.apps.image_gallery.utils.Utils;
 
 public class ImagePickerActivity extends AppCompatActivity {
     private UploadTask uploadTaskStorage;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_picker);
+
+        //init progress
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.INVISIBLE);
 
         //pick an image
         ImageButton buttonPickImage = findViewById(R.id.buttonImagePicker);
@@ -70,6 +77,9 @@ public class ImagePickerActivity extends AppCompatActivity {
                                         Toast.LENGTH_SHORT).show();
                                 return;
                             }
+
+                            //show progress
+                            progressBar.setVisibility(View.VISIBLE);
 
                             //validate image uploading
                             if (uploadTaskStorage != null && uploadTaskStorage.isInProgress()) {
@@ -104,6 +114,9 @@ public class ImagePickerActivity extends AppCompatActivity {
 
                                         //upload image metadata to online database
                                         Utils.getInstance().uploadImageMetadata(imageModel);
+
+                                        //hide progress
+                                        progressBar.setVisibility(View.INVISIBLE);
                                     });
                         });
                     });
