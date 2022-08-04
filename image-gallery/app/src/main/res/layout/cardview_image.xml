@@ -4,26 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_cardview_image"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <!--image placeholder-->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewImagePlaceholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:elevation="@dimen/cardview_default_elevation"
         app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!--image-->
-        <ImageView
-            android:id="@+id/cardViewImage"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/desc_image_from_database"
-            tools:src="@tools:sample/avatars" />
+            android:layout_margin="8dp">
 
+            <!--image-->
+            <ImageView
+                android:id="@+id/cardViewImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/desc_image_from_database"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <!--image name-->
+            <TextView
+                android:id="@+id/textViewImageName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="@+id/cardViewImage"
+                app:layout_constraintStart_toStartOf="@+id/cardViewImage"
+                app:layout_constraintTop_toBottomOf="@+id/cardViewImage"
+                tools:layout_editor_absoluteY="144dp"
+                tools:text="Image Name Here" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
