@@ -23,6 +23,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import android.content.Context;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -36,9 +37,11 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
+    ActivityScenario<MainActivity> activityScenario;
+
     @Before
     public void setUp() {
-        ActivityScenario.launch(MainActivity.class);
+        activityScenario = ActivityScenario.launch(MainActivity.class);
     }
 
     @Test
@@ -61,5 +64,18 @@ public class MainActivityInstrumentedTest {
     public void onClickImagePickerButton_redirectToImagePickerActivity() {
         onView(withId(R.id.fab_imagePicker)).perform(click());
         onView(withId(R.id.layout_activity_image_picker)).check(matches(isDisplayed()));
+    }
+
+    /* !!! Assert that the database in not empty !!! */
+    @Test
+    public void loadImagesFromDatabase_recyclerViewIsNotEmpty() throws InterruptedException {
+        //wait for image loading
+        Thread.sleep(1667);
+
+        //test here
+        activityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recyclerView_imageGallery);
+            assert recyclerView.getChildCount() > 0;
+        });
     }
 }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_cardview_image"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/cardview_dark_background">
 
     <!--image placeholder-->
     <androidx.cardview.widget.CardView
@@ -14,6 +15,7 @@
         android:layout_margin="8dp"
         android:elevation="@dimen/cardview_default_elevation"
         app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -44,7 +46,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/cardViewImage"
                 app:layout_constraintStart_toStartOf="@+id/cardViewImage"
                 app:layout_constraintTop_toBottomOf="@+id/cardViewImage"
-                tools:layout_editor_absoluteY="144dp"
                 tools:text="Image Name Here" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

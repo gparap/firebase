@@ -15,6 +15,7 @@
  */
 package gparap.apps.image_gallery.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 import gparap.apps.image_gallery.R;
@@ -32,8 +35,10 @@ import gparap.apps.image_gallery.data.ImageModel;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
     private ArrayList<ImageModel> images = new ArrayList<>();
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setImages(ArrayList<ImageModel> images) {
         this.images = images;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -51,7 +56,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         holder.name.setText(images.get(position).getName());
-        holder.image.setImageResource(R.mipmap.ic_launcher);
+
+        //load image
+        Glide.with(holder.image.getContext())
+                .load(images.get(position).getUri())
+                .centerCrop()
+                .into(holder.image);
     }
 
     @Override
@@ -59,7 +69,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         return images.size();
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder{
+    public static class ImageViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
         private final ImageView image;
 
