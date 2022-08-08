@@ -13,5 +13,7 @@
     <string name="toast_empty_image_filename">Please, enter a filename for the image</string>
     <string name="toast_image_still_uploading">Image still uploading…</string>
     <string name="toast_image_uploaded_success">Image upload successful…</string>
+    <string name="toast_image_deleted_success">Image deleted successfully…</string>
     <string name="toast_error_loading_images">Error loading images…</string>
+    <string name="toast_error_deleting_image">Error deleting image…</string>
 </resources>

@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
@@ -89,9 +88,18 @@ public class ImagePickerActivity extends AppCompatActivity {
                                 return;
                             }
 
+                            //get the image's storage child location path
+                            String childLocationPath = AppConstants.STORAGE_CHILD_LOCATION
+                                    + Utils.getInstance().getRandomNumber();
+
+                            //get the image's storage name
+                            String imageStorageName = childLocationPath.replace(
+                                    AppConstants.STORAGE_CHILD_LOCATION, ""
+                            );
+
                             //upload image to cloud storage and image metadata to online database
-                            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(getChildLocation(uri));
-                            uploadTaskStorage = (UploadTask) storageReference.putFile(uri);
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(childLocationPath);
+                            uploadTaskStorage = storageReference.putFile(uri);
                             Task<Uri> uriTask = uploadTaskStorage.continueWithTask(task -> {
                                 System.out.println(storageReference.getDownloadUrl());
                                 return storageReference.getDownloadUrl();
@@ -111,6 +119,7 @@ public class ImagePickerActivity extends AppCompatActivity {
                                                         + Utils.getInstance().getImageFiletype(ImagePickerActivity.this, uri)
                                         );
                                         imageModel.setUri(uriTask.getResult().toString());
+                                        imageModel.setStorageName(imageStorageName);
 
                                         //upload image metadata to online database
                                         Utils.getInstance().uploadImageMetadata(imageModel);
@@ -120,13 +129,4 @@ public class ImagePickerActivity extends AppCompatActivity {
                                     });
                         });
                     });
-
-    //returns a child location for the current storage reference
-    @NonNull
-    private String getChildLocation(Uri uri) {
-        return AppConstants.STORAGE_CHILD_LOCATION
-                + Utils.getInstance().getRandomNumber()
-                + AppConstants.DOT_CHARACTER
-                + Utils.getInstance().getImageFiletype(this, uri);
-    }
 }

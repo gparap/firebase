@@ -17,23 +17,28 @@ package gparap.apps.image_gallery;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityInstrumentedTest {
@@ -77,5 +82,44 @@ public class MainActivityInstrumentedTest {
             RecyclerView recyclerView = activity.findViewById(R.id.recyclerView_imageGallery);
             assert recyclerView.getChildCount() > 0;
         });
+    }
+
+    /* !!! Assert that the database in not empty !!! */
+    @Test
+    public void deleteImageFromDatabase_imageDeletedSuccessfully() throws InterruptedException {
+        //wait for image loading
+        Thread.sleep(1667);
+
+        //get the number of images in the RecyclerView
+        int imagesCountBefore;
+        imagesCountBefore = getRecyclerViewItemsCount();
+
+        //delete an image from RecyclerView using long click
+        onView(withId(R.id.recyclerView_imageGallery)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(0, longClick())
+        );
+
+        //confirm long click on dialog
+        onView(withText(R.string.text_ok)).perform(click());
+
+        //wait for image to delete
+        Thread.sleep(1667);
+
+        //get the number of images in the RecyclerView
+        int imagesCountAfter;
+        imagesCountAfter = getRecyclerViewItemsCount();
+
+        //test here
+        assert (imagesCountAfter < imagesCountBefore);
+    }
+
+    /* Returns the number of images in the RecyclerView */
+    private int getRecyclerViewItemsCount() {
+        AtomicInteger itemsCount = new AtomicInteger(-1);
+        activityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recyclerView_imageGallery);
+            itemsCount.set(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
+        });
+        return itemsCount.get();
     }
 }

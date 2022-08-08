@@ -19,6 +19,8 @@ public class ImageModel {
     private String name;
     private String uri;
 
+    private String storageName;
+
     public ImageModel() {
     }
 
@@ -36,5 +38,13 @@ public class ImageModel {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getStorageName() {
+        return storageName;
+    }
+
+    public void setStorageName(String storageName) {
+        this.storageName = storageName;
     }
 }

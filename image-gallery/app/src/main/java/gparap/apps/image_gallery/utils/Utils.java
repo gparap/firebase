@@ -76,9 +76,7 @@ public class Utils {
     public void uploadImageMetadata(ImageModel imageModel) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = database.getReference(AppConstants.DATABASE_REFERENCE_PATH);
-        String key = databaseRef.push().getKey();
-        if (key != null) {
-            databaseRef.child(key).setValue(imageModel);
-        }
+        DatabaseReference childRef = databaseRef.child(imageModel.getStorageName());
+        childRef.setValue(imageModel);
     }
 }

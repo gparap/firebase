@@ -9,10 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -87,9 +90,51 @@ public class MainActivity extends AppCompatActivity {
 
     //Removes an image and its metadata from online storage
     private void deleteImage(ImageModel image) {
-        System.out.println(image.getName());
-        System.out.println(image.getUri());
-        //TODO: delete image from storage
-        //TODO: delete image metadata from database
+        //get database reference
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference databaseRef = database.getReference(AppConstants.DATABASE_REFERENCE_PATH);
+
+        //delete image metadata from database
+        DatabaseReference childRef = databaseRef.child(image.getStorageName());
+        Task<Void> deleteImageMetadataTask = childRef.removeValue();
+        deleteImageMetadataTask.addOnCompleteListener(task -> {
+            //display error message
+            if (!task.isSuccessful()) {
+                Toast.makeText(this,
+                                getResources().getString(R.string.toast_error_deleting_image),
+                                Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            //delete image from storage
+            else {
+                //get storage reference
+                FirebaseStorage storageRef = FirebaseStorage.getInstance();
+                StorageReference storageChildRef = storageRef.getReference(
+                        AppConstants.STORAGE_CHILD_LOCATION + image.getStorageName()
+                );
+
+                Task<Void> deleteImageTask = storageChildRef.delete();
+                deleteImageTask.addOnCompleteListener(task1 -> {
+                    //display error message
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(this,
+                                        getResources().getString(R.string.toast_error_deleting_image),
+                                        Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        //display success message
+                        Toast.makeText(this,
+                                        getResources().getString(R.string.toast_image_deleted_success),
+                                        Toast.LENGTH_SHORT)
+                                .show();
+                    }
+
+                    //update image adapter
+                    images.remove(image);
+                    imageAdapter.setImages(images);
+                });
+            }
+        });
     }
 }
