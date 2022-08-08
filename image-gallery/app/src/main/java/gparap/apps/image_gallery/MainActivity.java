@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,10 +65,31 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(imageAdapter);
 
-        //handle the long click of an image
+        //handle the long click of an image to delete it from the database
         imageAdapter.setOnItemLongClickListener(position -> {
-            System.out.println(position);
-            System.out.println(imageAdapter.getImages().get(position).getName());
+            ImageModel imageToDelete = imageAdapter.getImages().get(position);
+
+            //display a confirmation dialog
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.ic_baseline_delete_forever_24)
+                    .setTitle(getResources().getString(R.string.text_delete_image))
+                    .setMessage(getResources().getString(R.string.text_delete_message))
+                    .setNegativeButton(
+                            getResources().getString(R.string.text_cancel),
+                            (dialog_cancel, which) -> this.closeContextMenu())
+                    .setPositiveButton(
+                            getResources().getString(R.string.text_ok),
+                            (dialog_ok, which) -> deleteImage(imageToDelete))
+                    .create();
+            dialog.show();
         });
+    }
+
+    //Removes an image and its metadata from online storage
+    private void deleteImage(ImageModel image) {
+        System.out.println(image.getName());
+        System.out.println(image.getUri());
+        //TODO: delete image from storage
+        //TODO: delete image metadata from database
     }
 }

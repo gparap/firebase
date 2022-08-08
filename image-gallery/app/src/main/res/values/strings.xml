@@ -4,6 +4,10 @@
     <string name="desc_image_picker_button">Image Picker Button</string>
     <string name="text_image_file_name_here">image file name here…</string>
     <string name="text_upload_image">Upload</string>
+    <string name="text_delete_image">Delete Image</string>
+    <string name="text_delete_message">The selected image will be removed from the database. Are you sure?</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_ok">OK</string>
     <string name="desc_image_picked">Image Picked</string>
     <string name="desc_image_from_database">Image Fetched From Database</string>
     <string name="toast_empty_image_filename">Please, enter a filename for the image</string>
