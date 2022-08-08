@@ -63,5 +63,11 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView_imageGallery);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(imageAdapter);
+
+        //handle the long click of an image
+        imageAdapter.setOnItemLongClickListener(position -> {
+            System.out.println(position);
+            System.out.println(imageAdapter.getImages().get(position).getName());
+        });
     }
 }

@@ -30,10 +30,16 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import gparap.apps.image_gallery.R;
+import gparap.apps.image_gallery.callbacks.RecyclerViewItemLongClickListener;
 import gparap.apps.image_gallery.data.ImageModel;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
     private ArrayList<ImageModel> images = new ArrayList<>();
+    private RecyclerViewItemLongClickListener itemLongClickListener;
+
+    public ArrayList<ImageModel> getImages() {
+        return images;
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setImages(ArrayList<ImageModel> images) {
@@ -69,7 +75,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         return images.size();
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemLongClickListener(RecyclerViewItemLongClickListener itemLongClickListener) {
+        this.itemLongClickListener = itemLongClickListener;
+    }
+
+    public class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
         private final TextView name;
         private final ImageView image;
 
@@ -79,6 +89,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             //describe items inside the recyclerView
             name = itemView.findViewById(R.id.textViewImageName);
             image = itemView.findViewById(R.id.cardViewImage);
+
+            //set a long click listener for the item
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            //pass the Adapter position of the item to the itemLongClickListener
+            itemLongClickListener.onRecyclerViewItemLongClick(getAdapterPosition());
+
+            return false;
         }
     }
 }
