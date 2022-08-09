@@ -15,6 +15,7 @@
  */
 package gparap.apps.image_gallery;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -48,12 +49,24 @@ public class ImagePickerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_picker);
 
         //init progress
-        progressBar = findViewById(R.id.progress_circular);
+        progressBar = findViewById(R.id.progressImagePicker);
         progressBar.setVisibility(View.INVISIBLE);
 
         //pick an image
         ImageButton buttonPickImage = findViewById(R.id.buttonImagePicker);
         buttonPickImage.setOnClickListener(v -> getContentCallback.launch(AppConstants.MIME_TYPE));
+    }
+
+    @Override
+    public void onBackPressed() {
+        //de-activate back button if image is uploading
+        if (uploadTaskStorage == null || !uploadTaskStorage.isInProgress()) {
+            super.onBackPressed();
+
+            //redirect to main
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
     }
 
     //register a callback for an activity result to prompt the user to pick a piece of content
@@ -126,6 +139,10 @@ public class ImagePickerActivity extends AppCompatActivity {
 
                                         //hide progress
                                         progressBar.setVisibility(View.INVISIBLE);
+
+                                        //redirect to main activity
+                                        startActivity(new Intent(this, MainActivity.class));
+                                        finish();
                                     });
                         });
                     });

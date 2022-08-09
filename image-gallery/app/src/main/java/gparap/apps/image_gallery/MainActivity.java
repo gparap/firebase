@@ -2,6 +2,8 @@ package gparap.apps.image_gallery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -26,17 +28,23 @@ import gparap.apps.image_gallery.utils.AppConstants;
 public class MainActivity extends AppCompatActivity {
     ArrayList<ImageModel> images = new ArrayList<>();
     ImageAdapter imageAdapter = new ImageAdapter();
+    ProgressBar progressMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //init progress
+        progressMain = findViewById(R.id.progressMain);
+        progressMain.setVisibility(View.VISIBLE);
+
         //pick image
         FloatingActionButton fabImagePicker = findViewById(R.id.fab_imagePicker);
         fabImagePicker.setOnClickListener(v -> {
             Intent intent = new Intent(this, ImagePickerActivity.class);
             startActivity(intent);
+            finish();
         });
 
         //read data from the database
@@ -61,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
                 //update Adapter dataset with images
                 imageAdapter.setImages(images);
             }
+
+            //hide progress
+            progressMain.setVisibility(View.INVISIBLE);
         });
 
         //create RecyclerView with Adapter for images
@@ -90,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Removes an image and its metadata from online storage
     private void deleteImage(ImageModel image) {
+        //show progress
+        progressMain.setVisibility(View.VISIBLE);
+
         //get database reference
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = database.getReference(AppConstants.DATABASE_REFERENCE_PATH);
@@ -135,6 +149,9 @@ public class MainActivity extends AppCompatActivity {
                     imageAdapter.setImages(images);
                 });
             }
+
+            //hide progress
+            progressMain.setVisibility(View.INVISIBLE);
         });
     }
 }
