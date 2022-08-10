@@ -18,13 +18,11 @@ package gparap.apps.image_gallery;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -50,7 +48,7 @@ public class ImagePickerActivity extends AppCompatActivity {
 
         //init progress
         progressBar = findViewById(R.id.progressImagePicker);
-        progressBar.setVisibility(View.INVISIBLE);
+        Utils.getInstance().handleProgressVisibility(progressBar, false);
 
         //pick an image
         ImageButton buttonPickImage = findViewById(R.id.buttonImagePicker);
@@ -84,20 +82,16 @@ public class ImagePickerActivity extends AppCompatActivity {
                             //validate image filename
                             EditText imageFileName = findViewById(R.id.editTextImageFileName);
                             if (imageFileName.getText().toString().trim().isEmpty()) {
-                                Toast.makeText(this,
-                                        getResources().getString(R.string.toast_empty_image_filename),
-                                        Toast.LENGTH_SHORT).show();
+                                Utils.getInstance().showToast(this,
+                                        getResources().getString(R.string.toast_empty_image_filename));
                                 return;
                             }
-
-                            //show progress
-                            progressBar.setVisibility(View.VISIBLE);
+                            Utils.getInstance().handleProgressVisibility(progressBar, true);
 
                             //validate image uploading
                             if (uploadTaskStorage != null && uploadTaskStorage.isInProgress()) {
-                                Toast.makeText(this,
-                                        getResources().getString(R.string.toast_image_still_uploading),
-                                        Toast.LENGTH_SHORT).show();
+                                Utils.getInstance().showToast(this,
+                                        getResources().getString(R.string.toast_image_still_uploading));
                                 return;
                             }
 
@@ -120,25 +114,18 @@ public class ImagePickerActivity extends AppCompatActivity {
                             uriTask.addOnFailureListener(e -> System.out.println(e.getMessage()))
                                     .addOnCompleteListener(task -> {
                                         //successfully uploaded to cloud storage
-                                        Toast.makeText(ImagePickerActivity.this,
-                                                getResources().getString(R.string.toast_image_uploaded_success),
-                                                Toast.LENGTH_SHORT).show();
+                                        Utils.getInstance().showToast(this,
+                                                getResources().getString(R.string.toast_image_uploaded_success));
 
                                         //create model object that holds the image metadata
                                         ImageModel imageModel = new ImageModel();
-                                        imageModel.setName(
-                                                imageFileName.getText().toString().trim()
-                                                        + AppConstants.DOT_CHARACTER
-                                                        + Utils.getInstance().getImageFiletype(ImagePickerActivity.this, uri)
-                                        );
+                                        imageModel.setName(imageFileName.getText().toString().trim());
                                         imageModel.setUri(uriTask.getResult().toString());
                                         imageModel.setStorageName(imageStorageName);
 
                                         //upload image metadata to online database
                                         Utils.getInstance().uploadImageMetadata(imageModel);
-
-                                        //hide progress
-                                        progressBar.setVisibility(View.INVISIBLE);
+                                        Utils.getInstance().handleProgressVisibility(progressBar, false);
 
                                         //redirect to main activity
                                         startActivity(new Intent(this, MainActivity.class));

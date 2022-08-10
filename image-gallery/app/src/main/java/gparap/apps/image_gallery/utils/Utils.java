@@ -15,9 +15,10 @@
  */
 package gparap.apps.image_gallery.utils;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.net.Uri;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -51,26 +52,8 @@ public class Utils {
     }
 
     /**
-     * Returns the filetype of a file from its MIME type
-     *
-     * @param context application environment
-     * @param url     file immutable URI reference
-     * @return String
-     */
-    public String getImageFiletype(Context context, Uri url) {
-        //get a ContentResolver instance for the application's package
-        ContentResolver contentResolver = context.getContentResolver();
-
-        //get the MIME type of the given content URL
-        String mimeType = contentResolver.getType(url);
-
-        //return the filetype
-        String[] fileType = mimeType.split("/");
-        return fileType[1];
-    }
-
-    /**
      * Upload image metadata to online database
+     *
      * @param imageModel ImageModel holding image metadata
      */
     public void uploadImageMetadata(ImageModel imageModel) {
@@ -78,5 +61,29 @@ public class Utils {
         DatabaseReference databaseRef = database.getReference(AppConstants.DATABASE_REFERENCE_PATH);
         DatabaseReference childRef = databaseRef.child(imageModel.getStorageName());
         childRef.setValue(imageModel);
+    }
+
+    /**
+     * Informs the user using an toast for a short period of time
+     *
+     * @param context application context
+     * @param message message to user
+     */
+    public void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Handles progress visibility
+     *
+     * @param progress  a progressBar
+     * @param isVisible progressBar's visibility
+     */
+    public void handleProgressVisibility(ProgressBar progress, boolean isVisible) {
+        if (isVisible) {
+            progress.setVisibility(View.VISIBLE);
+        } else {
+            progress.setVisibility(View.INVISIBLE);
+        }
     }
 }

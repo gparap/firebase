@@ -2,9 +2,7 @@ package gparap.apps.image_gallery;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,11 +22,12 @@ import java.util.ArrayList;
 import gparap.apps.image_gallery.adapters.ImageAdapter;
 import gparap.apps.image_gallery.data.ImageModel;
 import gparap.apps.image_gallery.utils.AppConstants;
+import gparap.apps.image_gallery.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<ImageModel> images = new ArrayList<>();
-    ImageAdapter imageAdapter = new ImageAdapter();
-    ProgressBar progressMain;
+    private final ArrayList<ImageModel> images = new ArrayList<>();
+    private final ImageAdapter imageAdapter = new ImageAdapter();
+    private ProgressBar progressMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         //init progress
         progressMain = findViewById(R.id.progressMain);
-        progressMain.setVisibility(View.VISIBLE);
+        Utils.getInstance().handleProgressVisibility(progressMain, true);
 
         //pick image
         FloatingActionButton fabImagePicker = findViewById(R.id.fab_imagePicker);
@@ -53,11 +52,8 @@ public class MainActivity extends AppCompatActivity {
         );
         databaseRef.get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                //inform the user that cannot fetch images from the database
-                Toast.makeText(MainActivity.this,
-                        getResources().getString(R.string.toast_error_loading_images),
-                        Toast.LENGTH_SHORT
-                ).show();
+                Utils.getInstance().showToast(this,
+                        getResources().getString(R.string.toast_error_loading_images));
 
             } else {
                 //put the images fetched from the database inside the images list
@@ -69,9 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 //update Adapter dataset with images
                 imageAdapter.setImages(images);
             }
-
-            //hide progress
-            progressMain.setVisibility(View.INVISIBLE);
+            Utils.getInstance().handleProgressVisibility(progressMain, false);
         });
 
         //create RecyclerView with Adapter for images
@@ -101,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Removes an image and its metadata from online storage
     private void deleteImage(ImageModel image) {
-        //show progress
-        progressMain.setVisibility(View.VISIBLE);
+        Utils.getInstance().handleProgressVisibility(progressMain, true);
 
         //get database reference
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -112,12 +105,9 @@ public class MainActivity extends AppCompatActivity {
         DatabaseReference childRef = databaseRef.child(image.getStorageName());
         Task<Void> deleteImageMetadataTask = childRef.removeValue();
         deleteImageMetadataTask.addOnCompleteListener(task -> {
-            //display error message
             if (!task.isSuccessful()) {
-                Toast.makeText(this,
-                                getResources().getString(R.string.toast_error_deleting_image),
-                                Toast.LENGTH_SHORT)
-                        .show();
+                Utils.getInstance().showToast(this,
+                        getResources().getString(R.string.toast_error_deleting_image));
             }
 
             //delete image from storage
@@ -130,18 +120,12 @@ public class MainActivity extends AppCompatActivity {
 
                 Task<Void> deleteImageTask = storageChildRef.delete();
                 deleteImageTask.addOnCompleteListener(task1 -> {
-                    //display error message
                     if (!task.isSuccessful()) {
-                        Toast.makeText(this,
-                                        getResources().getString(R.string.toast_error_deleting_image),
-                                        Toast.LENGTH_SHORT)
-                                .show();
+                        Utils.getInstance().showToast(this,
+                                getResources().getString(R.string.toast_error_deleting_image));
                     } else {
-                        //display success message
-                        Toast.makeText(this,
-                                        getResources().getString(R.string.toast_image_deleted_success),
-                                        Toast.LENGTH_SHORT)
-                                .show();
+                        Utils.getInstance().showToast(this,
+                                getResources().getString(R.string.toast_image_deleted_success));
                     }
 
                     //update image adapter
@@ -149,9 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     imageAdapter.setImages(images);
                 });
             }
-
-            //hide progress
-            progressMain.setVisibility(View.INVISIBLE);
+            Utils.getInstance().handleProgressVisibility(progressMain, false);
         });
     }
 }

@@ -23,8 +23,7 @@ import gparap.apps.image_gallery.utils.UtilsInstrumentedTest;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         MainActivityInstrumentedTest.class,
-        ImagePickerActivityInstrumentedTest.class,
-        UtilsInstrumentedTest.class
+        ImagePickerActivityInstrumentedTest.class
 })
 public class ImagePickerTestSuite {
 }
