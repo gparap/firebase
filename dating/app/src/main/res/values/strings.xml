@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Dating App</string>
 
-    <!-- Registration Layout -->
+    <!-- Registration -->
     <string name="desc_add_image_button">Add Image Button</string>
     <string name="hint_username">username</string>
     <string name="hint_email">e-mail address</string>
@@ -13,4 +13,10 @@
     <string name="hint_new_email">choose new e-mail address</string>
     <string name="hint_new_password">choose new password</string>
     <string name="button_register">Register</string>
+    <string name="toast_empty_username">Username cannot be empty.</string>
+    <string name="toast_empty_email">E-mail cannot be empty.</string>
+    <string name="toast_empty_password">Password cannot be empty.</string>
+    <string name="toast_empty_password_confirm">Please, confirm your password.</string>
+    <string name="toast_failed_password_confirm">Password confirmation failed.</string>
+    <string name="toast_registration_failed">User registration failed.</string>
 </resources>
