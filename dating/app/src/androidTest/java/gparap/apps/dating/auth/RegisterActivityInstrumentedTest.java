@@ -33,6 +33,9 @@ import android.view.View;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +43,9 @@ import gparap.apps.dating.R;
 
 public class RegisterActivityInstrumentedTest {
     private View rootView;
+    private final String testUsername = "gp";
+    private final String testEmail = "gp@dot.com";
+    private final String testPassword = "123123";
 
     @Before
     public void setUp() {
@@ -145,12 +151,74 @@ public class RegisterActivityInstrumentedTest {
         clearExistingText(R.id.editTextRegisterPassword);
         typeInputText(R.id.editTextRegisterPassword, "password");
         clearExistingText(R.id.editTextRegisterPasswordConfirm);
-        typeInputText(R.id.editTextRegisterPassword, "not matching");
+        typeInputText(R.id.editTextRegisterPasswordConfirm, "not matching");
 
         onView(withId(R.id.buttonRegister)).perform(click());
         onView(withText(R.string.toast_failed_password_confirm))
                 .inRoot(withDecorView(not(is(rootView))))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void registerUser_registrationSucceeded() throws InterruptedException {
+        //fill in test user registration details
+        clearExistingText(R.id.editTextRegisterUsername);
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
+        clearExistingText(R.id.editTextRegisterEmail);
+        typeInputText(R.id.editTextRegisterEmail, testEmail);
+        clearExistingText(R.id.editTextRegisterPassword);
+        typeInputText(R.id.editTextRegisterPassword, testPassword);
+        clearExistingText(R.id.editTextRegisterPasswordConfirm);
+        typeInputText(R.id.editTextRegisterPasswordConfirm, testPassword);
+
+        //register test user and wait a little to update
+        onView(withId(R.id.buttonRegister)).perform(click());
+        Thread.sleep(1667);
+
+        //assert test user is registered
+        onView(withText(R.string.toast_registration_success))
+                .inRoot(withDecorView(not(is(rootView))))
+                .check(matches(isDisplayed()));
+
+        //delete test user and wait a little to delete
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.delete();
+            Thread.sleep(1667);
+        }
+    }
+
+    @Test
+    public void registerUser_registrationFailed() throws InterruptedException {
+        //fill in test user registration details
+        clearExistingText(R.id.editTextRegisterUsername);
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
+        clearExistingText(R.id.editTextRegisterEmail);
+        typeInputText(R.id.editTextRegisterEmail, testEmail);
+        clearExistingText(R.id.editTextRegisterPassword);
+        typeInputText(R.id.editTextRegisterPassword, testPassword);
+        clearExistingText(R.id.editTextRegisterPasswordConfirm);
+        typeInputText(R.id.editTextRegisterPasswordConfirm, testPassword);
+
+        //register test user and wait a little to update
+        onView(withId(R.id.buttonRegister)).perform(click());
+        Thread.sleep(1667);
+
+        //register test user again and wait a little to update
+        onView(withId(R.id.buttonRegister)).perform(click());
+        Thread.sleep(1667);
+
+        //assert test user is not registered
+        onView(withText(R.string.toast_registration_failed))
+                .inRoot(withDecorView(not(is(rootView))))
+                .check(matches(isDisplayed()));
+
+        //delete test user and wait a little to delete
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.delete();
+            Thread.sleep(1667);
+        }
     }
 
     private void clearExistingText(int viewId) {

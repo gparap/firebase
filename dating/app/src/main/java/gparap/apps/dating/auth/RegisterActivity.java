@@ -1,17 +1,22 @@
 package gparap.apps.dating.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.dating.R;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText username, email, password, passwordConfirm;
     private Button buttonRegister;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +25,9 @@ public class RegisterActivity extends AppCompatActivity {
         getWidgets();
 
         //register new user
-        buttonRegister.setOnClickListener(view->{
+        buttonRegister.setOnClickListener(view -> {
             if (validateRegistration()) {
-                //TODO: Register user
+                registerUser();
             }
         });
     }
@@ -33,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextRegisterEmail);
         password = findViewById(R.id.editTextRegisterPassword);
         passwordConfirm = findViewById(R.id.editTextRegisterPasswordConfirm);
+        progressBar = findViewById(R.id.progressBarRegister);
     }
 
     private boolean validateRegistration() {
@@ -56,5 +62,26 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private void registerUser() {
+        //show progress
+        progressBar.setVisibility(View.VISIBLE);
+
+        //register user
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(RegisterActivity.this,
+                                getResources().getString(R.string.toast_registration_success), Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(RegisterActivity.this,
+                                getResources().getString(R.string.toast_registration_failed), Toast.LENGTH_SHORT).show();
+                    }
+
+                    //hide progress
+                    progressBar.setVisibility(View.INVISIBLE);
+                });
     }
 }
