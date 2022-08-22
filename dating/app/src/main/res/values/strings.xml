@@ -20,4 +20,8 @@
     <string name="toast_failed_password_confirm">Password confirmation failed.</string>
     <string name="toast_registration_failed">User registration failed.</string>
     <string name="toast_registration_success">User registration completed.</string>
+
+    <!-- Authentication -->
+    <string name="login_logo_placeholder">placeholder</string>
+    <string name="button_login">Sign In</string>
 </resources>

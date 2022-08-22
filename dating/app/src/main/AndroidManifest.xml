@@ -16,6 +16,9 @@
         android:theme="@style/Theme.DatingApp"
         tools:targetApi="31">
         <activity
+            android:name=".auth.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".auth.RegisterActivity"
             android:exported="false" />
         <activity
