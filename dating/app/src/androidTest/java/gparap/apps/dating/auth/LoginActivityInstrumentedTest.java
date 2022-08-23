@@ -16,6 +16,7 @@
 package gparap.apps.dating.auth;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -63,5 +64,11 @@ public class LoginActivityInstrumentedTest {
     @Test
     public void isInvisible_progressBar() {
         onView(withId(R.id.progressBarLogin)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void onButtonRegisterClick_redirectToRegistration() {
+        onView(withId(R.id.buttonRegisterRedirect)).perform(click());
+        onView(withId(R.id.layout_activity_register)).check(matches(isDisplayed()));
     }
 }

@@ -1,5 +1,6 @@
 package gparap.apps.dating.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         getWidgets();
+
+        //get any passed values from user login
+        Intent intent = getIntent();
+        if (intent != null) {
+            username.setText(intent.getStringExtra("login_username"));
+            password.setText(intent.getStringExtra("login_password"));
+        }
 
         //register new user
         buttonRegister.setOnClickListener(view -> {
