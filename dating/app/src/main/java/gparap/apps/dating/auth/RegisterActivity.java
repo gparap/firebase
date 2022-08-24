@@ -28,7 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
         //get any passed values from user login
         Intent intent = getIntent();
         if (intent != null) {
-            username.setText(intent.getStringExtra("login_username"));
+            email.setText(intent.getStringExtra("login_email"));
             password.setText(intent.getStringExtra("login_password"));
         }
 

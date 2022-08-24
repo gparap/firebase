@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/app_logo"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <!-- Username -->
+    <!-- Email -->
     <EditText
         android:id="@+id/editTextLoginEmail"
         android:layout_width="wrap_content"

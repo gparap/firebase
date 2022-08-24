@@ -24,4 +24,5 @@
     <!-- Authentication -->
     <string name="login_logo_placeholder">placeholder</string>
     <string name="button_login">Sign In</string>
+    <string name="toast_login_email_type_error">E-mail is not of correct type.</string>
 </resources>
