@@ -1,12 +1,14 @@
 package gparap.apps.dating.auth;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,7 +18,9 @@ import gparap.apps.dating.R;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
+    @SuppressWarnings("FieldCanBeLocal")
     private Button buttonLogin;
+    private ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +39,26 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextLoginEmail);
         password = findViewById(R.id.editTextLoginPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
+        progress = findViewById(R.id.progressBarLogin);
 
         //sign in user
-        buttonLogin.setOnClickListener(v->{
-            //validate input
+        buttonLogin.setOnClickListener(v -> {
             if (validateInput()) {
-                //TODO: sign in user
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                        email.getText().toString().trim(), password.getText().toString().trim()
+                ).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(this, getString(R.string.toast_login_successful), Toast.LENGTH_SHORT).show();
+
+                        //redirect to main activity
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+
+                    } else {
+                        Toast.makeText(this, getString(R.string.toast_login_failed), Toast.LENGTH_SHORT).show();
+                    }
+                    progress.setVisibility(View.INVISIBLE);
+                });
             }
         });
 

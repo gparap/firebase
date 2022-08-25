@@ -34,6 +34,8 @@ import android.widget.Toast;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.hamcrest.core.IsNot;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +44,10 @@ import gparap.apps.dating.R;
 
 public class LoginActivityInstrumentedTest {
     private View rootView;
+
+    /* Use this test user for convenience (exists by default) */
+    private final String testEmail = "gparap@dot.com";
+    private final String testPassword = "123123";
 
     @Before
     public void setUp() {
@@ -176,6 +182,56 @@ public class LoginActivityInstrumentedTest {
 
         onView(withId(R.id.buttonLogin)).perform(click());
         onView(withText(R.string.toast_login_email_type_error))
+                .inRoot(withDecorView(IsNot.not(is(rootView))))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void onButtonLoginClick_loginSuccessful() {
+        //clear email and password text
+        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
+        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
+        closeSoftKeyboard();
+
+        //sign-in test user with email and password
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText(testEmail));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testPassword));
+        closeSoftKeyboard();
+
+        try {
+            onView(withId(R.id.buttonLogin)).perform(click());
+
+            //wait a little to sign-in
+            Thread.sleep(1667);
+
+            //test if we are redirected to main activity
+            onView(withId(R.id.layout_activity_main)).check(matches(isDisplayed()));
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+
+        } finally {
+            //sign-out test user
+            try {FirebaseAuth.getInstance().signOut();} catch (Exception ignored) {}
+        }
+    }
+
+    @Test
+    public void onButtonLoginClick_loginFailed() {
+        //clear email and password text
+        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
+        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
+        closeSoftKeyboard();
+
+        //sign-in test user with email and password
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText(testEmail));
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testPassword));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonLogin)).perform(click());
+
+        //test if error message is displayed
+        onView(withText(R.string.toast_login_failed))
                 .inRoot(withDecorView(IsNot.not(is(rootView))))
                 .check(matches(isDisplayed()));
     }
