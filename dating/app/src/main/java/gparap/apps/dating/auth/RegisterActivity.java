@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import gparap.apps.dating.R;
@@ -17,7 +21,9 @@ import gparap.apps.dating.R;
 public class RegisterActivity extends AppCompatActivity {
     private EditText username, email, password, passwordConfirm;
     private Button buttonRegister;
+    private ImageButton buttonPickImage;
     private ProgressBar progressBar;
+    private ActivityResultLauncher<String> getUserImageLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +44,31 @@ public class RegisterActivity extends AppCompatActivity {
                 registerUser();
             }
         });
+
+        //show the image picked from the user device
+        getUserImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                result -> {
+                    //load the image
+                    Glide.with(RegisterActivity.this)
+                            .load(result)
+                            .centerCrop()
+                            .into(buttonPickImage);
+
+                    //clear the previous background
+                    buttonPickImage.setBackground(null);
+                });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //pick an image from the user device
+        buttonPickImage.setOnClickListener(view -> getUserImageLauncher.launch("image/*"));
     }
 
     private void getWidgets() {
+        buttonPickImage = findViewById(R.id.pickImageRegisterButton);
         buttonRegister = findViewById(R.id.buttonRegister);
         username = findViewById(R.id.editTextRegisterUsername);
         email = findViewById(R.id.editTextRegisterEmail);

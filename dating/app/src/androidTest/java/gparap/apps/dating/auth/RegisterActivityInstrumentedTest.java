@@ -57,8 +57,8 @@ public class RegisterActivityInstrumentedTest {
     }
 
     @Test
-    public void isVisible_addImageButton() {
-        onView(ViewMatchers.withId(R.id.imageViewRegisterButton)).check(matches(isDisplayed()));
+    public void isVisible_pickImageButton() {
+        onView(ViewMatchers.withId(R.id.pickImageRegisterButton)).check(matches(isDisplayed()));
     }
 
     @Test

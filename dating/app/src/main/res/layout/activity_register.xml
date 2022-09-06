@@ -10,21 +10,18 @@
     <!-- Image placeholder -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/cardViewRegister_layout_width"
+        android:layout_height="@dimen/cardViewRegister_layout_height"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- Add image button -->
         <ImageButton
-            android:id="@+id/imageViewRegisterButton"
+            android:id="@+id/pickImageRegisterButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/desc_add_image_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_add_a_photo_24" />
 
     </androidx.cardview.widget.CardView>
