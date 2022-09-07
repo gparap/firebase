@@ -18,6 +18,7 @@
     <string name="toast_empty_password">Password cannot be empty.</string>
     <string name="toast_empty_password_confirm">Please, confirm your password.</string>
     <string name="toast_failed_password_confirm">Password confirmation failed.</string>
+    <string name="toast_registration_image_upload_failed">Image upload failed.</string>
     <string name="toast_registration_failed">User registration failed.</string>
     <string name="toast_registration_success">User registration completed.</string>
 
