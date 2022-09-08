@@ -35,6 +35,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -219,6 +220,43 @@ public class RegisterActivityInstrumentedTest {
             user.delete();
             Thread.sleep(1667);
         }
+    }
+
+    @Test
+    public void registerUser_showError_UsernameAlreadyExists() throws InterruptedException {
+        //fill in test user registration details
+        clearExistingText(R.id.editTextRegisterUsername);
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
+        clearExistingText(R.id.editTextRegisterEmail);
+        typeInputText(R.id.editTextRegisterEmail, testEmail);
+        clearExistingText(R.id.editTextRegisterPassword);
+        typeInputText(R.id.editTextRegisterPassword, testPassword);
+        clearExistingText(R.id.editTextRegisterPasswordConfirm);
+        typeInputText(R.id.editTextRegisterPasswordConfirm, testPassword);
+
+        //register test user and wait a little to update
+        onView(withId(R.id.buttonRegister)).perform(click());
+        Thread.sleep(1667);
+
+        //change email and try to register user again
+        clearExistingText(R.id.editTextRegisterEmail);
+        typeInputText(R.id.editTextRegisterEmail, "test@dot.com");
+        onView(withId(R.id.buttonRegister)).perform(click());
+
+        //test here
+        onView(withText(R.string.toast_registration_username_exists))
+                .inRoot(withDecorView(not(is(rootView))))
+                .check(matches(isDisplayed()));
+
+        //delete test user and wait a little to delete
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.delete();
+            Thread.sleep(1667);
+        }
+
+        //delete test user metadata and wait a little to delete
+        FirebaseDatabase.getInstance().getReference("dating_app").child(testUsername).removeValue();
     }
 
     private void clearExistingText(int viewId) {
