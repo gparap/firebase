@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2022 gparap
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package gparap.apps.dating.auth;
 
 import android.content.Intent;
@@ -21,6 +36,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import gparap.apps.dating.R;
 import gparap.apps.dating.data.UserModel;
+import gparap.apps.dating.utils.AppConstants;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText username, email, password, passwordConfirm;
@@ -39,20 +55,39 @@ public class RegisterActivity extends AppCompatActivity {
         //get any passed values from user login
         Intent intent = getIntent();
         if (intent != null) {
-            email.setText(intent.getStringExtra("login_email"));
-            password.setText(intent.getStringExtra("login_password"));
+            email.setText(intent.getStringExtra(AppConstants.INTENT_EXTRA_LOGIN_EMAIL));
+            password.setText(intent.getStringExtra(AppConstants.INTENT_EXTRA_LOGIN_PASSWORD));
         }
 
         //register new user
         buttonRegister.setOnClickListener(view -> {
             if (validateRegistration()) {
-                registerUser();
+                showProgress();
+
+                //check if username already exists
+                FirebaseDatabase.getInstance().getReference(AppConstants.DATABASE_NAME)
+                        .child(username.getText().toString().trim()).get()
+                        .addOnCompleteListener(getChildrenCountTask -> {
+                            if (getChildrenCountTask.getResult().getChildrenCount() > 0) {
+                                showToast(R.string.toast_registration_username_exists);
+                                hideProgress();
+
+                            } else {
+                                //register user
+                                if (imageUri != null) {
+                                    registerUserWithProfileImage();
+                                } else {
+                                    registerUserWithoutProfileImage();
+                                }
+                            }
+                        });
             }
         });
 
         //show the image picked from the user device
         getUserImageLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 result -> {
+                    //get the image URI reference
                     imageUri = result;
 
                     //load the image
@@ -71,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onStart();
 
         //pick an image from the user device
-        buttonPickImage.setOnClickListener(view -> getUserImageLauncher.launch("image/*"));
+        buttonPickImage.setOnClickListener(view -> getUserImageLauncher.launch(AppConstants.IMAGE_MIME_TYPE));
     }
 
     private void getWidgets() {
@@ -107,132 +142,96 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
-    private void registerUser() {
-        //show progress
+    private void showToast(int resourceId) {
+        Toast.makeText(RegisterActivity.this, getResources().getString(resourceId), Toast.LENGTH_SHORT).show();
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
+    }
 
-        //check if username already exists
-        FirebaseDatabase.getInstance().getReference("dating_app")
-                .child(username.getText().toString().trim()).get()
-                .addOnCompleteListener(getChildrenCountTask -> {
-                    if (getChildrenCountTask.getResult().getChildrenCount() > 0) {
-                        Toast.makeText(RegisterActivity.this,
-                                getResources().getString(R.string.toast_registration_username_exists),
-                                Toast.LENGTH_SHORT).show();
+    private void hideProgress() {
+        progressBar.setVisibility(View.INVISIBLE);
+    }
 
-                        //hide progress
-                        progressBar.setVisibility(View.INVISIBLE);
+    private void uploadUserMetadata(UserModel user) {
+        FirebaseDatabase.getInstance().getReference(AppConstants.DATABASE_NAME)
+                .child(username.getText().toString().trim())
+                .setValue(user)
+                .addOnCompleteListener(uploadUserTask -> {
+                    if (uploadUserTask.isSuccessful()) {
+                        showToast(R.string.toast_registration_success);
+                    } else {
+                        showToast(R.string.toast_registration_failed);
+                    }
+                    hideProgress();
+                });
+    }
+
+    private void registerUserWithProfileImage() {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        //upload user profile image to cloud
+                        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+                        firebaseStorage.getReference(AppConstants.DATABASE_NAME)
+                                .child(username.getText().toString().trim()).child(AppConstants.USER_PROFILE_IMAGE_NAME)
+                                .putFile(imageUri)
+                                .addOnCompleteListener(uploadTask -> {
+                                    if (uploadTask.isSuccessful()) {
+                                        //get the downloadable url for the image
+                                        uploadTask.getResult().getStorage().getDownloadUrl()
+                                                .addOnCompleteListener(downloadUrlTask -> {
+
+                                                    //create the user model
+                                                    UserModel user = new UserModel(
+                                                            username.getText().toString().trim(),
+                                                            email.getText().toString().trim(),
+                                                            downloadUrlTask.getResult().toString()
+                                                    );
+
+                                                    //upload user metadata to cloud
+                                                    uploadUserMetadata(user);
+                                                });
+
+                                    } else {
+                                        showToast(R.string.toast_registration_image_upload_failed);
+                                    }
+                                    hideProgress();
+                                });
 
                     } else {
-                        //register user - profile image is picked
-                        if (imageUri != null) {
-                            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
-                                    .addOnCompleteListener(this, task -> {
-                                        if (task.isSuccessful()) {
-                                            //upload user profile image to cloud
-                                            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-                                            firebaseStorage.getReference("dating_app")
-                                                    .child(username.getText().toString().trim()).child("profile_picture")
-                                                    .putFile(imageUri)
-                                                    .addOnCompleteListener(uploadTask -> {
-                                                        if (uploadTask.isSuccessful()) {
-                                                            //get the downloadable url for the image
-                                                            uploadTask.getResult().getStorage().getDownloadUrl()
-                                                                    .addOnCompleteListener(downloadUrlTask -> {
-
-                                                                        //create the user model
-                                                                        UserModel user = new UserModel(
-                                                                                username.getText().toString().trim(),
-                                                                                email.getText().toString().trim(),
-                                                                                downloadUrlTask.getResult().toString()
-                                                                        );
-
-                                                                        //upload user metadata to cloud
-                                                                        FirebaseDatabase.getInstance().getReference("dating_app")
-                                                                                .child(username.getText().toString().trim())
-                                                                                .setValue(user)
-                                                                                .addOnCompleteListener(uploadUserTask -> {
-                                                                                    if (uploadUserTask.isSuccessful()) {
-                                                                                        Toast.makeText(RegisterActivity.this,
-                                                                                                getResources().getString(R.string.toast_registration_success),
-                                                                                                Toast.LENGTH_SHORT).show();
-
-                                                                                    } else {
-                                                                                        Toast.makeText(RegisterActivity.this,
-                                                                                                getResources().getString(R.string.toast_registration_failed),
-                                                                                                Toast.LENGTH_SHORT).show();
-                                                                                    }
-
-                                                                                    //hide progress
-                                                                                    progressBar.setVisibility(View.INVISIBLE);
-                                                                                });
-                                                                    });
-
-                                                        } else {
-                                                            Toast.makeText(RegisterActivity.this,
-                                                                    getResources().getString(R.string.toast_registration_image_upload_failed),
-                                                                    Toast.LENGTH_SHORT).show();
-                                                        }
-
-                                                        //hide progress
-                                                        progressBar.setVisibility(View.INVISIBLE);
-                                                    });
-
-                                        } else {
-                                            //create error message
-                                            if (task.getException() != null) {
-                                                Toast.makeText(RegisterActivity.this,
-                                                        task.getException().getLocalizedMessage(),
-                                                        Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(RegisterActivity.this,
-                                                        getResources().getString(R.string.toast_registration_failed),
-                                                        Toast.LENGTH_SHORT).show();
-                                            }
-
-                                            //hide progress
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                        }
-                                    });
+                        if (task.getException() != null) {
+                            //custom error message
+                            showToast(task.getException().getLocalizedMessage());
+                        } else {
+                            showToast(R.string.toast_registration_failed);
                         }
+                        hideProgress();
+                    }
+                });
+    }
 
-                        //register user - profile image is NOT picked
-                        else {
-                            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
-                                    .addOnCompleteListener(this, task -> {
-                                        if (task.isSuccessful()) {
-                                            //create the user model
-                                            UserModel user = new UserModel(
-                                                    username.getText().toString().trim(),
-                                                    email.getText().toString().trim(),
-                                                    ""
-                                            );
+    private void registerUserWithoutProfileImage() {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString())
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        //create the user model
+                        UserModel user = new UserModel(
+                                username.getText().toString().trim(),
+                                email.getText().toString().trim(),
+                                ""
+                        );
 
-                                            //upload user metadata to cloud
-                                            FirebaseDatabase.getInstance().getReference("dating_app")
-                                                    .child(username.getText().toString().trim())
-                                                    .setValue(user)
-                                                    .addOnCompleteListener(uploadUserTask -> {
-                                                        if (uploadUserTask.isSuccessful()) {
-                                                            Toast.makeText(RegisterActivity.this,
-                                                                    getResources().getString(R.string.toast_registration_success),
-                                                                    Toast.LENGTH_SHORT).show();
+                        //upload user metadata to cloud
+                        uploadUserMetadata(user);
 
-                                                        } else {
-                                                            Toast.makeText(RegisterActivity.this,
-                                                                    getResources().getString(R.string.toast_registration_failed),
-                                                                    Toast.LENGTH_SHORT).show();
-                                                        }
-
-                                                        //hide progress
-                                                        progressBar.setVisibility(View.INVISIBLE);
-                                                    });
-                                        } else {
-                                            //hide progress
-                                            progressBar.setVisibility(View.INVISIBLE);
-                                        }
-                                    });
-                        }
+                    } else {
+                        hideProgress();
                     }
                 });
     }

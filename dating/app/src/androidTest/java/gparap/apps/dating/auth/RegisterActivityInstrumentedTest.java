@@ -41,12 +41,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gparap.apps.dating.R;
+import gparap.apps.dating.utils.AppConstants;
 
 public class RegisterActivityInstrumentedTest {
     private View rootView;
     private final String testUsername = "gp";
     private final String testEmail = "gp@dot.com";
     private final String testPassword = "123123";
+    private final Long threadSleepMillis = 1667L;
 
     @Before
     public void setUp() {
@@ -106,7 +108,7 @@ public class RegisterActivityInstrumentedTest {
     @Test
     public void emailIsEmpty_showErrorMessage() {
         //fill in username first
-        typeInputText(R.id.editTextRegisterUsername, "username");
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
 
         clearExistingText(R.id.editTextRegisterEmail);
         onView(withId(R.id.buttonRegister)).perform(click());
@@ -118,8 +120,8 @@ public class RegisterActivityInstrumentedTest {
     @Test
     public void passwordIsEmpty_showErrorMessage() {
         //fill in username, email
-        typeInputText(R.id.editTextRegisterUsername, "username");
-        typeInputText(R.id.editTextRegisterEmail, "email");
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
+        typeInputText(R.id.editTextRegisterEmail, testEmail);
 
         clearExistingText(R.id.editTextRegisterPassword);
         onView(withId(R.id.buttonRegister)).perform(click());
@@ -131,9 +133,9 @@ public class RegisterActivityInstrumentedTest {
     @Test
     public void passwordConfirmationIsEmpty_showErrorMessage() {
         //fill in username, email and password
-        typeInputText(R.id.editTextRegisterUsername, "username");
-        typeInputText(R.id.editTextRegisterEmail, "email");
-        typeInputText(R.id.editTextRegisterPassword, "password");
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
+        typeInputText(R.id.editTextRegisterEmail, testEmail);
+        typeInputText(R.id.editTextRegisterPassword, testPassword);
 
         clearExistingText(R.id.editTextRegisterPasswordConfirm);
         onView(withId(R.id.buttonRegister)).perform(click());
@@ -145,12 +147,12 @@ public class RegisterActivityInstrumentedTest {
     @Test
     public void passwordAndConfirmationDoNotMatch_showErrorMessage() {
         //fill in username, email
-        typeInputText(R.id.editTextRegisterUsername, "username");
-        typeInputText(R.id.editTextRegisterEmail, "email");
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
+        typeInputText(R.id.editTextRegisterEmail, testEmail);
 
         //fill in password and confirmation
         clearExistingText(R.id.editTextRegisterPassword);
-        typeInputText(R.id.editTextRegisterPassword, "password");
+        typeInputText(R.id.editTextRegisterPassword, testPassword);
         clearExistingText(R.id.editTextRegisterPasswordConfirm);
         typeInputText(R.id.editTextRegisterPasswordConfirm, "not matching");
 
@@ -163,18 +165,10 @@ public class RegisterActivityInstrumentedTest {
     @Test
     public void registerUser_registrationSucceeded() throws InterruptedException {
         //fill in test user registration details
-        clearExistingText(R.id.editTextRegisterUsername);
-        typeInputText(R.id.editTextRegisterUsername, testUsername);
-        clearExistingText(R.id.editTextRegisterEmail);
-        typeInputText(R.id.editTextRegisterEmail, testEmail);
-        clearExistingText(R.id.editTextRegisterPassword);
-        typeInputText(R.id.editTextRegisterPassword, testPassword);
-        clearExistingText(R.id.editTextRegisterPasswordConfirm);
-        typeInputText(R.id.editTextRegisterPasswordConfirm, testPassword);
+        typeTestUserInputText();
 
         //register test user and wait a little to update
-        onView(withId(R.id.buttonRegister)).perform(click());
-        Thread.sleep(1667);
+        registerTestUser();
 
         //assert test user is registered
         onView(withText(R.string.toast_registration_success))
@@ -182,61 +176,36 @@ public class RegisterActivityInstrumentedTest {
                 .check(matches(isDisplayed()));
 
         //delete test user and wait a little to delete
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            user.delete();
-            Thread.sleep(1667);
-        }
+        deleteTestUser();
     }
 
     @Test
     public void registerUser_registrationFailed() throws InterruptedException {
         //fill in test user registration details
-        clearExistingText(R.id.editTextRegisterUsername);
-        typeInputText(R.id.editTextRegisterUsername, testUsername);
-        clearExistingText(R.id.editTextRegisterEmail);
-        typeInputText(R.id.editTextRegisterEmail, testEmail);
-        clearExistingText(R.id.editTextRegisterPassword);
-        typeInputText(R.id.editTextRegisterPassword, testPassword);
-        clearExistingText(R.id.editTextRegisterPasswordConfirm);
-        typeInputText(R.id.editTextRegisterPasswordConfirm, testPassword);
+        typeTestUserInputText();
 
         //register test user and wait a little to update
-        onView(withId(R.id.buttonRegister)).perform(click());
-        Thread.sleep(1667);
+        registerTestUser();
 
         //register test user again and wait a little to update
-        onView(withId(R.id.buttonRegister)).perform(click());
-        Thread.sleep(1667);
+        registerTestUser();
 
         //assert test user is not registered
-        onView(withText(R.string.toast_registration_failed))
+        onView(withText(R.string.toast_registration_username_exists))
                 .inRoot(withDecorView(not(is(rootView))))
                 .check(matches(isDisplayed()));
 
         //delete test user and wait a little to delete
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            user.delete();
-            Thread.sleep(1667);
-        }
+        deleteTestUser();
     }
 
     @Test
     public void registerUser_showError_UsernameAlreadyExists() throws InterruptedException {
         //fill in test user registration details
-        clearExistingText(R.id.editTextRegisterUsername);
-        typeInputText(R.id.editTextRegisterUsername, testUsername);
-        clearExistingText(R.id.editTextRegisterEmail);
-        typeInputText(R.id.editTextRegisterEmail, testEmail);
-        clearExistingText(R.id.editTextRegisterPassword);
-        typeInputText(R.id.editTextRegisterPassword, testPassword);
-        clearExistingText(R.id.editTextRegisterPasswordConfirm);
-        typeInputText(R.id.editTextRegisterPasswordConfirm, testPassword);
+        typeTestUserInputText();
 
         //register test user and wait a little to update
-        onView(withId(R.id.buttonRegister)).perform(click());
-        Thread.sleep(1667);
+        registerTestUser();
 
         //change email and try to register user again
         clearExistingText(R.id.editTextRegisterEmail);
@@ -249,14 +218,10 @@ public class RegisterActivityInstrumentedTest {
                 .check(matches(isDisplayed()));
 
         //delete test user and wait a little to delete
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            user.delete();
-            Thread.sleep(1667);
-        }
+        deleteTestUser();
 
         //delete test user metadata and wait a little to delete
-        FirebaseDatabase.getInstance().getReference("dating_app").child(testUsername).removeValue();
+        FirebaseDatabase.getInstance().getReference(AppConstants.DATABASE_NAME).child(testUsername).removeValue();
     }
 
     private void clearExistingText(int viewId) {
@@ -267,5 +232,29 @@ public class RegisterActivityInstrumentedTest {
     private void typeInputText(int viewId, String text) {
         onView(withId(viewId)).perform(typeText(text));
         closeSoftKeyboard();
+    }
+
+    private void typeTestUserInputText() {
+        clearExistingText(R.id.editTextRegisterUsername);
+        typeInputText(R.id.editTextRegisterUsername, testUsername);
+        clearExistingText(R.id.editTextRegisterEmail);
+        typeInputText(R.id.editTextRegisterEmail, testEmail);
+        clearExistingText(R.id.editTextRegisterPassword);
+        typeInputText(R.id.editTextRegisterPassword, testPassword);
+        clearExistingText(R.id.editTextRegisterPasswordConfirm);
+        typeInputText(R.id.editTextRegisterPasswordConfirm, testPassword);
+    }
+
+    private void registerTestUser() throws InterruptedException {
+        onView(withId(R.id.buttonRegister)).perform(click());
+        Thread.sleep(threadSleepMillis);
+    }
+
+    private void deleteTestUser() throws InterruptedException {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            user.delete();
+            Thread.sleep(threadSleepMillis);
+        }
     }
 }

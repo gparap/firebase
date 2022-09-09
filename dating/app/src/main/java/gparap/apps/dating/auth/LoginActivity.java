@@ -1,9 +1,23 @@
+/*
+ * Copyright (c) 2022 gparap
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package gparap.apps.dating.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -15,11 +29,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import gparap.apps.dating.MainActivity;
 import gparap.apps.dating.R;
+import gparap.apps.dating.utils.AppConstants;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
-    @SuppressWarnings("FieldCanBeLocal")
-    private Button buttonLogin;
     private ProgressBar progress;
 
     @Override
@@ -38,12 +51,15 @@ public class LoginActivity extends AppCompatActivity {
         //get widgets
         email = findViewById(R.id.editTextLoginEmail);
         password = findViewById(R.id.editTextLoginPassword);
-        buttonLogin = findViewById(R.id.buttonLogin);
         progress = findViewById(R.id.progressBarLogin);
 
-        //sign in user
-        buttonLogin.setOnClickListener(v -> {
+        //sign-in user with e-mail and password
+        findViewById(R.id.buttonLogin).setOnClickListener(v -> {
             if (validateInput()) {
+                //show progress
+                progress.setVisibility(View.VISIBLE);
+
+                //sign-in
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
                         email.getText().toString().trim(), password.getText().toString().trim()
                 ).addOnCompleteListener(task -> {
@@ -57,6 +73,8 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(this, getString(R.string.toast_login_failed), Toast.LENGTH_SHORT).show();
                     }
+
+                    //hide progress
                     progress.setVisibility(View.INVISIBLE);
                 });
             }
@@ -66,8 +84,8 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.buttonRegisterRedirect).setOnClickListener(v -> {
                     //pass any values the user input
                     Intent intent = new Intent(this, RegisterActivity.class);
-                    intent.putExtra("login_email", email.getText().toString().trim());
-                    intent.putExtra("login_password", password.getText().toString());
+                    intent.putExtra(AppConstants.INTENT_EXTRA_LOGIN_EMAIL, email.getText().toString().trim());
+                    intent.putExtra(AppConstants.INTENT_EXTRA_LOGIN_PASSWORD, password.getText().toString());
                     startActivity(intent);
                 }
         );
@@ -84,7 +102,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         //check if email is of correct type
-        if (!email.getText().toString().trim().contains("@") || !email.getText().toString().trim().contains(".")) {
+        if (!email.getText().toString().trim().contains(AppConstants.SYMBOL_SIGN_AT) ||
+                !email.getText().toString().trim().contains(AppConstants.SYMBOL_SIGN_DOT)) {
             Toast.makeText(this, getString(R.string.toast_login_email_type_error), Toast.LENGTH_SHORT).show();
             return false;
         }

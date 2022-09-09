@@ -10,12 +10,11 @@
     <!-- Logo placeholder -->
     <ImageView
         android:id="@+id/imageViewLoginLogoPlaceholder"
-        android:layout_width="192dp"
-        android:layout_height="192dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/imageViewLoginLogoPlaceholder_layout_width"
+        android:layout_height="@dimen/imageViewLoginLogoPlaceholder_layout_height"
+        android:layout_marginTop="@dimen/logoPlaceholderLogin_layout_marginTop"
         android:contentDescription="@string/login_logo_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/app_logo"
@@ -24,29 +23,27 @@
     <!-- Email -->
     <EditText
         android:id="@+id/editTextLoginEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/editTextLoginEmail_layout_marginTop"
         android:autofillHints="false"
-        android:ems="10"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        android:minHeight="@dimen/editText_minHeight"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewLoginLogoPlaceholder"
+        app:layout_constraintStart_toStartOf="@+id/imageViewLoginLogoPlaceholder"
         app:layout_constraintTop_toBottomOf="@+id/imageViewLoginLogoPlaceholder" />
 
     <!-- Password -->
     <EditText
         android:id="@+id/editTextLoginPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints="false"
-        android:ems="10"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
+        android:minHeight="@dimen/editText_minHeight"
         app:layout_constraintEnd_toEndOf="@+id/editTextLoginEmail"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/editTextLoginEmail"
         app:layout_constraintTop_toBottomOf="@+id/editTextLoginEmail" />
 
@@ -57,7 +54,6 @@
         android:layout_height="wrap_content"
         android:text="@string/button_login"
         app:layout_constraintEnd_toEndOf="@+id/editTextLoginEmail"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLoginEmail"
         app:layout_constraintTop_toBottomOf="@+id/editTextLoginPassword" />
 
@@ -68,7 +64,6 @@
         android:layout_height="wrap_content"
         android:text="@string/button_register"
         app:layout_constraintEnd_toEndOf="@+id/editTextLoginEmail"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLoginEmail"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
 
@@ -81,9 +76,8 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterRedirect"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

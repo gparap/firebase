@@ -12,6 +12,7 @@
         android:id="@+id/cardViewRegister"
         android:layout_width="@dimen/cardViewRegister_layout_width"
         android:layout_height="@dimen/cardViewRegister_layout_height"
+        android:layout_marginTop="@dimen/cardViewRegister_layout_marginTop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,10 +32,12 @@
         android:id="@+id/editTextRegisterUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/editTextRegisterUsername_layout_marginStart"
+        android:layout_marginEnd="@dimen/editTextRegisterUsername_layout_marginEnd"
         android:autofillHints="false"
-        android:ems="10"
         android:hint="@string/hint_username"
         android:inputType="textPersonName"
+        android:minHeight="@dimen/editText_minHeight"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,9 +51,10 @@
         android:autofillHints="false"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
+        android:minHeight="@dimen/editText_minHeight"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
         app:layout_constraintTop_toBottomOf="@+id/editTextRegisterUsername" />
 
     <!-- Password -->
@@ -61,9 +65,10 @@
         android:autofillHints="false"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
+        android:minHeight="@dimen/editText_minHeight"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
         app:layout_constraintTop_toBottomOf="@+id/editTextRegisterEmail" />
 
     <!-- Password confirmation -->
@@ -75,9 +80,10 @@
         android:hint="@string/hint_confirm_password"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
+        android:minHeight="@dimen/editText_minHeight"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
         app:layout_constraintTop_toBottomOf="@+id/editTextRegisterPassword" />
 
     <!-- Registration button -->
@@ -87,8 +93,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:text="@string/button_register"
-        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterPasswordConfirm"
-        app:layout_constraintStart_toStartOf="@+id/editTextRegisterPasswordConfirm"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
         app:layout_constraintTop_toBottomOf="@+id/editTextRegisterPasswordConfirm" />
 
     <!-- Registration progress -->

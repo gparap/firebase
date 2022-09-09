@@ -17,33 +17,43 @@ package gparap.apps.dating.data;
 
 public class UserModel {
     private String username, email, profileImageUrl;
-    public UserModel(){}
+
+    @SuppressWarnings("unused")
+    public UserModel() {
+    }
+
     public UserModel(String username, String email, String profileImageUrl) {
         this.username = username;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
     }
 
+    @SuppressWarnings("unused")
     public String getUsername() {
         return username;
     }
 
+    @SuppressWarnings("unused")
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @SuppressWarnings("unused")
     public String getEmail() {
         return email;
     }
 
+    @SuppressWarnings("unused")
     public void setEmail(String email) {
         this.email = email;
     }
 
+    @SuppressWarnings("unused")
     public String getProfileImageUrl() {
         return profileImageUrl;
     }
 
+    @SuppressWarnings("unused")
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }

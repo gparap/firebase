@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Design dimensions -->
+    <!-- Design dimensions: Pixel 2 (411 x 731 dp, xxhdpi) -->
+
+    <!-- common -->
+    <dimen name="editText_minHeight">48dp</dimen>
+
+    <!-- login -->
+    <dimen name="imageViewLoginLogoPlaceholder_layout_width">192dp</dimen>
+    <dimen name="imageViewLoginLogoPlaceholder_layout_height">192dp</dimen>
+    <dimen name="logoPlaceholderLogin_layout_marginTop">16dp</dimen>
+    <dimen name="editTextLoginEmail_layout_marginTop">16dp</dimen>
+
+    <!-- register -->
     <dimen name="cardViewRegister_layout_width">192dp</dimen>
     <dimen name="cardViewRegister_layout_height">192dp</dimen>
+    <dimen name="cardViewRegister_layout_marginTop">16dp</dimen>
+    <dimen name="editTextRegisterUsername_layout_marginStart">8dp</dimen>
+    <dimen name="editTextRegisterUsername_layout_marginEnd">8dp</dimen>
+
 </resources>

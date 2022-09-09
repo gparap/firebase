@@ -47,7 +47,9 @@ public class LoginActivityInstrumentedTest {
 
     /* Use this test user for convenience (exists by default) */
     private final String testEmail = "gparap@dot.com";
+    @SuppressWarnings("FieldCanBeLocal")
     private final String testPassword = "123123";
+    private final String wrongPassword = "password";
 
     @Before
     public void setUp() {
@@ -96,13 +98,9 @@ public class LoginActivityInstrumentedTest {
 
     @Test
     public void emailIsEmpty_showErrorMessage() throws InterruptedException {
-        //clear email text
-        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
-        closeSoftKeyboard();
-
-        //fill in password
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("password"));
-        closeSoftKeyboard();
+        //clear email text and fill in password
+        clearExistingText(R.id.editTextLoginEmail);
+        typeInputText(R.id.editTextLoginPassword, wrongPassword);
 
         onView(withId(R.id.buttonLogin)).perform(click());
         onView(withText(R.string.toast_empty_email))
@@ -115,13 +113,9 @@ public class LoginActivityInstrumentedTest {
 
     @Test
     public void passwordIsEmpty_showErrorMessage() throws InterruptedException {
-        //clear password text
-        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
-        closeSoftKeyboard();
-
-        //fill in email
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("email@dot.com"));
-        closeSoftKeyboard();
+        //clear password text and fill in email
+        clearExistingText(R.id.editTextLoginPassword);
+        typeInputText(R.id.editTextLoginEmail, "email@dot.com");
 
         onView(withId(R.id.buttonLogin)).perform(click());
         onView(withText(R.string.toast_empty_password))
@@ -135,14 +129,12 @@ public class LoginActivityInstrumentedTest {
     @Test
     public void email_at_SymbolMissing_showErrorMessage() {
         //clear email and password text
-        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
-        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
-        closeSoftKeyboard();
+        clearExistingText(R.id.editTextLoginEmail);
+        clearExistingText(R.id.editTextLoginPassword);
 
         //fill in email and password
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("emaildot.com"));
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("password"));
-        closeSoftKeyboard();
+        typeInputText(R.id.editTextLoginEmail, "email_dot.com");
+        typeInputText(R.id.editTextLoginPassword, wrongPassword);
 
         onView(withId(R.id.buttonLogin)).perform(click());
         onView(withText(R.string.toast_login_email_type_error))
@@ -153,14 +145,12 @@ public class LoginActivityInstrumentedTest {
     @Test
     public void email_dot_SymbolMissing_showErrorMessage() {
         //clear email and password text
-        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
-        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
-        closeSoftKeyboard();
+        clearExistingText(R.id.editTextLoginEmail);
+        clearExistingText(R.id.editTextLoginPassword);
 
         //fill in email and password
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("email@dotcom"));
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("password"));
-        closeSoftKeyboard();
+        typeInputText(R.id.editTextLoginEmail, "email@dotcom");
+        typeInputText(R.id.editTextLoginPassword, wrongPassword);
 
         onView(withId(R.id.buttonLogin)).perform(click());
         onView(withText(R.string.toast_login_email_type_error))
@@ -171,14 +161,12 @@ public class LoginActivityInstrumentedTest {
     @Test
     public void email_at_dot_SymbolsMissing_showErrorMessage() {
         //clear email and password text
-        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
-        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
-        closeSoftKeyboard();
+        clearExistingText(R.id.editTextLoginEmail);
+        clearExistingText(R.id.editTextLoginPassword);
 
         //fill in email and password
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("emaildotcom"));
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("password"));
-        closeSoftKeyboard();
+        typeInputText(R.id.editTextLoginEmail, "email_dot_com");
+        typeInputText(R.id.editTextLoginPassword, wrongPassword);
 
         onView(withId(R.id.buttonLogin)).perform(click());
         onView(withText(R.string.toast_login_email_type_error))
@@ -187,18 +175,14 @@ public class LoginActivityInstrumentedTest {
     }
 
     @Test
-    public void onButtonLoginClick_loginSuccessful() {
+    public void onButtonLoginClick_loginSuccessful() throws InterruptedException {
         //clear email and password text
-        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
-        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
-        closeSoftKeyboard();
+        clearExistingText(R.id.editTextLoginEmail);
+        clearExistingText(R.id.editTextLoginPassword);
 
         //sign-in test user with email and password
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText(testEmail));
-        closeSoftKeyboard();
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testPassword));
-        closeSoftKeyboard();
-
+        typeInputText(R.id.editTextLoginEmail, testEmail);
+        typeInputText(R.id.editTextLoginPassword, testPassword);
         try {
             onView(withId(R.id.buttonLogin)).perform(click());
 
@@ -208,31 +192,51 @@ public class LoginActivityInstrumentedTest {
             //test if we are redirected to main activity
             onView(withId(R.id.layout_activity_main)).check(matches(isDisplayed()));
 
+            //sign-out test user
+            signOut();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
 
         } finally {
             //sign-out test user
-            try {FirebaseAuth.getInstance().signOut();} catch (Exception ignored) {}
+            signOut();
         }
     }
 
     @Test
     public void onButtonLoginClick_loginFailed() {
         //clear email and password text
-        onView(withId(R.id.editTextLoginEmail)).perform(clearText());
-        onView(withId(R.id.editTextLoginPassword)).perform(clearText());
-        closeSoftKeyboard();
+        clearExistingText(R.id.editTextLoginEmail);
+        clearExistingText(R.id.editTextLoginPassword);
 
-        //sign-in test user with email and password
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText(testEmail));
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testPassword));
-        closeSoftKeyboard();
+        //try to  sign-in test user with email and wrong password
+        typeInputText(R.id.editTextLoginEmail, testEmail);
+        typeInputText(R.id.editTextLoginPassword, wrongPassword);
         onView(withId(R.id.buttonLogin)).perform(click());
 
         //test if error message is displayed
         onView(withText(R.string.toast_login_failed))
-                .inRoot(withDecorView(IsNot.not(is(rootView))))
+                .inRoot(withDecorView(not(is(rootView))))
                 .check(matches(isDisplayed()));
+    }
+
+    private void clearExistingText(int viewId) {
+        onView(withId(viewId)).perform(clearText());
+        closeSoftKeyboard();
+    }
+
+    private void typeInputText(int viewId, String text) {
+        onView(withId(viewId)).perform(typeText(text));
+        closeSoftKeyboard();
+    }
+
+    private void signOut() throws InterruptedException {
+        try {
+            FirebaseAuth.getInstance().signOut();
+            Thread.sleep(1667);
+        } catch (Exception ignored) {} finally {
+            Thread.sleep(1667);
+        }
     }
 }

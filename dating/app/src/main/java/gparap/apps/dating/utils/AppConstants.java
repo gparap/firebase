@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.dating;
+package gparap.apps.dating.utils;
 
-import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.FirebaseApp;
-
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        FirebaseApp.initializeApp(MainActivity.this);
-    }
+public class AppConstants {
+    public static String INTENT_EXTRA_LOGIN_EMAIL = "login_email";
+    public static String INTENT_EXTRA_LOGIN_PASSWORD = "login_password";
+    public static String SYMBOL_SIGN_AT = "@";
+    public static String SYMBOL_SIGN_DOT = ".";
+    public static String IMAGE_MIME_TYPE = "image/*";
+    public static String DATABASE_NAME = "dating_app";
+    public static String USER_PROFILE_IMAGE_NAME = "profile_picture";
 }
