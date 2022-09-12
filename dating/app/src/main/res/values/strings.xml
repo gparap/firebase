@@ -29,4 +29,5 @@
     <string name="toast_login_email_type_error">E-mail is not of correct type.</string>
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_login_failed">User login failed. Please, check your credentials and try again.</string>
+    <string name="main_menu_title_logout">Logout</string>
 </resources>
