@@ -13,8 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.player_music.utils;
+package gparap.apps.player_music.data;
 
-public class AppConstants {
-    public static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 999;
+public class StorageFileModel {
+    private String filename;
+
+    public StorageFileModel(String filename) {
+        this.filename = filename;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 }
