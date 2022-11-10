@@ -22,14 +22,25 @@ import static gparap.apps.player_music.utils.AppConstants.REQUEST_CODE_READ_EXTE
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.FirebaseApp;
 
+import java.io.File;
+import java.util.ArrayList;
+
+import gparap.apps.player_music.adapters.StorageFilesAdapter;
+import gparap.apps.player_music.data.StorageFileModel;
+
 public class MainActivity extends AppCompatActivity {
+    private final ArrayList<StorageFileModel> storageFiles = new ArrayList<>();
+    private RecyclerView recyclerViewStorageFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +50,18 @@ public class MainActivity extends AppCompatActivity {
         //initializes the default FirebaseApp instance
         FirebaseApp.initializeApp(this);
 
+        //setup recycler view with adapter for storage files
+        recyclerViewStorageFiles = findViewById(R.id.recyclerViewStorageFiles);
+        recyclerViewStorageFiles.setLayoutManager(new LinearLayoutManager(this));
+
         //determine whether the app have been granted the READ_EXTERNAL_STORAGE permission
         if (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            //get storage files from device (SDK >= 21 && <= 28)
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                storageFiles.clear();
+                getStorageFiles();
+            }
+
             //TODO(SDK >= 23 && < 33))
 
         } else {
@@ -61,7 +82,47 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_READ_EXTERNAL_STORAGE) {
-            //TODO (SDK >= 21)
+            //get storage files from device (SDK >= 21 && <= 28)
+            storageFiles.clear();
+            getStorageFiles();
         }
+    }
+
+    //get storage files from the device folders "DOWNLOADS" & "MUSIC"   TODO: Refactor code
+    private void getStorageFiles() {
+        //"DOWNLOADS"
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file:files) {
+                //get the file name
+                String filename = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
+
+                //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
+                if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
+                    storageFiles.add(new StorageFileModel(filename));
+                }
+            }
+        }
+
+        //"MUSIC"
+        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+        files = dir.listFiles();
+        if (files != null) {
+            for (File file:files) {
+                //get the file name
+                String filename = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
+
+                //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
+                if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
+                    storageFiles.add(new StorageFileModel(filename));
+                }
+            }
+        }
+
+        //update recycler view with storage files
+        StorageFilesAdapter adapter = new StorageFilesAdapter();
+        adapter.storageFiles = storageFiles;
+        recyclerViewStorageFiles.setAdapter(adapter);
     }
 }
