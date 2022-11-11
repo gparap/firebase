@@ -20,9 +20,11 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static gparap.apps.player_music.utils.AppConstants.REQUEST_CODE_READ_EXTERNAL_STORAGE;
 
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,10 +61,14 @@ public class MainActivity extends AppCompatActivity {
             //get storage files from device (SDK >= 21 && <= 28)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
                 storageFiles.clear();
-                getStorageFiles();
+                getStorageFiles(Build.VERSION_CODES.P);
             }
 
-            //TODO(SDK >= 23 && < 33))
+            ///get storage files from device (SDK >= 23 && < 33)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                storageFiles.clear();
+                getStorageFiles(Build.VERSION_CODES.Q);
+            }
 
         } else {
             //ask for READ_EXTERNAL_STORAGE permission (SDK >= 23 && < 33)
@@ -84,39 +90,67 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_READ_EXTERNAL_STORAGE) {
             //get storage files from device (SDK >= 21 && <= 28)
             storageFiles.clear();
-            getStorageFiles();
+            getStorageFiles(Build.VERSION_CODES.P);
         }
     }
 
     //get storage files from the device folders "DOWNLOADS" & "MUSIC"   TODO: Refactor code
-    private void getStorageFiles() {
-        //"DOWNLOADS"
-        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File[] files = dir.listFiles();
-        if (files != null) {
-            for (File file:files) {
-                //get the file name
-                String filename = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
+    private void getStorageFiles(int sdkVersionCode) {
+        //(SDK >= 21 && <= 28)
+        if (sdkVersionCode <= 28) {
+            //get storage files from the device folder "DOWNLOADS"
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    //get the file name
+                    String filename = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
 
-                //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
-                if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
-                    storageFiles.add(new StorageFileModel(filename));
+                    //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
+                    if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
+                        storageFiles.add(new StorageFileModel(filename));
+                    }
+                }
+            }
+
+            //get storage files from the device folder "MUSIC"
+            dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+            files = dir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    //get the file name
+                    String filename = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
+
+                    //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
+                    if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
+                        storageFiles.add(new StorageFileModel(filename));
+                    }
                 }
             }
         }
 
-        //"MUSIC"
-        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
-        files = dir.listFiles();
-        if (files != null) {
-            for (File file:files) {
-                //get the file name
-                String filename = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
+        //(SDK >= 23 && < 33)
+        if (sdkVersionCode >= 29) {
+            //define the columns that will be returned for each row
+            String[] projection = new String[]{MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME};
 
-                //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
-                if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
+            //query against the table and return a Cursor object
+            Cursor cursor = getContentResolver().query(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null, null, null
+            );
+
+            //get audio files and add to list
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    int index = cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
+                    String filename = cursor.getString(index);
                     storageFiles.add(new StorageFileModel(filename));
                 }
+            }
+
+            //free up the Cursor after use
+            if (cursor != null) {
+                cursor.close();
             }
         }
 
