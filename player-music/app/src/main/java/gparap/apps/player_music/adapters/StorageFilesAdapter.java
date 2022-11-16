@@ -15,14 +15,22 @@
  */
 package gparap.apps.player_music.adapters;
 
+import android.content.ContentUris;
+import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import gparap.apps.player_music.R;
@@ -30,10 +38,14 @@ import gparap.apps.player_music.data.StorageFileModel;
 
 public class StorageFilesAdapter extends RecyclerView.Adapter<StorageFilesAdapter.StorageFilesViewHolder> {
     public ArrayList<StorageFileModel> storageFiles = new ArrayList<>();
+    private Context context;
+    private MediaPlayer mediaPlayer;
 
     @NonNull
     @Override
     public StorageFilesAdapter.StorageFilesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //get target context
+        context = parent.getContext();
         //inflate view
         View storageFileView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.cardview_storage_file, parent, false
@@ -45,6 +57,45 @@ public class StorageFilesAdapter extends RecyclerView.Adapter<StorageFilesAdapte
     @Override
     public void onBindViewHolder(@NonNull StorageFilesAdapter.StorageFilesViewHolder holder, int position) {
         holder.storageFilename.setText(storageFiles.get(position).getFilename());
+
+        //TODO: refactor code & check files
+        //play the audio file
+        holder.playButton.setOnClickListener(view -> {
+            //get the URI of the storage file inside te device
+            Uri uri = ContentUris.withAppendedId(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, storageFiles.get(position).getId()
+            );
+            //create a MediaPlayer object and set its attributes
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build()
+            );
+            try {
+                mediaPlayer.setDataSource(context, uri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mediaPlayer.setScreenOnWhilePlaying(true);
+
+            //play the storage file
+            try {
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+
+        //stop the audio file and release resources
+        holder.stopButton.setOnClickListener(view->{
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
+            }
+        });
     }
 
     @Override
@@ -54,10 +105,14 @@ public class StorageFilesAdapter extends RecyclerView.Adapter<StorageFilesAdapte
 
     public static class StorageFilesViewHolder extends RecyclerView.ViewHolder {
         public TextView storageFilename;
+        public ImageButton playButton;
+        public ImageButton stopButton;
 
         public StorageFilesViewHolder(@NonNull View itemView) {
             super(itemView);
             storageFilename = itemView.findViewById(R.id.textViewStorageFilename);
+            playButton = itemView.findViewById(R.id.imageButtonPlayStorageFile);
+            stopButton = itemView.findViewById(R.id.imageButtonStopStorageFile);
         }
     }
 }

@@ -16,17 +16,25 @@
 package gparap.apps.player_music.data;
 
 public class StorageFileModel {
+    private Long id;
+    private String filepath;
     private String filename;
 
-    public StorageFileModel(String filename) {
+    public StorageFileModel(Long id, String filepath, String filename) {
+        this.id = id;
+        this.filepath = filepath;
         this.filename = filename;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getFilepath() {
+        return filepath;
     }
 
     public String getFilename() {
         return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
     }
 }
