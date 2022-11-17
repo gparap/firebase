@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
                     if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
-                        storageFiles.add(new StorageFileModel(-1L, "", filename));
+                        storageFiles.add(new StorageFileModel(-1L, file.getPath(), filename));
                     }
                 }
             }
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //check if filename extension is of audio type (ie: mp3, ogg, etc.) and add to list
                     if (filename.contains("mp3") || filename.contains("ogg")) { //TODO: more
-                        storageFiles.add(new StorageFileModel(-1L, "", filename));
+                        storageFiles.add(new StorageFileModel(-1L, file.getPath(), filename));
                     }
                 }
             }

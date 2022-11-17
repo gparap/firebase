@@ -20,6 +20,7 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,10 +62,14 @@ public class StorageFilesAdapter extends RecyclerView.Adapter<StorageFilesAdapte
         //TODO: refactor code & check files
         //play the audio file
         holder.playButton.setOnClickListener(view -> {
-            //get the URI of the storage file inside te device
-            Uri uri = ContentUris.withAppendedId(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, storageFiles.get(position).getId()
-            );
+            //get the URI of the storage file inside te device (SDK >= 29)
+            Uri uri = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                uri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, storageFiles.get(position).getId()
+                );
+            }
+
             //create a MediaPlayer object and set its attributes
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
@@ -73,7 +78,12 @@ public class StorageFilesAdapter extends RecyclerView.Adapter<StorageFilesAdapte
                     .build()
             );
             try {
-                mediaPlayer.setDataSource(context, uri);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    mediaPlayer.setDataSource(context, uri);
+                }else{
+                    mediaPlayer.setDataSource(storageFiles.get(position).getFilepath());
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
