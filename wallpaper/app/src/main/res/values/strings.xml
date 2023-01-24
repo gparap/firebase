@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">My Wallpaper App</string>
+    <string name="desc_wallpaper">Wallparer</string>
 </resources>
