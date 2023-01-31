@@ -22,34 +22,46 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 
 import gparap.apps.wallpaper.adapters.CategoryAdapter;
 import gparap.apps.wallpaper.data.CategoryModel;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
 
-        //create a test list of categories
-        ArrayList<CategoryModel> testList = new ArrayList<>();
-        testList.add(new CategoryModel("1", "one", ""));
-        testList.add(new CategoryModel("2", "two", ""));
-        testList.add(new CategoryModel("3", "three", ""));
-        testList.add(new CategoryModel("4", "four", ""));
-
-        //create a recycler view adapter and add the categories
+        //create a recycler view adapter
         CategoryAdapter categoryAdapter = new CategoryAdapter();
-        categoryAdapter.setCategories(testList);
 
-        //create a recycler view for categories and set its adapter
-        RecyclerView categories = findViewById(R.id.recyclerViewCategories);
-        categories.setAdapter(categoryAdapter);
-        categories.setLayoutManager(new GridLayoutManager(this, 2));
+        //get the wallpaper categories from the database
+        FirebaseFirestore database = FirebaseFirestore.getInstance();
+        CollectionReference categoriesRef = database.collection("wallpaper_app")
+                .document("category_document")
+                .collection("category_collection");
+
+        //Display the wallpaper categories and add them to the category adapter
+        categoriesRef.get().addOnCompleteListener(task -> {
+            //iterate through the wallpaper categories and add them to the category adapter
+            Iterator<DocumentSnapshot> iterator = task.getResult().getDocuments().iterator();
+            iterator.forEachRemaining(documentSnapshot -> categoryAdapter.addCategory(
+                    new CategoryModel(
+                            documentSnapshot.getId(),
+                            (String) documentSnapshot.get("name"),
+                            (String) documentSnapshot.get("url")
+                    )
+            ));
+            //create a recycler view for categories and set its adapter
+            RecyclerView categories = findViewById(R.id.recyclerViewCategories);
+            categories.setAdapter(categoryAdapter);
+            categories.setLayoutManager(new GridLayoutManager(this, 2));
+        });
     }
 }

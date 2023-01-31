@@ -23,8 +23,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         this.categories = categories;
     }
 
+    public void addCategory(CategoryModel category) {
+        categories.add(category);
+    }
+
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,8 +58,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
+        //show wallpaper category name
         holder.name.setText(categories.get(position).getName());
-        holder.image.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.test));
+
+        //load wallpaper category image
+        Picasso.get()
+                .load(categories.get(position).getUrl())
+                .fit()
+                .into(holder.image);
     }
 
     @Override
