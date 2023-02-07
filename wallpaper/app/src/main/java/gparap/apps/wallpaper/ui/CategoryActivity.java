@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.wallpaper;
+package gparap.apps.wallpaper.ui;
 
 import android.os.Bundle;
 
@@ -28,14 +28,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Iterator;
 
+import gparap.apps.wallpaper.R;
 import gparap.apps.wallpaper.adapters.CategoryAdapter;
 import gparap.apps.wallpaper.data.CategoryModel;
 
-public class MainActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_category);
         FirebaseApp.initializeApp(this);
 
         //create a recycler view adapter

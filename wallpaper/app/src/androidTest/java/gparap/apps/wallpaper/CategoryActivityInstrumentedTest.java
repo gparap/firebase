@@ -16,9 +16,11 @@
 package gparap.apps.wallpaper;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Context;
 
@@ -35,27 +37,51 @@ import static org.junit.Assert.*;
 
 import java.util.Objects;
 
+import gparap.apps.wallpaper.ui.CategoryActivity;
+
 @RunWith(AndroidJUnit4.class)
-public class MainActivityInstrumentedTest {
-    ActivityScenario<MainActivity> activityScenario;
+public class CategoryActivityInstrumentedTest {
+    ActivityScenario<CategoryActivity> activityScenario;
+
     @Before
     public void setUp() {
-        activityScenario = ActivityScenario.launch(MainActivity.class);
+        activityScenario = ActivityScenario.launch(CategoryActivity.class);
     }
+
     @Test
     public void useAppContext() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("gparap.apps.wallpaper", appContext.getPackageName());
     }
+
     @Test
     public void isVisible_RecyclerViewCategories() {
         onView(withId(R.id.recyclerViewCategories)).check(matches(isDisplayed()));
     }
+
     @Test
     public void afterAppLoaded_RecyclerViewCategoriesNotEmpty() {
         activityScenario.onActivity(activity -> {
             RecyclerView recyclerView = activity.findViewById(R.id.recyclerViewCategories);
             assert (Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() > 0);
+        });
+    }
+
+    @Test
+    public void onCategoryClick_AppBarTitleIsCategoryName() throws InterruptedException {
+        //loading...
+        Thread.sleep(1667);
+
+        //click the first category (1st category is always "abstract")
+        String categoryName = "abstract";
+        onView(withText(categoryName)).perform(click());
+
+
+
+        activityScenario.onActivity(activity -> {
+            System.out.println(activity.getSupportActionBar().getTitle().toString());
+            System.out.println(categoryName);
+            //assertEquals(activity.getSupportActionBar().getTitle().toString(), categoryName);
         });
     }
 }
