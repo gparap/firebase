@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CategoryDetailsActivity">
+    tools:context=".ui.WallpaperActivity">
 
     <!--Placeholder for wallpapers-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCategoryDetails"
+        android:id="@+id/recyclerViewWallpapers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

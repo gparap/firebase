@@ -16,24 +16,21 @@
 package gparap.apps.wallpaper;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
 
 import java.util.Objects;
 
@@ -64,24 +61,6 @@ public class CategoryActivityInstrumentedTest {
         activityScenario.onActivity(activity -> {
             RecyclerView recyclerView = activity.findViewById(R.id.recyclerViewCategories);
             assert (Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() > 0);
-        });
-    }
-
-    @Test
-    public void onCategoryClick_AppBarTitleIsCategoryName() throws InterruptedException {
-        //loading...
-        Thread.sleep(1667);
-
-        //click the first category (1st category is always "abstract")
-        String categoryName = "abstract";
-        onView(withText(categoryName)).perform(click());
-
-
-
-        activityScenario.onActivity(activity -> {
-            System.out.println(activity.getSupportActionBar().getTitle().toString());
-            System.out.println(categoryName);
-            //assertEquals(activity.getSupportActionBar().getTitle().toString(), categoryName);
         });
     }
 }

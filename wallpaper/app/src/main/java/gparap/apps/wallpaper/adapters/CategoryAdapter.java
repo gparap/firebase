@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 import gparap.apps.wallpaper.R;
 import gparap.apps.wallpaper.data.CategoryModel;
-import gparap.apps.wallpaper.ui.CategoryDetailsActivity;
+import gparap.apps.wallpaper.ui.WallpaperActivity;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private Context context;
@@ -71,7 +71,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         //click to enter category details activity
         holder.itemView.setOnClickListener(view->{
-            Intent intent = new Intent(context, CategoryDetailsActivity.class);
+            Intent intent = new Intent(context, WallpaperActivity.class);
             intent.putExtra("category_id", categories.get(position).getId());
             intent.putExtra("category_name", categories.get(position).getName());
             context.startActivity(intent);
