@@ -8,7 +8,7 @@
     <!--Wallpaper Image-->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardviewWallpaper"
-        android:layout_width="192dp"
+        android:layout_width="match_parent"
         android:layout_height="192dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,4 +21,18 @@
             android:contentDescription="@string/desc_wallpaper"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
+
+    <!--Set wallpaper button-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSetWallpaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:contentDescription="@string/desc_fab_set_wallpaper"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_wallpaper_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

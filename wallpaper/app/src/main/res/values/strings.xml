@@ -2,4 +2,7 @@
     <string name="app_name">My Wallpaper App</string>
     <string name="desc_category">Wallpaper Category</string>
     <string name="desc_wallpaper">Wallpaper</string>
+    <string name="desc_fab_set_wallpaper">Set Wallpaper</string>
+    <string name="toast_wallpaper_set">Wallpaper set successfully!</string>
+    <string name="toast_wallpaper_set_error">Error! Failed to set wallpaper.</string>
 </resources>
