@@ -21,6 +21,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import gparap.apps.social_media.R;
@@ -37,6 +38,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
+import com.google.errorprone.annotations.DoNotCall;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivityInstrumentedTest {
@@ -113,6 +115,14 @@ public class LoginActivityInstrumentedTest {
         onView(withText(R.string.toast_wrong_credentials))
                 .inRoot(withDecorView(not(rootView)))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    @Ignore("User must be already signed-in with their Google account.")
+    public void isLoginWithGoogleSuccessful_gotoMainActivity() throws InterruptedException {
+        onView(withId(R.id.buttonLoginWithGoogle)).perform(click());
+        Thread.sleep(1667); //wait for google..
+        onView(withId(R.id.layout_activity_main)).check(matches(isDisplayed()));
     }
 
     @Test

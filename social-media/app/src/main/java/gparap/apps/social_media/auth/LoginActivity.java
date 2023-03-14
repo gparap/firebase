@@ -24,20 +24,35 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Objects;
 
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
+import gparap.apps.social_media.utils.AppConstants;
 
+@SuppressWarnings({"FieldCanBeLocal", "deprecation"})
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
-    @SuppressWarnings("FieldCanBeLocal")
     private Button buttonLogin;
     private ProgressBar progressBar;
+
+    //for interacting with the Google Sign In API
+    private SignInButton buttonLoginWithGoogle;
+    private GoogleSignInOptions googleSignInOptions;
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +81,60 @@ public class LoginActivity extends AppCompatActivity {
                         });
             }
         });
+
+        //configure options for Google authentication
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        //create a client object for Google authentication
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
+        //user login using Google authentication
+        buttonLoginWithGoogle.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            startActivityForResult(googleSignInClient.getSignInIntent(), AppConstants.REQUEST_CODE_GOOGLE_AUTH);
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //start the Google authentication flow
+        if (requestCode == AppConstants.REQUEST_CODE_GOOGLE_AUTH) {
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(accountTask -> {
+                if (accountTask.isSuccessful()) {
+                    try {
+                        //get the basic account information of the signed in Google user
+                        GoogleSignInAccount googleAccount = accountTask.getResult(ApiException.class);
+
+                        //get the ID token of the user's Google account
+                        AuthCredential authCredential = GoogleAuthProvider.getCredential(googleAccount.getIdToken(), null);
+
+                        //authenticate user
+                        FirebaseAuth.getInstance().signInWithCredential(authCredential).addOnCompleteListener(resultTask -> {
+                            if (resultTask.isSuccessful()) {
+                                progressBar.setVisibility(View.INVISIBLE);
+
+                                //redirect to main activity
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                            }
+                        });
+
+                    } catch (ApiException e) {
+                        Toast.makeText(this, getResources().getString(R.string.toast_login_google_failed), Toast.LENGTH_SHORT).show();
+
+                        //debug
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    Toast.makeText(this, getResources().getString(R.string.toast_login_google_failed), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private boolean isLoginInputValid() {
@@ -87,5 +156,6 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.editTextLoginPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         progressBar = findViewById(R.id.progressBarLogin);
+        buttonLoginWithGoogle = findViewById(R.id.buttonLoginWithGoogle);
     }
 }
