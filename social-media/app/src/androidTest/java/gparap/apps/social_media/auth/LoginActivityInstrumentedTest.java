@@ -38,7 +38,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
-import com.google.errorprone.annotations.DoNotCall;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivityInstrumentedTest {
