@@ -1,12 +1,14 @@
 <resources>
     <string name="app_name">My Social Media App</string>
     <string name="desc_login_logo_placeholder">Image logo</string>
+    <string name="hint_username">username</string>
     <string name="hint_email">e-mail address</string>
+    <string name="hint_mobile">mobile phone</string>
     <string name="hint_password">password</string>
-    <string name="button_login">Login</string>
-    <string name="button_register">Register</string>
+    <string name="hint_password_confirm">confirm password</string>
     <string name="text_login">Login</string>
     <string name="text_logout">Logout</string>
+    <string name="text_register">Register</string>
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_logout_successful">Logout successful.</string>
     <string name="toast_wrong_credentials">User login failed. Please, check your credentials and try again.</string>

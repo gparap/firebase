@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".auth.RegisterActivity">
+
+    <!-- Image placeholder -->
+    <ImageView
+        android:id="@+id/imageViewRegisterPlaceholder"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/desc_login_logo_placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_add_photo_24" />
+
+    <!-- Username tools:srcCompat="@tools:sample/avatars"-->
+    <EditText
+        android:id="@+id/editTextRegisterUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:autofillHints="false"
+        android:ems="10"
+        android:hint="@string/hint_username"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewRegisterPlaceholder" />
+
+    <!-- Mobile -->
+    <EditText
+        android:id="@+id/editTextRegisterMobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="false"
+        android:ems="10"
+        android:hint="@string/hint_mobile"
+        android:inputType="phone"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterUsername" />
+
+    <!-- Email -->
+    <EditText
+        android:id="@+id/editTextRegisterEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="false"
+        android:ems="10"
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterMobile" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/editTextRegisterPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="false"
+        android:ems="10"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterEmail" />
+
+    <!-- Password confirmation -->
+    <EditText
+        android:id="@+id/editTextRegisterConfirmPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="false"
+        android:ems="10"
+        android:hint="@string/hint_password_confirm"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterPassword" />
+
+    <!-- Register button -->
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_register_24"
+        android:text="@string/text_register"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRegisterUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextRegisterUsername"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegisterConfirmPassword"
+        tools:ignore="RtlHardcoded" />
+
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/progressBarRegister"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

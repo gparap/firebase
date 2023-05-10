@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     @SuppressWarnings("FieldCanBeLocal")
     private Button buttonLogin;
+    private Button buttonRegister;
     private ProgressBar progressBar;
 
     @Override
@@ -66,6 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                         });
             }
         });
+
+        //user registration
+        buttonRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
     }
 
     private boolean isLoginInputValid() {
@@ -86,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextLoginEmail);
         password = findViewById(R.id.editTextLoginPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
+        buttonRegister = findViewById(R.id.buttonRegisterRedirect);
         progressBar = findViewById(R.id.progressBarLogin);
     }
 }
