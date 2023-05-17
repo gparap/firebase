@@ -12,7 +12,14 @@
     <string name="toast_login_successful">Login successful.</string>
     <string name="toast_logout_successful">Logout successful.</string>
     <string name="toast_wrong_credentials">User login failed. Please, check your credentials and try again.</string>
+    <string name="toast_empty_username">Please enter your username.</string>
     <string name="toast_empty_email">E-mail cannot be empty.</string>
     <string name="toast_invalid_email">E-mail is invalid.</string>
+    <string name="toast_email_badly_formatted">Please enter a valid e-mail address.</string>
+    <string name="toast_invalid_phone">Mobile is invalid.</string>
     <string name="toast_empty_password">Password cannot be empty.</string>
+    <string name="toast_empty_password_confirm">Password confirmation cannot be empty.</string>
+    <string name="toast_unmatched_passwords">Passwords do not match, please try again.</string>
+    <string name="toast_register_success">Registration successful.</string>
+    <string name="toast_registration_failed">Registration failed.</string>
 </resources>
