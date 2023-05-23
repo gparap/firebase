@@ -18,10 +18,10 @@ package gparap.apps.social_media;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class ProfileActivityActivityTest {
 
     @Test
     public void isVisible_imageButtonUserProfile() {
-        onView(ViewMatchers.withId(R.id.imageButtonUserProfile)).check(matches(isDisplayed()));
+        onView(withId(R.id.imageButtonUserProfile)).check(matches(isDisplayed()));
     }
 
     @Test

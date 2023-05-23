@@ -15,9 +15,11 @@
  */
 package gparap.apps.social_media;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -28,6 +30,7 @@ import static org.hamcrest.Matchers.not;
 import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +41,12 @@ import org.junit.Test;
 public class MainActivityActivityTest {
     ActivityScenario<MainActivity> activityScenario;
     View rootView = null;
+
+    //!!! Use this default test user, it never goes away
+    final private String testUser_username = "gp";
+    final private String testUser_phone = "1234567890";
+    final private String testUser_email = "gp@dot.com";
+    final private String testUser_password = "123123";
 
     @Before
     public void setUp() throws InterruptedException {
@@ -66,6 +75,23 @@ public class MainActivityActivityTest {
                 .check(matches(isDisplayed()));
     }
 
+    @Test
+    @LargeTest
+    public void isCorrect_displayUserProfileDetails() throws InterruptedException {
+        signOut();
+        signIn();
+
+        //open user profile
+        onView(withId(R.id.main_menu_item_profile)).perform(click());
+        Thread.sleep(4667); //wait for firebase..
+
+        //assert profile details are correct
+        onView(withId(R.id.editTextProfileUsername)).check(matches(withText(testUser_username)));
+        onView(withId(R.id.editTextProfileMobile)).check(matches(withText(testUser_phone)));
+        onView(withId(R.id.editTextProfileEmail)).check(matches(withText(testUser_email)));
+        onView(withId(R.id.editTextProfilePassword)).check(matches(withText(testUser_password)));
+    }
+
     /**
      * Signs-out either from the appbar icon or the menu item.
      */
@@ -76,5 +102,17 @@ public class MainActivityActivityTest {
         } catch (Exception e) {
             onView(withId(R.id.main_menu_item_logout)).perform(click());
         }
+    }
+
+    /**
+     * Signs-in as the default test user and waits a little for Firebase.
+     */
+    private void signIn() throws InterruptedException {
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText("gp@dot.com"));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText("123123"));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonLogin)).perform(click());
+        Thread.sleep(1667);
     }
 }

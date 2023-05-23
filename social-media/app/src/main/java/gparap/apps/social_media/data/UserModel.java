@@ -23,6 +23,11 @@ public class UserModel {
     private String password;
     private String imageUrl;
 
+    @SuppressWarnings("unused")
+    //!!! Do not remove, needed for
+    //  com.google.firebase.database.DatabaseException: does not define a no-argument constructor
+    public UserModel(){
+    }
     public UserModel(String id, String username, String email, String phone, String password) {
         this.id = id;
         this.username = username;
