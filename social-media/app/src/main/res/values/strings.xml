@@ -22,4 +22,13 @@
     <string name="toast_unmatched_passwords">Passwords do not match, please try again.</string>
     <string name="toast_register_success">Registration successful.</string>
     <string name="toast_registration_failed">Registration failed.</string>
+    <string name="text_profile">Profile</string>
+    <string name="desc_profile_image">User Profile Image</string>
+    <string name="text_username">username</string>
+    <string name="desc_change_username">Change username</string>
+    <string name="text_email">e-mail address</string>
+    <string name="desc_change_email">Change e-mail address</string>
+    <string name="text_password">password</string>
+    <string name="text_password_confirm">confirm password</string>
+    <string name="text_update">Update</string>
 </resources>

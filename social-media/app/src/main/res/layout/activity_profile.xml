@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+    <!--User profile image-->
+    <ImageButton
+        android:id="@+id/imageButtonUserProfile"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/desc_profile_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_profile_24" />
+
+    <!-- Username -->
+    <EditText
+        android:id="@+id/editTextProfileUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:autofillHints="false"
+        android:editable="false"
+        android:ems="10"
+        android:hint="@string/text_username"
+        android:inputType="none"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonProfileChangeUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonUserProfile"
+        tools:ignore="Deprecated" />
+
+    <!-- Change username -->
+    <ImageButton
+        android:id="@+id/imageButtonProfileChangeUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/desc_change_username"
+        android:src="@drawable/ic_edit_24"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextProfileUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextProfileUsername" />
+
+    <!-- Mobile -->
+    <EditText
+        android:id="@+id/editTextProfileMobile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:autofillHints="false"
+        android:editable="false"
+        android:ems="10"
+        android:hint="@string/hint_mobile"
+        android:inputType="none"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonProfileChangeUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonProfileChangeUsername"
+        tools:ignore="Deprecated" />
+
+    <!-- Change mobile -->
+    <ImageButton
+        android:id="@+id/imageButtonProfileChangeMobile"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/desc_change_username"
+        android:src="@drawable/ic_edit_24"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextProfileMobile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextProfileMobile" />
+
+    <!-- Email -->
+    <EditText
+        android:id="@+id/editTextProfileEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:autofillHints="false"
+        android:editable="false"
+        android:hint="@string/text_email"
+        android:inputType="none"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonProfileChangeEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonProfileChangeMobile"
+        tools:ignore="Deprecated,TextFields" />
+
+    <!-- Change email -->
+    <ImageButton
+        android:id="@+id/imageButtonProfileChangeEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/desc_change_email"
+        android:src="@drawable/ic_edit_24"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextProfileEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextProfileEmail"
+        app:layout_constraintTop_toTopOf="@+id/editTextProfileEmail" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/editTextProfilePassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:autofillHints="false"
+        android:editable="false"
+        android:hint="@string/text_password"
+        android:inputType="none"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonProfileChangePassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextProfileEmail"
+        tools:ignore="Deprecated,TextFields" />
+
+    <!-- Change password -->
+    <ImageButton
+        android:id="@+id/imageButtonProfileChangePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:contentDescription="@string/desc_change_username"
+        android:src="@drawable/ic_edit_24"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextProfilePassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextProfilePassword" />
+
+    <!-- Password confirmation -->
+    <EditText
+        android:id="@+id/editTextProfilePasswordConfirm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:autofillHints="false"
+        android:hint="@string/text_password_confirm"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/editTextProfilePassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextProfilePassword"
+        tools:visibility="visible" />
+
+    <!-- Update user settings button -->
+    <Button
+        android:id="@+id/buttonProfileUpdate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:text="@string/text_update"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonProfileChangePassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextProfilePassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextProfilePasswordConfirm" />
+
+    <!-- Update user settings progress -->
+    <ProgressBar
+        android:id="@+id/progressBarProfile"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

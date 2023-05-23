@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_logout_24"
         android:title="@string/text_logout"
         app:showAsAction="ifRoom" />
+    <!--Profile-->
+    <item
+        android:id="@+id/main_menu_item_profile"
+        android:icon="@drawable/ic_profile_24"
+        android:title="@string/text_profile"
+        app:showAsAction="ifRoom" />
 </menu>

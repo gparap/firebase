@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+        //redirect to user profile
+        if (item.getItemId() == R.id.main_menu_item_profile){
+            startActivity(new Intent(this, ProfileActivity.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 }
