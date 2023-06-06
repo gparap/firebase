@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_add_photo_24" />
+        app:srcCompat="@drawable/app_logo"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <!-- Username tools:srcCompat="@tools:sample/avatars"-->
     <EditText
