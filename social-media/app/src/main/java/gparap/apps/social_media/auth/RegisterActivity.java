@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                             //add user to the relevant database
                                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                            DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(username);
+                                            DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(user.getId());
                                             usersRef.setValue(user);
 
                                             //redirect to login
@@ -108,7 +108,6 @@ public class RegisterActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextRegisterEmail);
         editTextPassword = findViewById(R.id.editTextRegisterPassword);
         editTextConfirmPassword = findViewById(R.id.editTextRegisterConfirmPassword);
-
     }
 
     private void getInputFields() {

@@ -25,12 +25,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             //get more user details from database
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("social_media_app")
-                    .child("users").child(Objects.requireNonNull(user.getDisplayName()));
+                    .child("users").child(Objects.requireNonNull(user.getUid()));
             Task<DataSnapshot> snapshotTask = userRef.get();
             snapshotTask.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -107,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         buttonProfileUpdate.setOnClickListener(v -> {
             //add image to database storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReference("social_media_app").child(editTextProfileUsername.getText().toString().trim());
+            StorageReference storageRef = storage.getReference("social_media_app").child(dbUser.getId());
             StorageReference childRef = storageRef.child(String.valueOf(Math.abs((new Random()).nextLong())));
             UploadTask uploadTask = childRef.putFile(userProfileImageUriData);
             uploadTask.continueWithTask(task -> {
@@ -124,7 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
                     //update user reference in database
                     dbUser.setImageUrl(downloadUrl.toString());
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(dbUser.getUsername());
+                    DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(dbUser.getId());
                     usersRef.setValue(dbUser);
                 }
             });
