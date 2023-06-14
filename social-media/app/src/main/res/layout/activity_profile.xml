@@ -79,80 +79,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTextProfileMobile" />
 
-    <!-- Email -->
-    <EditText
-        android:id="@+id/editTextProfileEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:autofillHints="false"
-        android:editable="false"
-        android:hint="@string/text_email"
-        android:inputType="none"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonProfileChangeEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButtonProfileChangeMobile"
-        tools:ignore="Deprecated,TextFields" />
-
-    <!-- Change email -->
-    <ImageButton
-        android:id="@+id/imageButtonProfileChangeEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="24dp"
-        android:contentDescription="@string/desc_change_email"
-        android:src="@drawable/ic_edit_24"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextProfileEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextProfileEmail"
-        app:layout_constraintTop_toTopOf="@+id/editTextProfileEmail" />
-
-    <!-- Password -->
-    <EditText
-        android:id="@+id/editTextProfilePassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:autofillHints="false"
-        android:editable="false"
-        android:hint="@string/text_password"
-        android:inputType="none"
-        android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonProfileChangePassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextProfileEmail"
-        tools:ignore="Deprecated,TextFields" />
-
-    <!-- Change password -->
-    <ImageButton
-        android:id="@+id/imageButtonProfileChangePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="24dp"
-        android:contentDescription="@string/desc_change_username"
-        android:src="@drawable/ic_edit_24"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextProfilePassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextProfilePassword" />
-
-    <!-- Password confirmation -->
-    <EditText
-        android:id="@+id/editTextProfilePasswordConfirm"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:autofillHints="false"
-        android:hint="@string/text_password_confirm"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:selectAllOnFocus="true"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/editTextProfilePassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextProfilePassword"
-        tools:visibility="visible" />
-
     <!-- Update user settings button -->
     <Button
         android:id="@+id/buttonProfileUpdate"
@@ -160,9 +86,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:text="@string/text_update"
-        app:layout_constraintEnd_toEndOf="@+id/imageButtonProfileChangePassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextProfilePassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextProfilePasswordConfirm" />
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonProfileChangeUsername"
+        app:layout_constraintStart_toStartOf="@+id/editTextProfileUsername"
+        app:layout_constraintTop_toBottomOf="@+id/editTextProfileMobile" />
 
     <!-- Update user settings progress -->
     <ProgressBar

@@ -88,8 +88,6 @@ public class MainActivityActivityTest {
         //assert profile details are correct
         onView(withId(R.id.editTextProfileUsername)).check(matches(withText(testUser_username)));
         onView(withId(R.id.editTextProfileMobile)).check(matches(withText(testUser_phone)));
-        onView(withId(R.id.editTextProfileEmail)).check(matches(withText(testUser_email)));
-        onView(withId(R.id.editTextProfilePassword)).check(matches(withText(testUser_password)));
     }
 
     /**
