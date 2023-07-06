@@ -31,4 +31,5 @@
     <string name="text_password">password</string>
     <string name="text_password_confirm">confirm password</string>
     <string name="text_update">Update</string>
+    <string name="desc_app_user">Application User</string>
 </resources>

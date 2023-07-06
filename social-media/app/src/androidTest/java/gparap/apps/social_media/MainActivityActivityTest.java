@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.not;
 
 import android.view.View;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -37,6 +38,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class MainActivityActivityTest {
     ActivityScenario<MainActivity> activityScenario;
@@ -59,6 +62,15 @@ public class MainActivityActivityTest {
 
         //get root view
         activityScenario.onActivity(activity -> rootView = activity.getWindow().getDecorView());
+    }
+
+    @Test
+    public void isNotNull_recyclerViewUsers() {
+        activityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_users);
+            int users = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
+            assert (users > 0);
+        });
     }
 
     @Test
