@@ -65,7 +65,9 @@ public class MainActivityActivityTest {
     }
 
     @Test
-    public void isNotNull_recyclerViewUsers() {
+    @LargeTest
+    public void isNotNull_applicationUsers() throws InterruptedException {
+        Thread.sleep(4667); //wait for Firebase...
         activityScenario.onActivity(activity -> {
             RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_users);
             int users = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
