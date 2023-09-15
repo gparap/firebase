@@ -23,9 +23,11 @@ import gparap.apps.social_media.auth.RegisterActivityInstrumentedTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        MainActivityInstrumentedTest.class,
         LoginActivityInstrumentedTest.class,
         RegisterActivityInstrumentedTest.class,
-        UserActivityActivityTest.class
+        UserActivityActivityTest.class,
+        AddPostActivityInstrumentedTest.class
 })
 public class AppTestSuite {
 }

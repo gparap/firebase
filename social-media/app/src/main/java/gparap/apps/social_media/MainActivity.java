@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //TODO: posts here
+
+        //redirect to the activity that adds a new post
+        findViewById(R.id.fab_add_post_main).setOnClickListener(v ->
+                startActivity(new Intent(this, AddPostActivity.class)));
     }
 
     @Override
