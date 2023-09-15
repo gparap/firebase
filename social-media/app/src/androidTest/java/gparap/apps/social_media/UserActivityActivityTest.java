@@ -41,8 +41,8 @@ import org.junit.Test;
 
 import java.util.Objects;
 
-public class MainActivityActivityTest {
-    ActivityScenario<MainActivity> activityScenario;
+public class UserActivityActivityTest {
+    ActivityScenario<UserActivity> activityScenario;
     View rootView = null;
 
     //!!! Use this default test user, it never goes away
@@ -58,7 +58,7 @@ public class MainActivityActivityTest {
         Thread.sleep(1667);
 
         //launch activity
-        activityScenario = ActivityScenario.launch(MainActivity.class);
+        activityScenario = ActivityScenario.launch(UserActivity.class);
 
         //get root view
         activityScenario.onActivity(activity -> rootView = activity.getWindow().getDecorView());
