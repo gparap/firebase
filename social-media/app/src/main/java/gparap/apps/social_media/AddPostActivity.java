@@ -12,28 +12,42 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */package gparap.apps.social_media;
+ */
+package gparap.apps.social_media;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
+import java.util.List;
 import java.util.Objects;
 
 import gparap.apps.social_media.data.PostModel;
 
 public class AddPostActivity extends AppCompatActivity {
+    private ImageButton imageButtonPostImage;
     private EditText editTextPostTitle, editTextPostDetails;
-    private Uri imageUri = null;
+    private final static int REQUEST_CODE_GET_POST_IMAGE = 999;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +55,27 @@ public class AddPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_post);
 
         //get widgets
+        imageButtonPostImage = findViewById(R.id.imageButtonAddPost);
         editTextPostTitle = findViewById(R.id.editTextAddPostTitle);
         editTextPostDetails = findViewById(R.id.editTextAddPostDetails);
         Button buttonSavePost = findViewById(R.id.buttonSavePost);
+        ProgressBar progressBar = findViewById(R.id.progressBarAddPost);
 
         //update the app bar title
         Objects.requireNonNull(getSupportActionBar()).setTitle("Add Post");
 
+        //add an image to the post
+        imageButtonPostImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, REQUEST_CODE_GET_POST_IMAGE);
+        });
+
         //save post (publish)
         buttonSavePost.setOnClickListener(v -> {
+            //show progress
+            progressBar.setVisibility(View.VISIBLE);
+
             //TODO: validate post
 
             //get the current user
@@ -70,9 +96,67 @@ public class AddPostActivity extends AppCompatActivity {
 
                     //return to main activity
                     startActivity(new Intent(this, MainActivity.class));
+
+                    //hide progress
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+
+                //save post with image
+                else {
+                    //get a reference to app cloud storage
+                    StorageReference cloudRef = FirebaseStorage.getInstance().getReference();
+
+                    //get the last path segment of the image URI
+                    // (BUG: getLastPathSegment() don't works as expected most of the times)
+                    List<String> stringList = imageUri.getPathSegments();
+                    String lastPathSegment = stringList.get(stringList.size() - 1);
+
+                    //get a reference to the user image
+                    StorageReference imageRef = cloudRef.child("social_media_app").child(user.getUid()).child(lastPathSegment);
+
+                    //save image to storage
+                    StorageTask<UploadTask.TaskSnapshot> storageTask =
+                            imageRef.putFile(imageUri).addOnFailureListener(e ->
+                                    Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show()
+                            );
+
+                    //save post
+                    storageTask.addOnCompleteListener(task -> task.addOnSuccessListener(taskSnapshot -> {
+                        Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl();
+                        downloadURL.addOnCompleteListener(uriTask ->
+                                uriTask.addOnSuccessListener(uri -> {
+                                    //update blog post with image url
+                                    post.setImageUrl(uri.toString().trim());
+
+                                    savePostToDatabase(post);
+
+                                    //hide progress
+                                    progressBar.setVisibility(View.INVISIBLE);
+
+                                    //inform user and return to main activity
+                                    Toast.makeText(this, "Post published..", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(this, MainActivity.class));
+                                }).addOnFailureListener(e ->
+                                        Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show()
+                                )
+                        );
+                    }));
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //set the selected image for the post
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_GET_POST_IMAGE) {
+            if (data != null) {
+                imageUri = data.getData();
+                imageButtonPostImage.setImageURI(data.getData());
+            }
+        }
     }
 
     private void savePostToDatabase(PostModel post) {
