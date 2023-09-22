@@ -73,10 +73,13 @@ public class AddPostActivity extends AppCompatActivity {
 
         //save post (publish)
         buttonSavePost.setOnClickListener(v -> {
+            //validate post
+            if (!isPostValid()){
+                return;
+            }
+
             //show progress
             progressBar.setVisibility(View.VISIBLE);
-
-            //TODO: validate post
 
             //get the current user
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -172,5 +175,17 @@ public class AddPostActivity extends AppCompatActivity {
         postsRef.child("title").setValue(post.getTitle());
         postsRef.child("details").setValue(post.getDetails());
         postsRef.child("imageUrl").setValue(post.getImageUrl());
+    }
+
+    //check is the post title and details are filled-in
+    private boolean isPostValid() {
+        if (editTextPostTitle.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_post_title), Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (editTextPostDetails.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.toast_empty_post_details), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

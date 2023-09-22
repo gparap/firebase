@@ -25,6 +25,8 @@
     <string name="toast_unmatched_passwords">Passwords do not match, please try again.</string>
     <string name="toast_register_success">Registration successful.</string>
     <string name="toast_registration_failed">Registration failed.</string>
+    <string name="toast_empty_post_title">Post has no title.</string>
+    <string name="toast_empty_post_details">Post has no details.</string>
     <string name="text_profile">Profile</string>
     <string name="desc_profile_image">User Profile Image</string>
     <string name="text_username">username</string>

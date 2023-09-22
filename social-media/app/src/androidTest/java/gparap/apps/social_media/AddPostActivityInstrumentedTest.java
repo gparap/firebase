@@ -17,23 +17,32 @@ package gparap.apps.social_media;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.not;
 
+import android.view.View;
+
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
 import androidx.test.filters.SmallTest;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class AddPostActivityInstrumentedTest {
+    private View rootView;
 
     @Before
     public void setUp() {
-        ActivityScenario.launch(AddPostActivity.class);
+        //start activity and get the top-level window view
+        ActivityScenario<AddPostActivity> activityScenario = ActivityScenario.launch(AddPostActivity.class);
+        activityScenario.onActivity(activity -> rootView = activity.getWindow().getDecorView());
     }
 
     @Test
@@ -64,5 +73,25 @@ public class AddPostActivityInstrumentedTest {
     @SmallTest
     public void isNotVisible_progressBarAddPost() {
         onView(withId(R.id.progressBarAddPost)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    @SmallTest
+    public void isPostTitleEmpty_displayError() {
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        onView(withText(R.string.toast_empty_post_title)).inRoot(withDecorView(not(rootView)))
+                .check(matches(isDisplayed()));
+    }
+
+    @Test
+    @SmallTest
+    public void arePostDetailsEmpty_displayError() {
+        //make sure title is not empty
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText("title"));
+        Espresso.closeSoftKeyboard();
+
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        onView(withText(R.string.toast_empty_post_details)).inRoot(withDecorView(not(rootView)))
+                .check(matches(isDisplayed()));
     }
 }
