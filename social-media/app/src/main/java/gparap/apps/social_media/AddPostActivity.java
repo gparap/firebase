@@ -15,9 +15,15 @@
  */
 package gparap.apps.social_media;
 
+import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,8 +31,10 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,11 +51,15 @@ import java.util.Objects;
 
 import gparap.apps.social_media.data.PostModel;
 
+@SuppressWarnings("deprecation")
 public class AddPostActivity extends AppCompatActivity {
     private ImageButton imageButtonPostImage;
     private EditText editTextPostTitle, editTextPostDetails;
     private final static int REQUEST_CODE_GET_POST_IMAGE = 999;
+    private final static int REQUEST_CODE_CAPTURE_POST_IMAGE = 888;
+    private final static int REQUEST_CODE_CAMERA_PERMISSION = 777;
     private Uri imageUri;
+    private Boolean isUsingImageFromGallery = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +78,43 @@ public class AddPostActivity extends AppCompatActivity {
 
         //add an image to the post
         imageButtonPostImage.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(intent, REQUEST_CODE_GET_POST_IMAGE);
+            //using the device image gallery
+            if (isUsingImageFromGallery) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_CODE_GET_POST_IMAGE);
+            }
+
+            //using the device camera
+            else {
+                //request camera permission
+                if ((ContextCompat.checkSelfPermission(this, "Manifest.permission.CAMERA") == PackageManager.PERMISSION_GRANTED) &&
+                        (ContextCompat.checkSelfPermission(this, "Manifest.permission.WRITE_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED)) {
+
+                    //add captured image values
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(MediaStore.Images.Media.TITLE, editTextPostTitle.getText().toString());
+                    contentValues.put(MediaStore.Images.Media.DESCRIPTION, editTextPostDetails.getText().toString());
+                    imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+                    //capture image
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    try {
+                        startActivityForResult(intent, REQUEST_CODE_CAPTURE_POST_IMAGE);
+                    } catch (Exception ignored) {
+                    }
+
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_CAMERA_PERMISSION);
+                }
+            }
         });
 
         //save post (publish)
         buttonSavePost.setOnClickListener(v -> {
             //validate post
-            if (!isPostValid()){
+            if (!isPostValid()) {
                 return;
             }
 
@@ -160,6 +200,52 @@ public class AddPostActivity extends AppCompatActivity {
                 imageButtonPostImage.setImageURI(data.getData());
             }
         }
+
+        //set the captured image for the post
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAPTURE_POST_IMAGE) {
+            if (data != null) {
+                imageButtonPostImage.setImageURI(imageUri);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == REQUEST_CODE_CAMERA_PERMISSION) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.Images.Media.TITLE, "title");      //TODO: add the details
+            contentValues.put(MediaStore.Images.Media.DESCRIPTION, "desc"); //  of the post here and
+            contentValues.put(MediaStore.Images.Media.AUTHOR, "author");   //  the user id
+            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            try {
+                startActivityForResult(intent, REQUEST_CODE_CAPTURE_POST_IMAGE);
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_post_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.add_post_menu_use_gallery) {
+            //set image from gallery checked
+            item.setChecked(true);
+            isUsingImageFromGallery = true;
+        }else{
+            //set image from camera checked
+            item.setChecked(true);
+            isUsingImageFromGallery = false;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void savePostToDatabase(PostModel post) {
