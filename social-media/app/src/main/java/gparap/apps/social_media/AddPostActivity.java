@@ -67,9 +67,9 @@ public class AddPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_post);
 
         //get widgets
-        imageButtonPostImage = findViewById(R.id.imageButtonAddPost);
-        editTextPostTitle = findViewById(R.id.editTextAddPostTitle);
-        editTextPostDetails = findViewById(R.id.editTextAddPostDetails);
+        imageButtonPostImage = findViewById(R.id.imageViewPost);
+        editTextPostTitle = findViewById(R.id.textViewPostTitle);
+        editTextPostDetails = findViewById(R.id.textViewPostDetails);
         Button buttonSavePost = findViewById(R.id.buttonSavePost);
         ProgressBar progressBar = findViewById(R.id.progressBarAddPost);
 

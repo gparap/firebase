@@ -40,4 +40,5 @@
     <string name="desc_post_add">Add a new post</string>
     <string name="text_use_image_from_gallery">Use image from gallery</string>
     <string name="text_use_image_from_camera">Use image from camera</string>
+    <string name="desc_post_image">Post Image</string>
 </resources>

@@ -48,19 +48,19 @@ public class AddPostActivityInstrumentedTest {
     @Test
     @SmallTest
     public void isVisible_imageButtonAddPost() {
-        onView(withId(R.id.imageButtonAddPost)).check(matches(isDisplayed()));
+        onView(withId(R.id.imageViewPost)).check(matches(isDisplayed()));
     }
 
     @Test
     @SmallTest
     public void isVisible_editTextAddPostTitle() {
-        onView(withId(R.id.editTextAddPostTitle)).check(matches(isDisplayed()));
+        onView(withId(R.id.textViewPostTitle)).check(matches(isDisplayed()));
     }
 
     @Test
     @SmallTest
     public void isVisible_editTextAddPostDetails() {
-        onView(withId(R.id.editTextAddPostDetails)).check(matches(isDisplayed()));
+        onView(withId(R.id.textViewPostDetails)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class AddPostActivityInstrumentedTest {
     @SmallTest
     public void arePostDetailsEmpty_displayError() {
         //make sure title is not empty
-        onView(withId(R.id.editTextAddPostTitle)).perform(typeText("title"));
+        onView(withId(R.id.textViewPostTitle)).perform(typeText("title"));
         Espresso.closeSoftKeyboard();
 
         onView(withId(R.id.buttonSavePost)).perform(click());

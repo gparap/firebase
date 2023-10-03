@@ -23,12 +23,23 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
+import gparap.apps.social_media.adapters.PostAdapter;
 import gparap.apps.social_media.auth.LoginActivity;
+import gparap.apps.social_media.data.PostModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +55,33 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
-        //TODO: posts here
+        //setup post recycler view with adapter
+        RecyclerView recyclerViewPosts = findViewById(R.id.recycler_view_posts);
+        recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
+        PostAdapter postAdapter = new PostAdapter();
+        recyclerViewPosts.setAdapter(postAdapter);
+
+        //display application posts from all users  TODO: display post based on time published
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("social_media_app").child("posts");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<PostModel> postsList = new ArrayList<>();
+
+                //get all posts from database
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    PostModel post = child.getValue(PostModel.class);
+                    postsList.add(post);
+                }
+                postAdapter.setPostsList(postsList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //redirect to the activity that adds a new post
         findViewById(R.id.fab_add_post_main).setOnClickListener(v ->
