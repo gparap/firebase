@@ -55,13 +55,18 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
+        //create a vertical LinearLayoutManager with reversed order
+        LinearLayoutManager reversedLayoutManager = new LinearLayoutManager(this);
+        reversedLayoutManager.setReverseLayout(true);
+        reversedLayoutManager.setStackFromEnd(true);
+
         //setup post recycler view with adapter
         RecyclerView recyclerViewPosts = findViewById(R.id.recycler_view_posts);
-        recyclerViewPosts.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewPosts.setLayoutManager(reversedLayoutManager);
         PostAdapter postAdapter = new PostAdapter();
         recyclerViewPosts.setAdapter(postAdapter);
 
-        //display application posts from all users  TODO: display post based on time published
+        //display application posts (newest first) from all users
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("social_media_app").child("posts");
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
