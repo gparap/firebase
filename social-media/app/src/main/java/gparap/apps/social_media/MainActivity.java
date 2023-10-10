@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +43,7 @@ import gparap.apps.social_media.auth.LoginActivity;
 import gparap.apps.social_media.data.PostModel;
 
 public class MainActivity extends AppCompatActivity {
+    private PostAdapter postAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         //setup post recycler view with adapter
         RecyclerView recyclerViewPosts = findViewById(R.id.recycler_view_posts);
         recyclerViewPosts.setLayoutManager(reversedLayoutManager);
-        PostAdapter postAdapter = new PostAdapter();
+        postAdapter = new PostAdapter();
         recyclerViewPosts.setAdapter(postAdapter);
 
         //display application posts (newest first) from all users
@@ -111,6 +113,72 @@ public class MainActivity extends AppCompatActivity {
         //redirect to user profile
         if (item.getItemId() == R.id.main_menu_item_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
+        }
+        //search for posts
+        if (item.getItemId() == R.id.main_menu_item_search) {
+            //keep initial posts
+            ArrayList<PostModel> initialPostsList = postAdapter.getPostsList();
+
+            //search posts in all available fields (title, details, url)
+            SearchView searchView = (SearchView) item.getActionView();
+            assert searchView != null;
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    //get application posts (newest first) from all users
+                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("social_media_app").child("posts");
+                    dbRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            ArrayList<PostModel> postsList = new ArrayList<>();
+                            //get all posts from database containing the search query keyword(s)
+                            //TODO: > 1 keywords
+                            Iterable<DataSnapshot> children = snapshot.getChildren();
+                            for (DataSnapshot child : children) {
+                                PostModel post = child.getValue(PostModel.class);
+                                if (post != null){
+                                    if (post.getTitle().contains(query) || post.getDetails().contains(query) || post.getImageUrl().contains(query)) {
+                                        postsList.add(post);
+                                    }
+                                }
+                            }
+                            //display posts if exists
+                            postAdapter.setPostsList(postsList);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            postAdapter.setPostsList(initialPostsList);
+                        }
+                    });
+
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    //if user presses the "x" on the search, show all posts
+                    if (newText.isEmpty()) {
+                        postAdapter.setPostsList(initialPostsList);
+                    }
+                    return true;
+                }
+            });
+
+            //search has ended, restore the initial posts list
+            item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(@NonNull MenuItem item) {
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(@NonNull MenuItem item) {
+                    postAdapter.setPostsList(initialPostsList);
+                    return true;
+                }
+            });
+
         }
         return super.onOptionsItemSelected(item);
     }

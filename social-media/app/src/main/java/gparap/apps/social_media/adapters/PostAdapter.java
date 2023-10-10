@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
-import gparap.apps.social_media.data.UserModel;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private ArrayList<PostModel> postsList = new ArrayList<>();
@@ -45,7 +44,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         //display post image
         String imageUrl = postsList.get(position).getImageUrl();
-        if (!imageUrl.isEmpty()) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
             Uri uri = Uri.parse(postsList.get(position).getImageUrl());
             Picasso.get().load(uri).into(holder.postImage);
         } else {

@@ -260,7 +260,11 @@ public class AddPostActivity extends AppCompatActivity {
         postsRef.child("userId").setValue(post.getUserId());
         postsRef.child("title").setValue(post.getTitle());
         postsRef.child("details").setValue(post.getDetails());
-        postsRef.child("imageUrl").setValue(post.getImageUrl());
+        if (post.getImageUrl() == null){
+            postsRef.child("imageUrl").setValue("");
+        }else{
+            postsRef.child("imageUrl").setValue(post.getImageUrl());
+        }
     }
 
     //check is the post title and details are filled-in

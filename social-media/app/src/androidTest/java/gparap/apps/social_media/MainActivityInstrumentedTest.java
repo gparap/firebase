@@ -18,10 +18,13 @@ package gparap.apps.social_media;
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
+import android.view.KeyEvent;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
@@ -76,6 +79,39 @@ public class MainActivityInstrumentedTest {
             RecyclerView recyclerViewPosts = activity.findViewById(R.id.recycler_view_posts);
             int posts = Objects.requireNonNull(recyclerViewPosts.getAdapter()).getItemCount();
             assert (posts != 0);
+        });
+    }
+
+    @Test
+    public void testSearch() throws InterruptedException {
+        signInUser();
+
+        //assert that there are at least 2 posts with only one containing the keyword
+        onView(withId(R.id.fab_add_post_main)).perform(click());
+        onView(withId(R.id.textViewPostTitle)).perform(typeText("title to find"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.textViewPostDetails)).perform(typeText("details..."));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        Thread.sleep(667);
+
+        onView(withId(R.id.fab_add_post_main)).perform(click());
+        onView(withId(R.id.textViewPostTitle)).perform(typeText("title"));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.textViewPostDetails)).perform(typeText("details..."));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        Thread.sleep(667);
+
+        //search for the post
+        onView(withId(R.id.main_menu_item_search)).perform(click());
+        onView(withId(androidx.appcompat.R.id.search_src_text)).perform(typeText("find")).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+        Espresso.closeSoftKeyboard();
+
+        //get the number of posts after search
+        activityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_posts);
+            assert (Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() > 0);
         });
     }
 
