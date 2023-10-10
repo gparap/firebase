@@ -25,6 +25,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_USERS;
 
 import android.view.View;
 
@@ -217,7 +219,7 @@ public class RegisterActivityInstrumentedTest {
         assert firebaseUser != null;
         firebaseUser.delete();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(username);
+        DatabaseReference usersRef = database.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS).child(username);
         usersRef.removeValue();
 
         //wait for Firebase to delete user

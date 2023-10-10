@@ -21,6 +21,7 @@ import gparap.apps.social_media.data.UserModel;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
     private ArrayList<UserModel> userList = new ArrayList<>();
 
+    /** @noinspection unused*/
     public ArrayList<UserModel> getUserList() {
         return userList;
     }

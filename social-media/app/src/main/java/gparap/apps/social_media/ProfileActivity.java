@@ -15,16 +15,19 @@
  */
 package gparap.apps.social_media;
 
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_USERS;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,11 +49,11 @@ import java.util.Random;
 
 import gparap.apps.social_media.data.UserModel;
 
+@SuppressWarnings("deprecation")
 public class ProfileActivity extends AppCompatActivity {
     private ImageButton imageButtonUserProfile, imageButtonProfileChangeUsername, imageButtonProfileChangeMobile;
     private EditText editTextProfileUsername, editTextProfileMobile;
     private Button buttonProfileUpdate;
-    private ProgressBar progressBarProfile;
     private final int GET_CONTENT_REQUEST_CODE = 999;
     UserModel dbUser;
     Uri userProfileImageUriData = null;
@@ -71,8 +74,8 @@ public class ProfileActivity extends AppCompatActivity {
             editTextProfileUsername.setText(user.getDisplayName());
 
             //get more user details from database
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("social_media_app")
-                    .child("users").child(Objects.requireNonNull(user.getUid()));
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(DATABASE_REFERENCE)
+                    .child(DATABASE_REFERENCE_USERS).child(Objects.requireNonNull(user.getUid()));
             Task<DataSnapshot> snapshotTask = userRef.get();
             snapshotTask.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -106,7 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
             if (isImageChanged) {
                 //add image to database storage
                 FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageRef = storage.getReference("social_media_app").child(dbUser.getId());
+                StorageReference storageRef = storage.getReference(DATABASE_REFERENCE).child(dbUser.getId());
                 StorageReference childRef = storageRef.child(String.valueOf(Math.abs((new Random()).nextLong())));
                 UploadTask uploadTask = childRef.putFile(userProfileImageUriData);
                 uploadTask.continueWithTask(task -> {
@@ -123,11 +126,11 @@ public class ProfileActivity extends AppCompatActivity {
                         //update user reference in database
                         dbUser.setImageUrl(downloadUrl.toString());
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(dbUser.getId());
+                        DatabaseReference usersRef = database.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS).child(dbUser.getId());
                         usersRef.setValue(dbUser);
 
                         //update user's display name (aka username)
-                        if (isUsernameChanged) {
+                        if (isUsernameChanged && user != null) {
                             user.updateProfile(new UserProfileChangeRequest.Builder()
                                     .setDisplayName(editTextProfileUsername.getText().toString())
                                     .build()).addOnCompleteListener(taskUsername -> {
@@ -137,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
                                     Task<Void> dbTask = usersRef.setValue(dbUser);
                                     dbTask.addOnCompleteListener(t -> {
                                         if (t.isSuccessful()) {
-                                            System.out.println("Username updated.");
+                                            Log.d("gparap.apps.social_media", "Username updated.");
                                         }
                                     });
                                 }
@@ -150,7 +153,7 @@ public class ProfileActivity extends AppCompatActivity {
                             Task<Void> dbTask = usersRef.setValue(dbUser);
                             dbTask.addOnCompleteListener(t -> {
                                 if (t.isSuccessful()) {
-                                    System.out.println("User phone updated.");
+                                    Log.d("gparap.apps.social_media", "User phone updated.");
                                 }
                             });
                         }
@@ -160,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
                 //update user profile without image
             } else {
                 //update user's display name (aka username)
-                if (isUsernameChanged) {
+                if (isUsernameChanged && user != null) {
                     user.updateProfile(new UserProfileChangeRequest.Builder()
                             .setDisplayName(editTextProfileUsername.getText().toString())
                             .build()).addOnCompleteListener(task -> {
@@ -168,11 +171,11 @@ public class ProfileActivity extends AppCompatActivity {
                             //update user reference in database
                             dbUser.setUsername(editTextProfileUsername.getText().toString());
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(dbUser.getId());
+                            DatabaseReference usersRef = database.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS).child(dbUser.getId());
                             Task<Void> dbTask = usersRef.setValue(dbUser);
                             dbTask.addOnCompleteListener(t -> {
                                 if (t.isSuccessful()) {
-                                    System.out.println("Username updated.");
+                                    Log.d("gparap.apps.social_media","Username updated.");
                                 }
                             });
                         }
@@ -183,11 +186,11 @@ public class ProfileActivity extends AppCompatActivity {
                     //update user reference in database
                     dbUser.setPhone(editTextProfileMobile.getText().toString());
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(dbUser.getId());
+                    DatabaseReference usersRef = database.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS).child(dbUser.getId());
                     Task<Void> task = usersRef.setValue(dbUser);
                     task.addOnCompleteListener(t -> {
                         if (t.isSuccessful()) {
-                            System.out.println("User phone updated.");
+                            Log.d("gparap.apps.social_media","User phone updated.");
                         }
                     });
                 }
@@ -221,7 +224,6 @@ public class ProfileActivity extends AppCompatActivity {
         editTextProfileUsername = findViewById(R.id.editTextProfileUsername);
         editTextProfileMobile = findViewById(R.id.editTextProfileMobile);
         buttonProfileUpdate = findViewById(R.id.buttonProfileUpdate);
-        progressBarProfile = findViewById(R.id.progressBarProfile);
     }
 
     private void setEditTextsEditable() {

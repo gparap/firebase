@@ -37,6 +37,7 @@ import org.junit.Test;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ProfileActivityActivityTest {
     ActivityScenario<ProfileActivity> activityScenario;
@@ -44,7 +45,7 @@ public class ProfileActivityActivityTest {
     String oldPhone, newPhone;
 
     //!!! Use this default test user credentials, they don't change
-    final private String testUser_email = "test@dot.com";
+    final private String testUser_email = "gp@dot.com";
     final private String testUser_password = "123123";
 
     @Before
@@ -94,22 +95,13 @@ public class ProfileActivityActivityTest {
         //sign in with Firebase and get the username
         FirebaseAuth.getInstance().signInWithEmailAndPassword(testUser_email, testUser_password);
         Thread.sleep(1667);
-        activityScenario.onActivity(activity -> {
-            EditText editText = activity.findViewById(R.id.editTextProfileUsername);
-            oldUsername = editText.getText().toString();
-        });
+        oldUsername = getEditTextValueById(R.id.editTextProfileUsername);
 
         //create a random int to add to the username string
-        Random random = new Random();
-        newUsername = "test" + random.nextInt(999999999);
+        newUsername = getValueAtRandom();
 
         //change the username
-        onView(withId(R.id.imageButtonProfileChangeUsername)).perform(click());
-        onView(withId(R.id.editTextProfileUsername)).perform(click());
-        onView(withId(R.id.editTextProfileUsername)).perform(clearText());
-        onView(withId(R.id.editTextProfileUsername)).perform(typeText(newUsername));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.buttonProfileUpdate)).perform(click());
+        updateEditTextValueById(R.id.editTextProfileUsername, newUsername);
 
         //wait for Firebase
         Thread.sleep(4667);
@@ -120,10 +112,7 @@ public class ProfileActivityActivityTest {
         //sign in with Firebase and get the username
         FirebaseAuth.getInstance().signInWithEmailAndPassword(testUser_email, testUser_password);
         Thread.sleep(1667);
-        activityScenario.onActivity(activity -> {
-            EditText editText = activity.findViewById(R.id.editTextProfileUsername);
-            newUsername = editText.getText().toString();
-        });
+        newUsername = getEditTextValueById(R.id.editTextProfileUsername);
 
         //assert the username has changed
         assert !Objects.equals(oldUsername, newUsername);
@@ -135,22 +124,13 @@ public class ProfileActivityActivityTest {
         //sign in with Firebase and get the old phone
         FirebaseAuth.getInstance().signInWithEmailAndPassword(testUser_email, testUser_password);
         Thread.sleep(1667);
-        activityScenario.onActivity(activity -> {
-            EditText editText = activity.findViewById(R.id.editTextProfileMobile);
-            oldPhone = editText.getText().toString();
-        });
+        oldPhone = getEditTextValueById(R.id.editTextProfileMobile);
 
         //create a random int for the phone string
-        Random random = new Random();
-        newPhone = "0" + random.nextInt(999999999);
+        newPhone = getValueAtRandom();
 
         //change the phone
-        onView(withId(R.id.imageButtonProfileChangeMobile)).perform(click());
-        onView(withId(R.id.editTextProfileMobile)).perform(click());
-        onView(withId(R.id.editTextProfileMobile)).perform(clearText());
-        onView(withId(R.id.editTextProfileMobile)).perform(typeText(newPhone));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.buttonProfileUpdate)).perform(click());
+        updateEditTextValueById(R.id.editTextProfileMobile, newPhone);
 
         //wait for Firebase
         Thread.sleep(4667);
@@ -161,12 +141,32 @@ public class ProfileActivityActivityTest {
         //sign in with Firebase and get the new phone
         FirebaseAuth.getInstance().signInWithEmailAndPassword(testUser_email, testUser_password);
         Thread.sleep(1667);
-        activityScenario.onActivity(activity -> {
-            EditText editText = activity.findViewById(R.id.editTextProfileMobile);
-            newPhone = editText.getText().toString();
-        });
+        newPhone = getEditTextValueById(R.id.editTextProfileMobile);
 
         //assert the username has changed
         assert !Objects.equals(oldPhone, newPhone);
+    }
+
+    private String getEditTextValueById(int id) {
+        AtomicReference<String> value = new AtomicReference<>("");
+        activityScenario.onActivity(activity -> {
+            EditText editText = activity.findViewById(id);
+            value.set(editText.getText().toString());
+        });
+        return String.valueOf(value);
+    }
+
+    private void updateEditTextValueById(int id, String newValue) {
+        onView(withId(R.id.imageButtonProfileChangeUsername)).perform(click());
+        onView(withId(id)).perform(click());
+        onView(withId(id)).perform(clearText());
+        onView(withId(id)).perform(typeText(newValue));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.buttonProfileUpdate)).perform(click());
+    }
+
+    private String getValueAtRandom() {
+        Random random = new Random();
+        return ("test" + random.nextInt(999999999));
     }
 }

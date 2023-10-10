@@ -41,6 +41,7 @@ import org.junit.Test;
 
 import java.util.Objects;
 
+/** @noinspection FieldCanBeLocal*/
 public class UserActivityActivityTest {
     ActivityScenario<UserActivity> activityScenario;
     View rootView = null;
@@ -54,7 +55,7 @@ public class UserActivityActivityTest {
     @Before
     public void setUp() throws InterruptedException {
         //sign-in test user and wait for database transaction
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("gparap@dot.com", "123123");
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(testUser_email, testUser_password);
         Thread.sleep(1667);
 
         //launch activity
@@ -120,9 +121,9 @@ public class UserActivityActivityTest {
      * Signs-in as the default test user and waits a little for Firebase.
      */
     private void signIn() throws InterruptedException {
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("gp@dot.com"));
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText(testUser_email));
         closeSoftKeyboard();
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("123123"));
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testUser_password));
         closeSoftKeyboard();
         onView(withId(R.id.buttonLogin)).perform(click());
         Thread.sleep(1667);

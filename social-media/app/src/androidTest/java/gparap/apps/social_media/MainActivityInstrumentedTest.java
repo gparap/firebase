@@ -39,8 +39,13 @@ import org.junit.Test;
 
 import java.util.Objects;
 
+/** @noinspection FieldCanBeLocal*/
 public class MainActivityInstrumentedTest {
     private ActivityScenario<MainActivity> activityScenario;
+
+    //!!! Use this default test user credentials, they don't change
+    final private String testUser_email = "gp@dot.com";
+    final private String testUser_password = "123123";
 
     @Before
     public void setUp() {
@@ -87,21 +92,8 @@ public class MainActivityInstrumentedTest {
         signInUser();
 
         //assert that there are at least 2 posts with only one containing the keyword
-        onView(withId(R.id.fab_add_post_main)).perform(click());
-        onView(withId(R.id.textViewPostTitle)).perform(typeText("title to find"));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.textViewPostDetails)).perform(typeText("details..."));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.buttonSavePost)).perform(click());
-        Thread.sleep(667);
-
-        onView(withId(R.id.fab_add_post_main)).perform(click());
-        onView(withId(R.id.textViewPostTitle)).perform(typeText("title"));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.textViewPostDetails)).perform(typeText("details..."));
-        Espresso.closeSoftKeyboard();
-        onView(withId(R.id.buttonSavePost)).perform(click());
-        Thread.sleep(667);
+        addNewPost("title to find", "details...");
+        addNewPost("title", "details...");
 
         //search for the post
         onView(withId(R.id.main_menu_item_search)).perform(click());
@@ -116,11 +108,22 @@ public class MainActivityInstrumentedTest {
     }
 
     private void signInUser() throws InterruptedException {
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("gparap@dot.com"));
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText(testUser_email));
         closeSoftKeyboard();
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("123123"));
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testUser_password));
         closeSoftKeyboard();
         onView(withId(R.id.buttonLogin)).perform(click());
         Thread.sleep(1667); //wait for firebase..
+    }
+
+    /** @noinspection SameParameterValue*/
+    private void addNewPost(String title, String details) throws InterruptedException {
+        onView(withId(R.id.fab_add_post_main)).perform(click());
+        onView(withId(R.id.textViewPostTitle)).perform(typeText(title));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.textViewPostDetails)).perform(typeText(details));
+        Espresso.closeSoftKeyboard();
+        onView(withId(R.id.buttonSavePost)).perform(click());
+        Thread.sleep(667);
     }
 }

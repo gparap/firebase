@@ -1,0 +1,42 @@
+/*
+ * Copyright 2023 gparap
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package gparap.apps.social_media.utils;
+
+public class AppConstants {
+    public static final String DATABASE_REFERENCE                   = "social_media_app";
+    public static final String DATABASE_REFERENCE_USERS             = "users";
+    public static final String DATABASE_REFERENCE_POSTS             = "posts";
+    public static final String DATABASE_FIELD_POST_ID               = "id";
+    public static final String DATABASE_FIELD_POST_USER_ID          = "userId";
+    public static final String DATABASE_FIELD_POST_TITLE            = "title";
+    public static final String DATABASE_FIELD_POST_DETAILS          = "details";
+    public static final String DATABASE_FIELD_POST_IMAGE_URL        = "imageUrl";
+
+    public static final String INTENT_EXTRA_EMAIL                   = "email";
+    public static final String APP_BAR_TITLE_ADD_POST               = "Add Post";
+    public static final String MIME_TYPE_IMAGE                      = "image/*";
+
+    public static final int REQUEST_CODE_GET_POST_IMAGE             = 999;
+    public static final int REQUEST_CODE_CAPTURE_POST_IMAGE         = 888;
+    public static final int REQUEST_CODE_CAMERA_PERMISSION          = 777;
+
+    public static final String PERMISSION_CAMERA                    = "Manifest.permission.CAMERA";
+    public static final String PERMISSION_WRITE_EXTERNAL_STORAGE    = "Manifest.permission.WRITE_EXTERNAL_STORAGE";
+
+    public static final String CONTENT_VALUE_TITLE                  = "title";
+    public static final String CONTENT_VALUE_DESCRIPTION            = "desc";
+    public static final String CONTENT_VALUE_AUTHOR                 = "author";
+}

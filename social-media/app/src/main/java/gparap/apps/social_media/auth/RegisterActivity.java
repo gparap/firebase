@@ -15,6 +15,10 @@
  */
 package gparap.apps.social_media.auth;
 
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_USERS;
+import static gparap.apps.social_media.utils.AppConstants.INTENT_EXTRA_EMAIL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -78,12 +82,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                                             //add user to the relevant database
                                             FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                            DatabaseReference usersRef = database.getReference("social_media_app").child("users").child(user.getId());
+                                            DatabaseReference usersRef = database.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS).child(user.getId());
                                             usersRef.setValue(user);
 
                                             //redirect to login
                                             Intent intent = new Intent(this, LoginActivity.class);
-                                            intent.putExtra("email", "email");
+                                            intent.putExtra(INTENT_EXTRA_EMAIL, INTENT_EXTRA_EMAIL);
                                             startActivity(intent);
                                             finish();
                                         }

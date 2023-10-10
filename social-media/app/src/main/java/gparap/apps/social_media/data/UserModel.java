@@ -15,6 +15,7 @@
  */
 package gparap.apps.social_media.data;
 
+/** @noinspection unused*/
 public class UserModel {
     private String id;
     private String username;

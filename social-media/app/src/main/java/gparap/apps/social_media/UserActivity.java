@@ -15,6 +15,9 @@
  */
 package gparap.apps.social_media;
 
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_USERS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -62,7 +65,7 @@ public class UserActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //get application users from the database (except current)
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("social_media_app").child("users");
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS);
         Task<DataSnapshot> snapshotTask = usersRef.get();
         snapshotTask.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

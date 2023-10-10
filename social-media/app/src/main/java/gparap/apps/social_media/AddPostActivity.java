@@ -15,6 +15,24 @@
  */
 package gparap.apps.social_media;
 
+import static gparap.apps.social_media.utils.AppConstants.APP_BAR_TITLE_ADD_POST;
+import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_AUTHOR;
+import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_DESCRIPTION;
+import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_TITLE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_DETAILS;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_ID;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_IMAGE_URL;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_TITLE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_USER_ID;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_POSTS;
+import static gparap.apps.social_media.utils.AppConstants.MIME_TYPE_IMAGE;
+import static gparap.apps.social_media.utils.AppConstants.PERMISSION_CAMERA;
+import static gparap.apps.social_media.utils.AppConstants.PERMISSION_WRITE_EXTERNAL_STORAGE;
+import static gparap.apps.social_media.utils.AppConstants.REQUEST_CODE_CAMERA_PERMISSION;
+import static gparap.apps.social_media.utils.AppConstants.REQUEST_CODE_CAPTURE_POST_IMAGE;
+import static gparap.apps.social_media.utils.AppConstants.REQUEST_CODE_GET_POST_IMAGE;
+
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -55,9 +73,6 @@ import gparap.apps.social_media.data.PostModel;
 public class AddPostActivity extends AppCompatActivity {
     private ImageButton imageButtonPostImage;
     private EditText editTextPostTitle, editTextPostDetails;
-    private final static int REQUEST_CODE_GET_POST_IMAGE = 999;
-    private final static int REQUEST_CODE_CAPTURE_POST_IMAGE = 888;
-    private final static int REQUEST_CODE_CAMERA_PERMISSION = 777;
     private Uri imageUri;
     private Boolean isUsingImageFromGallery = true;
 
@@ -74,22 +89,22 @@ public class AddPostActivity extends AppCompatActivity {
         ProgressBar progressBar = findViewById(R.id.progressBarAddPost);
 
         //update the app bar title
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Add Post");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(APP_BAR_TITLE_ADD_POST);
 
         //add an image to the post
         imageButtonPostImage.setOnClickListener(v -> {
             //using the device image gallery
             if (isUsingImageFromGallery) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
+                intent.setType(MIME_TYPE_IMAGE);
                 startActivityForResult(intent, REQUEST_CODE_GET_POST_IMAGE);
             }
 
             //using the device camera
             else {
                 //request camera permission
-                if ((ContextCompat.checkSelfPermission(this, "Manifest.permission.CAMERA") == PackageManager.PERMISSION_GRANTED) &&
-                        (ContextCompat.checkSelfPermission(this, "Manifest.permission.WRITE_EXTERNAL_STORAGE") == PackageManager.PERMISSION_GRANTED)) {
+                if ((ContextCompat.checkSelfPermission(this, PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED) &&
+                        (ContextCompat.checkSelfPermission(this, PERMISSION_WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
 
                     //add captured image values
                     ContentValues contentValues = new ContentValues();
@@ -99,7 +114,6 @@ public class AddPostActivity extends AppCompatActivity {
 
                     //capture image
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                     try {
                         startActivityForResult(intent, REQUEST_CODE_CAPTURE_POST_IMAGE);
                     } catch (Exception ignored) {
@@ -155,7 +169,7 @@ public class AddPostActivity extends AppCompatActivity {
                     String lastPathSegment = stringList.get(stringList.size() - 1);
 
                     //get a reference to the user image
-                    StorageReference imageRef = cloudRef.child("social_media_app").child(user.getUid()).child(lastPathSegment);
+                    StorageReference imageRef = cloudRef.child(DATABASE_REFERENCE).child(user.getUid()).child(lastPathSegment);
 
                     //save image to storage
                     StorageTask<UploadTask.TaskSnapshot> storageTask =
@@ -177,7 +191,7 @@ public class AddPostActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.INVISIBLE);
 
                                     //inform user and return to main activity
-                                    Toast.makeText(this, "Post published..", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, getResources().getString(R.string.toast_post_published), Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(this, MainActivity.class));
                                 }).addOnFailureListener(e ->
                                         Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show()
@@ -214,9 +228,9 @@ public class AddPostActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == REQUEST_CODE_CAMERA_PERMISSION) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(MediaStore.Images.Media.TITLE, "title");      //TODO: add the details
-            contentValues.put(MediaStore.Images.Media.DESCRIPTION, "desc"); //  of the post here and
-            contentValues.put(MediaStore.Images.Media.AUTHOR, "author");   //  the user id
+            contentValues.put(MediaStore.Images.Media.TITLE, CONTENT_VALUE_TITLE);             //TODO: add the details
+            contentValues.put(MediaStore.Images.Media.DESCRIPTION, CONTENT_VALUE_DESCRIPTION); //  of the post here and
+            contentValues.put(MediaStore.Images.Media.AUTHOR, CONTENT_VALUE_AUTHOR);           //  the user id
             imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -240,7 +254,7 @@ public class AddPostActivity extends AppCompatActivity {
             //set image from gallery checked
             item.setChecked(true);
             isUsingImageFromGallery = true;
-        }else{
+        } else {
             //set image from camera checked
             item.setChecked(true);
             isUsingImageFromGallery = false;
@@ -253,17 +267,17 @@ public class AddPostActivity extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
         //...get the DatabaseReference for the database root node
-        DatabaseReference postsRef = firebaseDatabase.getReference("social_media_app").child("posts").push();
+        DatabaseReference postsRef = firebaseDatabase.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_POSTS).push();
 
         //write data to the database
-        postsRef.child("id").setValue(postsRef.getKey());
-        postsRef.child("userId").setValue(post.getUserId());
-        postsRef.child("title").setValue(post.getTitle());
-        postsRef.child("details").setValue(post.getDetails());
-        if (post.getImageUrl() == null){
-            postsRef.child("imageUrl").setValue("");
-        }else{
-            postsRef.child("imageUrl").setValue(post.getImageUrl());
+        postsRef.child(DATABASE_FIELD_POST_ID).setValue(postsRef.getKey());
+        postsRef.child(DATABASE_FIELD_POST_USER_ID).setValue(post.getUserId());
+        postsRef.child(DATABASE_FIELD_POST_TITLE).setValue(post.getTitle());
+        postsRef.child(DATABASE_FIELD_POST_DETAILS).setValue(post.getDetails());
+        if (post.getImageUrl() == null) {
+            postsRef.child(DATABASE_FIELD_POST_IMAGE_URL).setValue("");
+        } else {
+            postsRef.child(DATABASE_FIELD_POST_IMAGE_URL).setValue(post.getImageUrl());
         }
     }
 

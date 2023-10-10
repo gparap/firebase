@@ -15,6 +15,9 @@
  */
 package gparap.apps.social_media;
 
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_POSTS;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,27 +72,8 @@ public class MainActivity extends AppCompatActivity {
         postAdapter = new PostAdapter();
         recyclerViewPosts.setAdapter(postAdapter);
 
-        //display application posts (newest first) from all users
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("social_media_app").child("posts");
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<PostModel> postsList = new ArrayList<>();
-
-                //get all posts from database
-                Iterable<DataSnapshot> children = snapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    PostModel post = child.getValue(PostModel.class);
-                    postsList.add(post);
-                }
-                postAdapter.setPostsList(postsList);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        //display all application posts (newest first)
+        displayApplicationPosts(null);
 
         //redirect to the activity that adds a new post
         findViewById(R.id.fab_add_post_main).setOnClickListener(v ->
@@ -125,33 +110,9 @@ public class MainActivity extends AppCompatActivity {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    //get application posts (newest first) from all users
-                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("social_media_app").child("posts");
-                    dbRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            ArrayList<PostModel> postsList = new ArrayList<>();
-                            //get all posts from database containing the search query keyword(s)
-                            //TODO: > 1 keywords
-                            Iterable<DataSnapshot> children = snapshot.getChildren();
-                            for (DataSnapshot child : children) {
-                                PostModel post = child.getValue(PostModel.class);
-                                if (post != null){
-                                    if (post.getTitle().contains(query) || post.getDetails().contains(query) || post.getImageUrl().contains(query)) {
-                                        postsList.add(post);
-                                    }
-                                }
-                            }
-                            //display posts if exists
-                            postAdapter.setPostsList(postsList);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            postAdapter.setPostsList(initialPostsList);
-                        }
-                    });
-
+                    // TODO: > 1 keywords
+                    //display all application posts (newest first) based on a search query
+                    displayApplicationPosts(query);
                     return true;
                 }
 
@@ -181,5 +142,55 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Displays application posts from all users with or without a search query.
+     * Posts are displayed in chronological order with the newest first.
+     *
+     * @param query search query keyword(s)
+     */
+    public void displayApplicationPosts(@Nullable String query) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(DATABASE_REFERENCE).child(DATABASE_REFERENCE_POSTS);
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //get all posts from database
+                postAdapter.setPostsList(getApplicationPosts(snapshot, query));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    /**
+     * Fetch users' posts from the database with or without a search query.
+     *
+     * @param snapshot instance containing data from a Firebase Database
+     * @param query search query keyword(s)
+     * @return ArrayList<PostModel>
+     */
+    private ArrayList<PostModel> getApplicationPosts(DataSnapshot snapshot, @Nullable String query) {
+        ArrayList<PostModel> posts = new ArrayList<>();
+        Iterable<DataSnapshot> children = snapshot.getChildren();
+        for (DataSnapshot child : children) {
+            PostModel post = child.getValue(PostModel.class);
+            if (post != null){
+                //get all posts
+                if (query == null) {
+                    posts.add(post);
+                }
+                //get posts based on search query
+                else{
+                    if (post.getTitle().contains(query) || post.getDetails().contains(query) || post.getImageUrl().contains(query)) {
+                        posts.add(post);
+                    }
+                }
+            }
+        }
+        return posts;
     }
 }

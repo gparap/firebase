@@ -68,7 +68,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //user registration TODO: pass the typed credentials to the intent
+        //user registration
+        // TODO pass the typed credentials to the intent
         buttonRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
     }
 

@@ -39,9 +39,14 @@ import static org.hamcrest.Matchers.not;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+/** @noinspection FieldCanBeLocal*/
 public class LoginActivityInstrumentedTest {
     ActivityScenario<LoginActivity> activityScenario;
     View rootView = null;
+
+    //!!! Use this default test user credentials, they don't change
+    final private String testUser_email = "gp@dot.com";
+    final private String testUser_password = "123123";
 
     @Before
     public void setUp() {
@@ -91,10 +96,7 @@ public class LoginActivityInstrumentedTest {
     @Test
     public void isLoginSuccessful_gotoMainActivity() throws InterruptedException {
         //type correct credentials
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("gparap@dot.com"));
-        closeSoftKeyboard();
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("123123"));
-        closeSoftKeyboard();
+        enterCredentials(testUser_email, testUser_password);
 
         onView(withId(R.id.buttonLogin)).perform(click());
         Thread.sleep(1667); //wait for firebase..
@@ -104,10 +106,7 @@ public class LoginActivityInstrumentedTest {
     @Test
     public void isLoginUnsuccessful_displayToast() {
         //type incorrect credentials
-        onView(withId(R.id.editTextLoginEmail)).perform(typeText("gparap@dot.com"));
-        closeSoftKeyboard();
-        onView(withId(R.id.editTextLoginPassword)).perform(typeText("123"));
-        closeSoftKeyboard();
+        enterCredentials(testUser_email, "123");
 
         onView(withId(R.id.buttonLogin)).perform(click());
         onView(withText(R.string.toast_wrong_credentials))
@@ -144,5 +143,13 @@ public class LoginActivityInstrumentedTest {
         onView(withText(R.string.toast_empty_password))
                 .inRoot(withDecorView(not(rootView)))
                 .check(matches(isDisplayed()));
+    }
+
+    /** @noinspection SameParameterValue*/
+    private void enterCredentials(String email, String password) {
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText(email));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(password));
+        closeSoftKeyboard();
     }
 }

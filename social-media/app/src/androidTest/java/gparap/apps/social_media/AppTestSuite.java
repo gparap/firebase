@@ -26,6 +26,7 @@ import gparap.apps.social_media.auth.RegisterActivityInstrumentedTest;
         MainActivityInstrumentedTest.class,
         LoginActivityInstrumentedTest.class,
         RegisterActivityInstrumentedTest.class,
+        ProfileActivityActivityTest.class,
         UserActivityActivityTest.class,
         AddPostActivityInstrumentedTest.class
 })

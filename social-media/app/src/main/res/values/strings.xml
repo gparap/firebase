@@ -42,4 +42,5 @@
     <string name="text_use_image_from_camera">Use image from camera</string>
     <string name="desc_post_image">Post Image</string>
     <string name="text_search_posts">Search Posts</string>
+    <string name="toast_post_published">Post published..</string>
 </resources>
