@@ -1,6 +1,7 @@
 package gparap.apps.social_media.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import gparap.apps.social_media.data.PostModel;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private ArrayList<PostModel> postsList = new ArrayList<>();
+    private Context context;
 
     public ArrayList<PostModel> getPostsList() {
         return postsList;
@@ -34,9 +36,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
+
         //create & return the item view
         View view = LayoutInflater.from(parent.getContext()).inflate(parent.getContext()
-                .getResources().getLayout(R.layout.cardview_post), parent, false);
+                .getResources().getLayout(R.layout.cardview_post_thumbnail), parent, false);
         return new PostViewHolder(view);
     }
 
@@ -57,7 +61,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         //TODO: username instead of id
         //display post creator
-        holder.postCreator.setText(postsList.get(position).getUserId());
+        holder.postCreator.setText(String.format("%s%s",
+                context.getString(R.string.text_posted_by), postsList.get(position).getUserId()));
     }
 
     @Override
@@ -71,10 +76,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            postImage = itemView.findViewById(R.id.imageViewPost);
-            postTitle = itemView.findViewById(R.id.textViewPostTitle);
-            postDetails = itemView.findViewById(R.id.textViewPostDetails);
-            postCreator = itemView.findViewById(R.id.textViewPostCreator);
+            postImage = itemView.findViewById(R.id.imageViewPost_thumbnail);
+            postTitle = itemView.findViewById(R.id.textViewPostTitle_thumbnail);
+            postDetails = itemView.findViewById(R.id.textViewPostDetails_thumbnail);
+            postCreator = itemView.findViewById(R.id.textViewPostCreator_thumbnail);
         }
     }
 }

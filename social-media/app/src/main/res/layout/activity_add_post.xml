@@ -8,12 +8,12 @@
 
     <!-- Image placeholder -->
     <ImageButton
-        android:id="@+id/imageViewPost"
+        android:id="@+id/imageViewPost_thumbnail"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc_login_logo_placeholder"
         android:gravity="center|top"
-        app:layout_constraintBottom_toTopOf="@+id/textViewPostTitle"
+        app:layout_constraintBottom_toTopOf="@+id/textViewPostTitle_thumbnail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
 
     <!-- Blog post title -->
     <EditText
-        android:id="@+id/textViewPostTitle"
+        android:id="@+id/textViewPostTitle_thumbnail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints="false"
@@ -41,7 +41,7 @@
 
     <!-- Blog post details -->
     <EditText
-        android:id="@+id/textViewPostDetails"
+        android:id="@+id/textViewPostDetails_thumbnail"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:autofillHints="false"
@@ -54,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPostTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPostTitle_thumbnail"
         tools:text="Blog Post Details" />
 
     <!-- Save button -->

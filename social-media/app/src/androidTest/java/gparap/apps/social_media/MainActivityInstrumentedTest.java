@@ -74,7 +74,7 @@ public class MainActivityInstrumentedTest {
 
         //add a post (title only)
         onView(withId(R.id.fab_add_post_main)).perform(click());
-        onView(withId(R.id.textViewPostTitle)).perform(typeText("title"));
+        onView(withId(R.id.textViewPostTitle_thumbnail)).perform(typeText("title"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.buttonSavePost)).perform(click());
         Thread.sleep(1667); //wait for firebase..
@@ -119,9 +119,9 @@ public class MainActivityInstrumentedTest {
     /** @noinspection SameParameterValue*/
     private void addNewPost(String title, String details) throws InterruptedException {
         onView(withId(R.id.fab_add_post_main)).perform(click());
-        onView(withId(R.id.textViewPostTitle)).perform(typeText(title));
+        onView(withId(R.id.textViewPostTitle_thumbnail)).perform(typeText(title));
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.textViewPostDetails)).perform(typeText(details));
+        onView(withId(R.id.textViewPostDetails_thumbnail)).perform(typeText(details));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.buttonSavePost)).perform(click());
         Thread.sleep(667);

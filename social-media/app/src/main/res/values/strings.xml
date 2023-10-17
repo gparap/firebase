@@ -43,4 +43,5 @@
     <string name="desc_post_image">Post Image</string>
     <string name="text_search_posts">Search Posts</string>
     <string name="toast_post_published">Post published..</string>
+    <string name="text_posted_by">posted by\u00A0</string>
 </resources>
