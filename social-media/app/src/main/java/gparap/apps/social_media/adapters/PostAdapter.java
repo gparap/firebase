@@ -1,5 +1,8 @@
 package gparap.apps.social_media.adapters;
 
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_USERS;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
@@ -12,12 +15,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
+import gparap.apps.social_media.data.UserModel;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private ArrayList<PostModel> postsList = new ArrayList<>();
@@ -59,10 +67,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.postTitle.setText(postsList.get(position).getTitle());
         holder.postDetails.setText(postsList.get(position).getDetails());
 
-        //TODO: username instead of id
-        //display post creator
-        holder.postCreator.setText(String.format("%s%s",
-                context.getString(R.string.text_posted_by), postsList.get(position).getUserId()));
+        //get the FirebaseDatabase instance for the specified URL
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+        //get the username based on the user id
+        DatabaseReference usersRef = firebaseDatabase.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS).child(postsList.get(position).getUserId());
+            Task<DataSnapshot> userSnapshot = usersRef.get();
+            userSnapshot.addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    UserModel user = task.getResult().getValue(UserModel.class);
+                    if (user != null){
+                        //display post creator
+                        holder.postCreator.setText(String.format("%s%s",
+                                context.getString(R.string.text_posted_by), user.getUsername()));
+                    }
+                }
+            });
     }
 
     @Override
