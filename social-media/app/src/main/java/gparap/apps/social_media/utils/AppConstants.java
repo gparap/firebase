@@ -39,4 +39,11 @@ public class AppConstants {
     public static final String CONTENT_VALUE_TITLE                  = "title";
     public static final String CONTENT_VALUE_DESCRIPTION            = "desc";
     public static final String CONTENT_VALUE_AUTHOR                 = "author";
+
+    public static final String POST_ID                              = "post_id";
+    public static final String POST_USER_ID                         = "post_user_id";
+    public static final String POST_USER_NAME                       = "post_user_name";
+    public static final String POST_TITLE                           = "post_title";
+    public static final String POST_DETAILS                         = "post_details";
+    public static final String POST_IMAGE_URL                       = "post_image_url";
 }
