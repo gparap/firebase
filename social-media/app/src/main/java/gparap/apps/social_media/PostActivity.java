@@ -16,12 +16,18 @@
 package gparap.apps.social_media;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
+
+import java.util.Objects;
 
 import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.utils.AppConstants;
@@ -55,5 +61,14 @@ public class PostActivity extends AppCompatActivity {
 
         //display post image
         Picasso.get().load(post.getImageUrl()).into(((ImageView)findViewById(R.id.imageViewPost)));
+
+        //if the user that views the post is also its creator, show the related buttons
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null && Objects.equals(currentUser.getDisplayName(), username)) {
+            ImageButton buttonDeletePost = findViewById(R.id.imageButton_deletePost);
+            buttonDeletePost.setVisibility(View.VISIBLE);
+            ImageButton buttonEditPost = findViewById(R.id.imageButton_editPost);
+            buttonEditPost.setVisibility(View.VISIBLE);
+        }
     }
 }
