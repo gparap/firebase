@@ -32,6 +32,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
@@ -87,6 +89,15 @@ public class PostActivity extends AppCompatActivity {
                                         .removeValue().addOnCompleteListener(task -> {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(this, getString(R.string.text_post_deleted), Toast.LENGTH_SHORT).show();
+
+                                                //delete post image from cloud storage
+                                                if (!post.getImageStorageId().isEmpty()) {
+                                                    StorageReference storageReference = FirebaseStorage.getInstance().getReference(DATABASE_REFERENCE);
+                                                    StorageReference userRef = storageReference.child(post.getUserId());
+                                                    StorageReference imageRef = userRef.child(post.getImageStorageId());
+                                                    imageRef.delete();
+                                                }
+
                                                 //close this activity and return to application posts
                                                 this.startActivity(new Intent(this, MainActivity.class));
                                                 this.finish();
