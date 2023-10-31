@@ -64,6 +64,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -167,6 +168,15 @@ public class AddPostActivity extends AppCompatActivity {
                     // (BUG: getLastPathSegment() don't works as expected most of the times)
                     List<String> stringList = imageUri.getPathSegments();
                     String lastPathSegment = stringList.get(stringList.size() - 1);
+                    //fix lastPathSegment, if needed
+                    if (lastPathSegment.contains("/")) {    //ie: primary:Pictures/
+                        List<String> lastPathSegments = Arrays.asList(lastPathSegment.split("/"));
+                        lastPathSegment = lastPathSegments.get(lastPathSegments.size() - 1);
+                    }
+                    if (lastPathSegment.contains(".")) {    //ie: .jpg
+                        List<String> lastPathSegments = Arrays.asList(lastPathSegment.split("\\."));
+                        lastPathSegment = lastPathSegments.get(0);
+                    }
 
                     //get a reference to the user image
                     StorageReference imageRef = cloudRef.child(DATABASE_REFERENCE).child(user.getUid()).child(lastPathSegment);
@@ -266,7 +276,7 @@ public class AddPostActivity extends AppCompatActivity {
         //get the FirebaseDatabase instance for the specified URL
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
-        //...get the DatabaseReference for the database root node
+        //get the DatabaseReference for the database root node
         DatabaseReference postsRef = firebaseDatabase.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_POSTS).push();
 
         //write data to the database
