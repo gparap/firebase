@@ -24,6 +24,7 @@ public class AppConstants {
     public static final String DATABASE_FIELD_POST_TITLE            = "title";
     public static final String DATABASE_FIELD_POST_DETAILS          = "details";
     public static final String DATABASE_FIELD_POST_IMAGE_URL        = "imageUrl";
+    public static final String DATABASE_FIELD_POST_IMAGE_STORAGE_ID = "imageStorageId";
 
     public static final String INTENT_EXTRA_EMAIL                   = "email";
     public static final String APP_BAR_TITLE_ADD_POST               = "Add Post";
@@ -46,4 +47,5 @@ public class AppConstants {
     public static final String POST_TITLE                           = "post_title";
     public static final String POST_DETAILS                         = "post_details";
     public static final String POST_IMAGE_URL                       = "post_image_url";
+    public static final String POST_IMAGE_STORAGE_ID                = "post_image_storage_id";
 }

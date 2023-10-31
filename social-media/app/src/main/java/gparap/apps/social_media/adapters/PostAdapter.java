@@ -19,6 +19,7 @@ import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_USERS;
 import static gparap.apps.social_media.utils.AppConstants.POST_DETAILS;
 import static gparap.apps.social_media.utils.AppConstants.POST_ID;
+import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_STORAGE_ID;
 import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_URL;
 import static gparap.apps.social_media.utils.AppConstants.POST_TITLE;
 import static gparap.apps.social_media.utils.AppConstants.POST_USER_ID;
@@ -113,6 +114,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                             intent.putExtra(POST_TITLE, postsList.get(position).getTitle());
                             intent.putExtra(POST_DETAILS, postsList.get(position).getDetails());
                             intent.putExtra(POST_IMAGE_URL, postsList.get(position).getImageUrl());
+                            intent.putExtra(POST_IMAGE_STORAGE_ID, postsList.get(position).getImageStorageId());
                             context.startActivity(intent);
                         });
                     }

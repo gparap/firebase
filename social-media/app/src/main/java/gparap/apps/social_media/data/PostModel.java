@@ -20,7 +20,7 @@ package gparap.apps.social_media.data;
  */
 @SuppressWarnings("unused")
 public class PostModel {
-    private String id, userId, title, details, imageUrl;
+    private String id, userId, title, details, imageUrl, imageStorageId;
 
     public String getId() {
         return id;
@@ -62,15 +62,24 @@ public class PostModel {
         this.imageUrl = imageUrl;
     }
 
+    public String getImageStorageId() {
+        return imageStorageId;
+    }
+
+    public void setImageStorageId(String imageStorageId) {
+        this.imageStorageId = imageStorageId;
+    }
+
     //!!! required for Firebase
     public PostModel() {
     }
 
-    public PostModel(String id, String userId, String title, String details, String imageUrl) {
+    public PostModel(String id, String userId, String title, String details, String imageUrl, String imageStorageId) {
         this.id = id;
         this.userId = userId;
         this.title = title;
         this.details = details;
         this.imageUrl = imageUrl;
+        this.imageStorageId = imageStorageId;
     }
 }

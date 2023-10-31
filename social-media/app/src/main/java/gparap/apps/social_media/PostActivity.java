@@ -54,7 +54,8 @@ public class PostActivity extends AppCompatActivity {
                     getIntent().getStringExtra(AppConstants.POST_USER_ID),
                     getIntent().getStringExtra(AppConstants.POST_TITLE),
                     getIntent().getStringExtra(AppConstants.POST_DETAILS),
-                    getIntent().getStringExtra(AppConstants.POST_IMAGE_URL));
+                    getIntent().getStringExtra(AppConstants.POST_IMAGE_URL),
+                    getIntent().getStringExtra(AppConstants.POST_IMAGE_STORAGE_ID));
             username = getIntent().getStringExtra(AppConstants.POST_USER_NAME);
         }
 
@@ -86,7 +87,6 @@ public class PostActivity extends AppCompatActivity {
                                         .removeValue().addOnCompleteListener(task -> {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(this, getString(R.string.text_post_deleted), Toast.LENGTH_SHORT).show();
-
                                                 //close this activity and return to application posts
                                                 this.startActivity(new Intent(this, MainActivity.class));
                                                 this.finish();

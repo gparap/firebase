@@ -21,6 +21,7 @@ import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_DESCRIPT
 import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_TITLE;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_DETAILS;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_ID;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_IMAGE_STORAGE_ID;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_IMAGE_URL;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_TITLE;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_USER_ID;
@@ -76,6 +77,7 @@ public class AddPostActivity extends AppCompatActivity {
     private EditText editTextPostTitle, editTextPostDetails;
     private Uri imageUri;
     private Boolean isUsingImageFromGallery = true;
+    String lastPathSegment = null;  //the decoded last path segment of an image uri
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,8 +147,8 @@ public class AddPostActivity extends AppCompatActivity {
                         user.getUid(),
                         editTextPostTitle.getText().toString().trim(),
                         editTextPostDetails.getText().toString().trim(),
-                        user.getDisplayName()
-                );
+                        user.getDisplayName(),
+                        "");
 
                 //save post without image
                 if (imageUri == null) {
@@ -167,7 +169,7 @@ public class AddPostActivity extends AppCompatActivity {
                     //get the last path segment of the image URI
                     // (BUG: getLastPathSegment() don't works as expected most of the times)
                     List<String> stringList = imageUri.getPathSegments();
-                    String lastPathSegment = stringList.get(stringList.size() - 1);
+                    lastPathSegment = stringList.get(stringList.size() - 1);
                     //fix lastPathSegment, if needed
                     if (lastPathSegment.contains("/")) {    //ie: primary:Pictures/
                         List<String> lastPathSegments = Arrays.asList(lastPathSegment.split("/"));
@@ -192,8 +194,9 @@ public class AddPostActivity extends AppCompatActivity {
                         Task<Uri> downloadURL = taskSnapshot.getStorage().getDownloadUrl();
                         downloadURL.addOnCompleteListener(uriTask ->
                                 uriTask.addOnSuccessListener(uri -> {
-                                    //update blog post with image url
+                                    //update blog post with image url and storage id
                                     post.setImageUrl(uri.toString().trim());
+                                    post.setImageStorageId(lastPathSegment);
 
                                     savePostToDatabase(post);
 
@@ -288,6 +291,11 @@ public class AddPostActivity extends AppCompatActivity {
             postsRef.child(DATABASE_FIELD_POST_IMAGE_URL).setValue("");
         } else {
             postsRef.child(DATABASE_FIELD_POST_IMAGE_URL).setValue(post.getImageUrl());
+        }
+        if (post.getImageStorageId() == null) {
+            postsRef.child(DATABASE_FIELD_POST_IMAGE_STORAGE_ID).setValue("");
+        } else {
+            postsRef.child(DATABASE_FIELD_POST_IMAGE_STORAGE_ID).setValue(post.getImageStorageId());
         }
     }
 
