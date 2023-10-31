@@ -45,4 +45,8 @@
     <string name="toast_post_published">Post published..</string>
     <string name="text_posted_by">posted by\u00A0</string>
     <string name="text_delete_post">Delete post</string>
+    <string name="text_post_deleted">Post deleted</string>
+    <string name="text_post_deleted_alert_dialog">This post is going to be deleted. Are you sure?</string>
+    <string name="text_ok">OK</string>
+    <string name="text_cancel">Cancel</string>
 </resources>
