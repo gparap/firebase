@@ -1,0 +1,82 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_add_post"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditPostActivity">
+
+    <!-- Post image -->
+    <ImageButton
+        android:id="@+id/imageButton_editPostImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/desc_login_logo_placeholder"
+        android:gravity="center|top"
+        app:layout_constraintBottom_toTopOf="@+id/editText_editPostTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_add_photo_48" />
+
+    <!-- Post title -->
+    <EditText
+        android:id="@+id/editText_editPostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="false"
+        android:background="@null"
+        android:gravity="start|center"
+        android:hint="@string/hint_enter_title_here"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.33"
+        tools:text="Blog Post Title" />
+
+    <!-- Post details -->
+    <EditText
+        android:id="@+id/editText_editPostDetails"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autofillHints="false"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="top|start"
+        android:hint="@string/hint_enter_details_here"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSave_editPost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_editPostTitle"
+        tools:text="Blog Post Details" />
+
+    <!-- Save button -->
+    <Button
+        android:id="@+id/buttonSave_editPost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_update"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!--Saving progress-->
+    <ProgressBar
+        android:id="@+id/progressBar_EditPost"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,23 +15,15 @@
  */
 package gparap.apps.social_media;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import android.os.Bundle;
 
-import gparap.apps.social_media.auth.LoginActivityInstrumentedTest;
-import gparap.apps.social_media.auth.RegisterActivityInstrumentedTest;
+import androidx.appcompat.app.AppCompatActivity;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        MainActivityInstrumentedTest.class,
-        LoginActivityInstrumentedTest.class,
-        RegisterActivityInstrumentedTest.class,
-        ProfileActivityActivityTest.class,
-        UserActivityActivityTest.class,
-        AddPostActivityInstrumentedTest.class,
-        EditPostActivityInstrumentedTest.class
-})
-public class AppTestSuite {
+public class EditPostActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_post);
+    }
 }
-
-
