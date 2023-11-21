@@ -17,6 +17,12 @@ package gparap.apps.social_media;
 
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_POSTS;
+import static gparap.apps.social_media.utils.AppConstants.POST_DETAILS;
+import static gparap.apps.social_media.utils.AppConstants.POST_ID;
+import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_STORAGE_ID;
+import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_URL;
+import static gparap.apps.social_media.utils.AppConstants.POST_TITLE;
+import static gparap.apps.social_media.utils.AppConstants.POST_USER_ID;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,8 +75,10 @@ public class PostActivity extends AppCompatActivity {
                 String.format("%s%s", getString(R.string.text_posted_by), username)
         );
 
-        //display post image
-        Picasso.get().load(post.getImageUrl()).into(((ImageView) findViewById(R.id.imageViewPost)));
+        //display post image TODO: fixed <<if (!post.getImageUrl().isEmpty())>>
+        if (!post.getImageUrl().isEmpty()){
+            Picasso.get().load(post.getImageUrl()).into(((ImageView) findViewById(R.id.imageViewPost)));
+        }
 
         //if the user that views the post is also its creator, show the related buttons
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -113,6 +121,17 @@ public class PostActivity extends AppCompatActivity {
             //edit post
             ImageButton buttonEditPost = findViewById(R.id.imageButton_editPost);
             buttonEditPost.setVisibility(View.VISIBLE);
+            buttonEditPost.setOnClickListener(v -> {
+                //open the post for editing
+                Intent intent = new Intent(this, EditPostActivity.class);
+                intent.putExtra(POST_ID, post.getId());
+                intent.putExtra(POST_USER_ID, post.getUserId());
+                intent.putExtra(POST_TITLE, post.getTitle());
+                intent.putExtra(POST_DETAILS, post.getDetails());
+                intent.putExtra(POST_IMAGE_URL, post.getImageUrl());
+                intent.putExtra(POST_IMAGE_STORAGE_ID, post.getImageStorageId());
+                startActivity(intent);
+            });
         }
     }
 }
