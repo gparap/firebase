@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_media;
+package gparap.apps.social_media.posts;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -32,12 +32,16 @@ import android.widget.EditText;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.SmallTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import gparap.apps.social_media.R;
+import gparap.apps.social_media.posts.EditPostActivity;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class EditPostActivityInstrumentedTest {
@@ -69,7 +73,7 @@ public class EditPostActivityInstrumentedTest {
     @Test
     @SmallTest
     public void isVisible_imageButton_editPostImage() {
-        onView(withId(R.id.imageButton_editPostImage)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.imageButton_editPostImage)).check(matches(isDisplayed()));
     }
 
     @Test

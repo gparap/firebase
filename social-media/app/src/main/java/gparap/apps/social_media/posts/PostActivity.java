@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_media;
+package gparap.apps.social_media.posts;
 
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_POSTS;
@@ -44,6 +44,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
+import gparap.apps.social_media.MainActivity;
+import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.utils.AppConstants;
 

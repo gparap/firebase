@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_media;
+package gparap.apps.social_media.posts;
 
 import static gparap.apps.social_media.utils.AppConstants.APP_BAR_TITLE_ADD_POST;
 import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_AUTHOR;
@@ -69,6 +69,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import gparap.apps.social_media.MainActivity;
+import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
 
 @SuppressWarnings("deprecation")

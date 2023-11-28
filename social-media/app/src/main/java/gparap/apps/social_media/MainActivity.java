@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import gparap.apps.social_media.adapters.PostAdapter;
 import gparap.apps.social_media.auth.LoginActivity;
 import gparap.apps.social_media.data.PostModel;
+import gparap.apps.social_media.posts.AddPostActivity;
 
 public class MainActivity extends AppCompatActivity {
     private PostAdapter postAdapter;

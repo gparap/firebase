@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_media;
+package gparap.apps.social_media.posts;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -30,10 +30,14 @@ import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.SmallTest;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import gparap.apps.social_media.R;
+import gparap.apps.social_media.posts.AddPostActivity;
 
 public class AddPostActivityInstrumentedTest {
     private View rootView;
@@ -48,7 +52,7 @@ public class AddPostActivityInstrumentedTest {
     @Test
     @SmallTest
     public void isVisible_imageButtonAddPost() {
-        onView(withId(R.id.imageViewPost)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.imageViewPost)).check(matches(isDisplayed()));
     }
 
     @Test

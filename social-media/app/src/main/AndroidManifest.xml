@@ -22,13 +22,13 @@
         android:theme="@style/Theme.MySocialMediaApp"
         tools:targetApi="31">
         <activity
-            android:name=".EditPostActivity"
+            android:name=".posts.EditPostActivity"
             android:exported="false" />
         <activity
-            android:name=".PostActivity"
+            android:name=".posts.PostActivity"
             android:exported="false" />
         <activity
-            android:name=".AddPostActivity"
+            android:name=".posts.AddPostActivity"
             android:exported="false" />
         <activity
             android:name=".UserActivity"

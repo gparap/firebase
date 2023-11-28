@@ -20,6 +20,8 @@ import org.junit.runners.Suite;
 
 import gparap.apps.social_media.auth.LoginActivityInstrumentedTest;
 import gparap.apps.social_media.auth.RegisterActivityInstrumentedTest;
+import gparap.apps.social_media.posts.AddPostActivityInstrumentedTest;
+import gparap.apps.social_media.posts.EditPostActivityInstrumentedTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

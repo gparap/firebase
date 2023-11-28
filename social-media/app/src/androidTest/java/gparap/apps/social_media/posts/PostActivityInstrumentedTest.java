@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_media;
+package gparap.apps.social_media.posts;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
@@ -39,6 +39,8 @@ import org.junit.Test;
 
 import java.util.Objects;
 
+import gparap.apps.social_media.MainActivity;
+import gparap.apps.social_media.R;
 import gparap.apps.social_media.auth.LoginActivity;
 
 /**

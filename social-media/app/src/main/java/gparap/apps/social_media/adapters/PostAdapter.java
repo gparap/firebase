@@ -46,7 +46,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import gparap.apps.social_media.PostActivity;
+import gparap.apps.social_media.posts.PostActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.data.UserModel;
