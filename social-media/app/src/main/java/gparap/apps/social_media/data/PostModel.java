@@ -18,7 +18,6 @@ package gparap.apps.social_media.data;
 /**
  * This is a model class for a user post.
  */
-@SuppressWarnings("unused")
 public class PostModel {
     private String id, userId, title, details, imageUrl, imageStorageId;
 
@@ -34,6 +33,7 @@ public class PostModel {
         return userId;
     }
 
+    /** @noinspection unused*/
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -70,16 +70,57 @@ public class PostModel {
         this.imageStorageId = imageStorageId;
     }
 
-    //!!! required for Firebase
-    public PostModel() {
+    /** @noinspection unused !!! required for Firebase*/
+    private PostModel() {
     }
 
-    public PostModel(String id, String userId, String title, String details, String imageUrl, String imageStorageId) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.details = details;
-        this.imageUrl = imageUrl;
-        this.imageStorageId = imageStorageId;
+    private PostModel(Builder builder) {
+        id = builder.id;
+        userId = builder.userId;
+        title = builder.title;
+        details = builder.details;
+        imageUrl = builder.imageUrl;
+        imageStorageId = builder.imageStorageId;
+    }
+
+    /**
+     * This is a builder class for the user post model.
+     */
+    public static class Builder {
+        private String id, userId, title, details, imageUrl, imageStorageId;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setDetails(String details) {
+            this.details = details;
+            return this;
+        }
+
+        public Builder setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public Builder setImageStorageId(String imageStorageId) {
+            this.imageStorageId = imageStorageId;
+            return this;
+        }
+
+        public PostModel build() {
+            return new PostModel(this);
+        }
     }
 }

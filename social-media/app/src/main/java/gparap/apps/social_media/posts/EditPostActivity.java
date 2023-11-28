@@ -37,12 +37,14 @@ public class EditPostActivity extends AppCompatActivity {
 
         //get post extras from intent
         if (getIntent() != null) {
-            post = new PostModel(getIntent().getStringExtra(AppConstants.POST_ID),
-                    getIntent().getStringExtra(AppConstants.POST_USER_ID),
-                    getIntent().getStringExtra(AppConstants.POST_TITLE),
-                    getIntent().getStringExtra(AppConstants.POST_DETAILS),
-                    getIntent().getStringExtra(AppConstants.POST_IMAGE_URL),
-                    getIntent().getStringExtra(AppConstants.POST_IMAGE_STORAGE_ID));
+            post = new PostModel.Builder()
+                    .setId(getIntent().getStringExtra(AppConstants.POST_ID))
+                    .setUserId(getIntent().getStringExtra(AppConstants.POST_USER_ID))
+                    .setTitle(getIntent().getStringExtra(AppConstants.POST_TITLE))
+                    .setDetails(getIntent().getStringExtra(AppConstants.POST_DETAILS))
+                    .setImageUrl(getIntent().getStringExtra(AppConstants.POST_IMAGE_URL))
+                    .setImageStorageId(getIntent().getStringExtra(AppConstants.POST_IMAGE_STORAGE_ID))
+                    .build();
         }
 
         //display post texts

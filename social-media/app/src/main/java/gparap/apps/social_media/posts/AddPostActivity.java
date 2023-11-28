@@ -145,12 +145,11 @@ public class AddPostActivity extends AppCompatActivity {
 
             if (user != null) {
                 //create post
-                PostModel post = new PostModel("",
-                        user.getUid(),
-                        editTextPostTitle.getText().toString().trim(),
-                        editTextPostDetails.getText().toString().trim(),
-                        user.getDisplayName(),
-                        "");
+                PostModel post = new PostModel.Builder()
+                        .setUserId(user.getUid())
+                        .setTitle(editTextPostTitle.getText().toString().trim())
+                        .setDetails(editTextPostDetails.getText().toString().trim())
+                        .build();
 
                 //save post without image
                 if (imageUri == null) {
