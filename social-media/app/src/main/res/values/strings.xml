@@ -49,4 +49,5 @@
     <string name="text_post_deleted_alert_dialog">This post is going to be deleted. Are you sure?</string>
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
+    <string name="toast_post_edited">Post updated..</string>
 </resources>
