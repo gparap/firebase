@@ -31,7 +31,7 @@
             android:name=".posts.AddPostActivity"
             android:exported="false" />
         <activity
-            android:name=".UserActivity"
+            android:name=".users.UserActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_media;
+package gparap.apps.social_media.users;
 
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
 import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_USERS;
@@ -40,6 +40,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import gparap.apps.social_media.ProfileActivity;
+import gparap.apps.social_media.R;
 import gparap.apps.social_media.adapters.UserAdapter;
 import gparap.apps.social_media.auth.LoginActivity;
 import gparap.apps.social_media.data.UserModel;

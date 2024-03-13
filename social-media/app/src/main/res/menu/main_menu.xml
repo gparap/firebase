@@ -13,11 +13,17 @@
         android:icon="@drawable/ic_profile_24"
         android:title="@string/text_profile"
         app:showAsAction="ifRoom" />
-    <!--Search-->
+    <!--Search posts-->
     <item
-        android:id="@+id/main_menu_item_search"
+        android:id="@+id/main_menu_item_search_posts"
         android:icon="@drawable/ic_search_24"
         android:title="@string/text_search_posts"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />
+    <!--Users-->
+    <item
+        android:id="@+id/main_menu_item_users"
+        android:icon="@drawable/ic_users_24"
+        android:title="@string/text_users"
+        app:showAsAction="ifRoom" />
 </menu>

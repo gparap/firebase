@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import gparap.apps.social_media.auth.LoginActivityInstrumentedTest;
 import gparap.apps.social_media.auth.RegisterActivityInstrumentedTest;
 import gparap.apps.social_media.posts.AddPostActivityInstrumentedTest;
 import gparap.apps.social_media.posts.EditPostActivityInstrumentedTest;
+import gparap.apps.social_media.users.UserActivityActivityTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

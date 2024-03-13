@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ import gparap.apps.social_media.adapters.PostAdapter;
 import gparap.apps.social_media.auth.LoginActivity;
 import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.posts.AddPostActivity;
+import gparap.apps.social_media.users.UserActivity;
 
 public class MainActivity extends AppCompatActivity {
     private PostAdapter postAdapter;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ProfileActivity.class));
         }
         //search for posts
-        if (item.getItemId() == R.id.main_menu_item_search) {
+        if (item.getItemId() == R.id.main_menu_item_search_posts) {
             //keep initial posts
             ArrayList<PostModel> initialPostsList = postAdapter.getPostsList();
 
@@ -141,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        }
+        //redirect to user activity
+        if (item.getItemId() == R.id.main_menu_item_users) {
+            startActivity(new Intent(this, UserActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

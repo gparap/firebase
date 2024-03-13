@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gparap.apps.social_media;
+package gparap.apps.social_media.users;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
@@ -40,6 +40,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Objects;
+
+import gparap.apps.social_media.R;
+import gparap.apps.social_media.users.UserActivity;
 
 /** @noinspection FieldCanBeLocal*/
 public class UserActivityActivityTest {

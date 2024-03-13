@@ -50,4 +50,5 @@
     <string name="text_ok">OK</string>
     <string name="text_cancel">Cancel</string>
     <string name="toast_post_edited">Post updated..</string>
+    <string name="text_users">Users</string>
 </resources>

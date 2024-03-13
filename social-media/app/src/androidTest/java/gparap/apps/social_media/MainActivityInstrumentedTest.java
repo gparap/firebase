@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,14 @@ package gparap.apps.social_media;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.view.KeyEvent;
 
@@ -31,6 +33,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.filters.LargeTest;
 import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -88,7 +91,7 @@ public class MainActivityInstrumentedTest {
     }
 
     @Test
-    public void testSearch() throws InterruptedException {
+    public void testPostSearch() throws InterruptedException {
         signInUser();
 
         //assert that there are at least 2 posts with only one containing the keyword
@@ -96,7 +99,7 @@ public class MainActivityInstrumentedTest {
         addNewPost("title", "details...");
 
         //search for the post
-        onView(withId(R.id.main_menu_item_search)).perform(click());
+        onView(withId(R.id.main_menu_item_search_posts)).perform(click());
         onView(withId(androidx.appcompat.R.id.search_src_text)).perform(typeText("find")).perform(pressKey(KeyEvent.KEYCODE_ENTER));
         Espresso.closeSoftKeyboard();
 
@@ -105,6 +108,18 @@ public class MainActivityInstrumentedTest {
             RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_posts);
             assert (Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() > 0);
         });
+    }
+
+    @Test
+    @LargeTest
+    public void onMenuOptionUsersClick_redirectToUserActivity() throws InterruptedException {
+        signInUser();
+
+        //click the "Users" in main menu
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        onView(withText(R.string.text_users)).perform(click());
+
+        onView(withId(R.id.layout_activity_user)).check(matches(isDisplayed()));
     }
 
     private void signInUser() throws InterruptedException {
