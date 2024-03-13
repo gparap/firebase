@@ -77,7 +77,7 @@ public class MainActivityInstrumentedTest {
 
         //add a post (title only)
         onView(withId(R.id.fab_add_post_main)).perform(click());
-        onView(withId(R.id.textViewPostTitle_thumbnail)).perform(typeText("title"));
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText("title"));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.buttonSavePost)).perform(click());
         Thread.sleep(1667); //wait for firebase..
@@ -99,7 +99,14 @@ public class MainActivityInstrumentedTest {
         addNewPost("title", "details...");
 
         //search for the post
-        onView(withId(R.id.main_menu_item_search_posts)).perform(click());
+        try {
+            //open from action bar icon
+            onView(withId(R.id.main_menu_item_search_posts)).perform(click());
+        } catch (Exception e) {
+            //open from overflow menu
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+            onView(withText(R.string.text_search_posts)).perform(click());
+        }
         onView(withId(androidx.appcompat.R.id.search_src_text)).perform(typeText("find")).perform(pressKey(KeyEvent.KEYCODE_ENTER));
         Espresso.closeSoftKeyboard();
 
@@ -134,9 +141,9 @@ public class MainActivityInstrumentedTest {
     /** @noinspection SameParameterValue*/
     private void addNewPost(String title, String details) throws InterruptedException {
         onView(withId(R.id.fab_add_post_main)).perform(click());
-        onView(withId(R.id.textViewPostTitle_thumbnail)).perform(typeText(title));
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText(title));
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.textViewPostDetails_thumbnail)).perform(typeText(details));
+        onView(withId(R.id.editTextAddPostDetails)).perform(typeText(details));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.buttonSavePost)).perform(click());
         Thread.sleep(667);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ProfileActivityActivityTest {
+public class ProfileActivityInstrumentedTest {
     ActivityScenario<ProfileActivity> activityScenario;
     String oldUsername, newUsername;
     String oldPhone, newPhone;
@@ -116,6 +116,9 @@ public class ProfileActivityActivityTest {
 
         //assert the username has changed
         assert !Objects.equals(oldUsername, newUsername);
+
+        //restore old username
+        updateEditTextValueById(R.id.editTextProfileUsername, oldUsername);
     }
 
     @Test

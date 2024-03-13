@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,7 +110,13 @@ public class PostActivityInstrumentedTest {
         onView(withId(R.id.imageButton_deletePost)).perform(click());
         onView(withText(R.string.text_ok)).perform(click());
         Thread.sleep(Toast.LENGTH_SHORT);
-        onView(withText(postTitle)).check(matches(not(isDisplayed())));
+        try {
+            onView(withText(postTitle)).check(matches(not(isDisplayed())));
+        } catch (androidx.test.espresso.NoMatchingViewException exception) {
+            if (exception.getMessage() != null && exception.getMessage().contains(postTitle)) {
+                assert true;
+            }
+        }
     }
 
     private void signInUser() throws InterruptedException {
@@ -127,9 +133,9 @@ public class PostActivityInstrumentedTest {
      */
     private void addNewPost(String title, String details) throws InterruptedException {
         onView(withId(R.id.fab_add_post_main)).perform(click());
-        onView(withId(R.id.textViewPostTitle_thumbnail)).perform(typeText(title));
+        onView(withId(R.id.editTextAddPostTitle)).perform(typeText(title));
         Espresso.closeSoftKeyboard();
-        onView(withId(R.id.textViewPostDetails_thumbnail)).perform(typeText(details));
+        onView(withId(R.id.editTextAddPostDetails)).perform(typeText(details));
         Espresso.closeSoftKeyboard();
         onView(withId(R.id.buttonSavePost)).perform(click());
         Thread.sleep(667);

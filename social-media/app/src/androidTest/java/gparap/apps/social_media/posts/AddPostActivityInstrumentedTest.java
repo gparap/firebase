@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,19 +52,19 @@ public class AddPostActivityInstrumentedTest {
     @Test
     @SmallTest
     public void isVisible_imageButtonAddPost() {
-        onView(ViewMatchers.withId(R.id.imageViewPost)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.imageViewAddPost)).check(matches(isDisplayed()));
     }
 
     @Test
     @SmallTest
     public void isVisible_editTextAddPostTitle() {
-        onView(withId(R.id.textViewPostTitle)).check(matches(isDisplayed()));
+        onView(withId(R.id.editTextAddPostTitle)).check(matches(isDisplayed()));
     }
 
     @Test
     @SmallTest
     public void isVisible_editTextAddPostDetails() {
-        onView(withId(R.id.textViewPostDetails)).check(matches(isDisplayed()));
+        onView(withId(R.id.editTextAddPostTitle)).check(matches(isDisplayed()));
     }
 
     @Test

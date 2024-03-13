@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,9 +133,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            postImage = itemView.findViewById(R.id.imageViewPost_thumbnail);
-            postTitle = itemView.findViewById(R.id.textViewPostTitle_thumbnail);
-            postDetails = itemView.findViewById(R.id.textViewPostDetails_thumbnail);
+            postImage = itemView.findViewById(R.id.imageViewAddPost);
+            postTitle = itemView.findViewById(R.id.editTextAddPostTitle);
+            postDetails = itemView.findViewById(R.id.editTextAddPostDetails);
             postCreator = itemView.findViewById(R.id.textViewPostCreator_thumbnail);
         }
     }

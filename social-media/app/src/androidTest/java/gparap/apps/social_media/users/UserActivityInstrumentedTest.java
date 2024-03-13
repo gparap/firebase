@@ -42,10 +42,11 @@ import org.junit.Test;
 import java.util.Objects;
 
 import gparap.apps.social_media.R;
-import gparap.apps.social_media.users.UserActivity;
 
-/** @noinspection FieldCanBeLocal*/
-public class UserActivityActivityTest {
+/**
+ * @noinspection FieldCanBeLocal
+ */
+public class UserActivityInstrumentedTest {
     ActivityScenario<UserActivity> activityScenario;
     View rootView = null;
 
@@ -100,8 +101,17 @@ public class UserActivityActivityTest {
         signIn();
 
         //open user profile
-        onView(withId(R.id.main_menu_item_profile)).perform(click());
-        Thread.sleep(4667); //wait for firebase..
+        try {
+            //open from action bar icon
+            onView(withId(R.id.main_menu_item_profile)).perform(click());
+        } catch (Exception e) {
+            //open from overflow menu
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+            onView(withText(R.string.text_profile)).perform(click());
+        } finally {
+            //wait for firebase..
+            Thread.sleep(4667);
+        }
 
         //assert profile details are correct
         onView(withId(R.id.editTextProfileUsername)).check(matches(withText(testUser_username)));
@@ -113,10 +123,11 @@ public class UserActivityActivityTest {
      */
     private void signOut() {
         try {
+            onView(withId(R.id.main_menu_item_logout)).perform(click());
+
+        } catch (Exception e) {
             openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
             onView(withText(R.string.text_logout)).perform(click());
-        } catch (Exception e) {
-            onView(withId(R.id.main_menu_item_logout)).perform(click());
         }
     }
 

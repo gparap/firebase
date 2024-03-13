@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,9 +87,9 @@ public class AddPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_post);
 
         //get widgets
-        imageButtonPostImage = findViewById(R.id.imageViewPost_thumbnail);
-        editTextPostTitle = findViewById(R.id.textViewPostTitle_thumbnail);
-        editTextPostDetails = findViewById(R.id.textViewPostDetails_thumbnail);
+        imageButtonPostImage = findViewById(R.id.imageViewAddPost);
+        editTextPostTitle = findViewById(R.id.editTextAddPostTitle);
+        editTextPostDetails = findViewById(R.id.editTextAddPostDetails);
         Button buttonSavePost = findViewById(R.id.buttonSavePost);
         ProgressBar progressBar = findViewById(R.id.progressBarAddPost);
 

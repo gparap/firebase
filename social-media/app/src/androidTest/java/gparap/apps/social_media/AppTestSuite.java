@@ -22,15 +22,17 @@ import gparap.apps.social_media.auth.LoginActivityInstrumentedTest;
 import gparap.apps.social_media.auth.RegisterActivityInstrumentedTest;
 import gparap.apps.social_media.posts.AddPostActivityInstrumentedTest;
 import gparap.apps.social_media.posts.EditPostActivityInstrumentedTest;
-import gparap.apps.social_media.users.UserActivityActivityTest;
+import gparap.apps.social_media.users.UserActivityInstrumentedTest;
+import gparap.apps.social_media.users.UserDetailsActivityInstrumentedTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         MainActivityInstrumentedTest.class,
         LoginActivityInstrumentedTest.class,
         RegisterActivityInstrumentedTest.class,
-        ProfileActivityActivityTest.class,
-        UserActivityActivityTest.class,
+        ProfileActivityInstrumentedTest.class,
+        UserActivityInstrumentedTest.class,
+        UserDetailsActivityInstrumentedTest.class,
         AddPostActivityInstrumentedTest.class,
         EditPostActivityInstrumentedTest.class
 })

@@ -8,21 +8,21 @@
 
     <!-- Image placeholder -->
     <ImageButton
-        android:id="@+id/imageViewPost_thumbnail"
+        android:id="@+id/imageViewAddPost"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/desc_login_logo_placeholder"
         android:gravity="center|top"
-        app:layout_constraintBottom_toTopOf="@+id/textViewPostTitle_thumbnail"
+        app:layout_constraintBottom_toTopOf="@+id/editTextAddPostTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_add_photo_48" />
 
-    <!-- Blog post title -->
+    <!-- Post title -->
     <EditText
-        android:id="@+id/textViewPostTitle_thumbnail"
+        android:id="@+id/editTextAddPostTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints="false"
@@ -39,9 +39,9 @@
         app:layout_constraintVertical_bias="0.33"
         tools:text="Blog Post Title" />
 
-    <!-- Blog post details -->
+    <!-- Post details -->
     <EditText
-        android:id="@+id/textViewPostDetails_thumbnail"
+        android:id="@+id/editTextAddPostDetails"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:autofillHints="false"
@@ -54,7 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPostTitle_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/editTextAddPostTitle"
         tools:text="Blog Post Details" />
 
     <!-- Save button -->

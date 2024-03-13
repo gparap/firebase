@@ -15,7 +15,7 @@
 
         <!-- Post image -->
         <ImageView
-            android:id="@+id/imageViewPost_thumbnail"
+            android:id="@+id/imageViewAddPost"
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:contentDescription="@string/desc_post_image"
@@ -28,7 +28,7 @@
 
         <!-- Post title -->
         <TextView
-            android:id="@+id/textViewPostTitle_thumbnail"
+            android:id="@+id/editTextAddPostTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="false"
@@ -38,12 +38,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewPost_thumbnail"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewAddPost"
             tools:text="Post Title" />
 
         <!-- Post details -->
         <TextView
-            android:id="@+id/textViewPostDetails_thumbnail"
+            android:id="@+id/editTextAddPostDetails"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="5"
@@ -53,7 +53,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewPostTitle_thumbnail"
+            app:layout_constraintTop_toBottomOf="@+id/editTextAddPostTitle"
             tools:height="48dp"
             tools:text="Post Details" />
 
@@ -72,7 +72,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewPostDetails_thumbnail"
+            app:layout_constraintTop_toBottomOf="@+id/editTextAddPostDetails"
             tools:text="Post Creator" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
