@@ -48,4 +48,14 @@ public class AppConstants {
     public static final String POST_DETAILS                         = "post_details";
     public static final String POST_IMAGE_URL                       = "post_image_url";
     public static final String POST_IMAGE_STORAGE_ID                = "post_image_storage_id";
+
+    public static final String USER_ID                              = "user_id";
+    public static final String USER_NAME                            = "user_name";
+    public static final String USER_EMAIL                           = "user_email";
+    public static final String USER_PHONE                           = "user_phone";
+    public static final String USER_PASSWORD                        = "user_password";
+    public static final String USER_IMAGE_URL                       = "user_image_url";
+    public static final String USER_POSTS                           = "user_posts";
+    public static final String USER_ABOUT_ME                        = "user_about_me";
+    public static final String USER_MEMBER_SINCE                    = "user_member_since";
 }

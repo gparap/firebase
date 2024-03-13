@@ -51,4 +51,9 @@
     <string name="text_cancel">Cancel</string>
     <string name="toast_post_edited">Post updated..</string>
     <string name="text_users">Users</string>
+    <string name="text_view_posts">View Posts</string>
+    <string name="text_message_user">Message User</string>
+    <string name="label_user_name">User:&#160;</string>
+    <string name="label_member_since">Member Since:&#160;</string>
+    <string name="label_posts_count">Posts:&#160;</string>
 </resources>

@@ -19,20 +19,38 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
 import static org.hamcrest.core.IsNot.not;
 
+import android.content.Intent;
+import android.widget.TextView;
+
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import gparap.apps.social_media.R;
+import gparap.apps.social_media.utils.AppConstants;
 
 public class UserDetailsActivityInstrumentedTest {
+    private ActivityScenario<UserDetailsActivity> activityScenario;
+
+    //use this alternative test user (they don't change)
+    String userName = "immutable_test_user_name";
+    String userAboutMe = "immutable_test_user_about_me";
+    int userPosts = 0;
+
     @Before
     public void setUp() {
-        ActivityScenario.launch(UserDetailsActivity.class);
+        //create the user intent
+        Intent userDetailsIntent = new Intent(ApplicationProvider.getApplicationContext(), UserDetailsActivity.class);
+        userDetailsIntent.putExtra(AppConstants.USER_NAME, userName);
+        userDetailsIntent.putExtra(AppConstants.USER_ABOUT_ME, userAboutMe);
+        userDetailsIntent.putExtra(AppConstants.USER_POSTS, userPosts);
+
+        //run scenario from intent
+        activityScenario = ActivityScenario.launch(userDetailsIntent);
     }
 
     @Test
@@ -68,5 +86,22 @@ public class UserDetailsActivityInstrumentedTest {
     @Test
     public void isVisible_buttonUserDetailsMessageUser() {
         onView(withId(R.id.buttonUserDetailsMessageUser)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void areCorrect_userDetails() {
+        //create the expected strings, wherever needed
+        String expectedUserName = ApplicationProvider.getApplicationContext().getString(R.string.label_user_name) + userName;
+        String expectedUserPosts = ApplicationProvider.getApplicationContext().getString(R.string.label_posts_count) + userPosts;
+
+        //compare the actual & expected user details, in compact mode
+        activityScenario.onActivity(activity -> {
+            TextView textViewUserName = activity.findViewById(R.id.textViewUserDetailsName);
+            assert (textViewUserName.getText().toString().equals(expectedUserName));
+            TextView textViewUserAboutMe = activity.findViewById(R.id.textViewUserDetailsAboutMe);
+            assert (textViewUserAboutMe.getText().toString().equals(userAboutMe));
+            TextView textViewUserPosts = activity.findViewById(R.id.textViewUserDetailsPosts);
+            assert (textViewUserPosts.getText().toString().equals(expectedUserPosts));
+        });
     }
 }

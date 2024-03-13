@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package gparap.apps.social_media.data;
 
+import com.google.firebase.database.PropertyName;
+
 /** @noinspection unused*/
 public class UserModel {
     private String id;
@@ -23,6 +25,9 @@ public class UserModel {
     private String phone;
     private String password;
     private String imageUrl;
+    private int postsCount;
+    private String aboutMe;     //TODO: update profile with user's about section
+    private String memberSince; //TODO: use Date object
 
     @SuppressWarnings("unused")
     //!!! Do not remove, needed for
@@ -36,6 +41,9 @@ public class UserModel {
         this.phone = phone;
         this.password = password;
         imageUrl = "";
+        postsCount = 0;
+        aboutMe = "";
+        memberSince = "";
     }
 
     public String getId() {
@@ -84,5 +92,35 @@ public class UserModel {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @PropertyName("posts")
+    public int getPostsCount() {
+        return postsCount;
+    }
+
+    @PropertyName("posts")
+    public void setPostsCount(int postsCount) {
+        this.postsCount = postsCount;
+    }
+
+    @PropertyName("about")
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    @PropertyName("about")
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
+
+    @PropertyName("member_since")
+    public String getMemberSince() {
+        return memberSince;
+    }
+
+    @PropertyName("member_since")
+    public void setMemberSince(String memberSince) {
+        this.memberSince = memberSince;
     }
 }

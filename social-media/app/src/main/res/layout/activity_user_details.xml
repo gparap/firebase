@@ -34,7 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewUserDetails"
-            tools:text="User Name: user" />
+            android:text="@string/label_user_name" />
 
         <!-- User is member since this date -->
         <TextView
@@ -45,7 +45,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserDetailsName"
-            tools:text="Member Since: 1/1/1970" />
+            android:text="@string/label_member_since" />
 
         <!-- User has posted that many posts -->
         <TextView
@@ -56,7 +56,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserDetailsMemberSince"
-            tools:text="Posts: 999" />
+            tools:text="@string/label_posts_count" />
 
         <!-- User motto about themselves -->
         <TextView
@@ -79,7 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserDetailsAboutMe"
-            tools:text="View Posts" />
+            android:text="@string/text_view_posts" />
 
         <!-- Message this user -->
         <Button
@@ -90,7 +90,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonUserDetailsViewPosts"
-            tools:text="Message User" />
+            android:text="@string/text_message_user" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
