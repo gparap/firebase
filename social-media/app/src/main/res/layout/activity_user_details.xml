@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_activity_user_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dp"
+    tools:context=".users.UserDetailsActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- User image -->
+        <ImageView
+            android:id="@+id/imageViewUserDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_post_image"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_height="192dp"
+            tools:srcCompat="@drawable/app_logo" />
+
+        <!-- User name -->
+        <TextView
+            android:id="@+id/textViewUserDetailsName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewUserDetails"
+            tools:text="User Name: user" />
+
+        <!-- User is member since this date -->
+        <TextView
+            android:id="@+id/textViewUserDetailsMemberSince"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserDetailsName"
+            tools:text="Member Since: 1/1/1970" />
+
+        <!-- User has posted that many posts -->
+        <TextView
+            android:id="@+id/textViewUserDetailsPosts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserDetailsMemberSince"
+            tools:text="Posts: 999" />
+
+        <!-- User motto about themselves -->
+        <TextView
+            android:id="@+id/textViewUserDetailsAboutMe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserDetailsPosts"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc id cursus metus aliquam eleifend mi. At consectetur lorem donec massa sapien faucibus et molestie ac. Ut faucibus pulvinar elementum integer. Gravida in fermentum et sollicitudin ac orci phasellus egestas tellus. Massa tincidunt dui ut ornare lectus sit amet. Eget arcu dictum varius duis. Dictum varius duis at consectetur lorem donec massa sapien. Arcu dictum varius duis at consectetur lorem donec. Malesuada nunc vel risus commodo. Natoque penatibus et magnis dis parturient montes nascetur ridiculus. Nulla facilisi etiam dignissim diam. Ultricies tristique nulla aliquet enim tortor. Ac turpis egestas maecenas pharetra convallis posuere morbi leo. Viverra aliquet eget sit amet tellus cras adipiscing enim. Tristique risus nec feugiat in fermentum posuere urna nec tincidunt. Felis eget nunc lobortis mattis." />
+
+        <!-- View this user's posts -->
+        <Button
+            android:id="@+id/buttonUserDetailsViewPosts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserDetailsAboutMe"
+            tools:text="View Posts" />
+
+        <!-- Message this user -->
+        <Button
+            android:id="@+id/buttonUserDetailsMessageUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonUserDetailsViewPosts"
+            tools:text="Message User" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
