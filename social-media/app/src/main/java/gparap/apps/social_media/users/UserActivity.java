@@ -26,7 +26,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,8 +37,10 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -48,6 +52,7 @@ import gparap.apps.social_media.data.UserModel;
 
 public class UserActivity extends AppCompatActivity {
     private final ArrayList<UserModel> applicationUsers = new ArrayList<>();
+    private UserAdapter userAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,32 +89,124 @@ public class UserActivity extends AppCompatActivity {
                 //setup recycler view with adapter for application users
                 RecyclerView recyclerViewUsers = findViewById(R.id.recycler_view_users);
                 recyclerViewUsers.setLayoutManager(new LinearLayoutManager(this));
-                UserAdapter adapter = new UserAdapter();
-                adapter.setUserList(applicationUsers);
-                recyclerViewUsers.setAdapter(adapter);
+                userAdapter = new UserAdapter();
+                userAdapter.setUserList(applicationUsers);
+                recyclerViewUsers.setAdapter(userAdapter);
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.user_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         //logout user and redirect to login
-        if (item.getItemId() == R.id.main_menu_item_logout){
+        if (item.getItemId() == R.id.user_menu_item_logout){
             FirebaseAuth.getInstance().signOut();
             Toast.makeText(this, getResources().getString(R.string.toast_logout_successful), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
         //redirect to user profile
-        if (item.getItemId() == R.id.main_menu_item_profile){
+        if (item.getItemId() == R.id.user_menu_item_profile){
             startActivity(new Intent(this, ProfileActivity.class));
         }
+        //search for users
+        if (item.getItemId() == R.id.user_menu_item_search_users) {
+            //keep initial users
+            ArrayList<UserModel> initialUsersList = userAdapter.getUserList();
+
+            //search users in all relevant fields (e-mail, username)
+            SearchView searchView = (SearchView) item.getActionView();
+            assert searchView != null;
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    // TODO: > 1 keywords
+                    //display all application users (newest first) based on a search query
+                    displayApplicationUsers(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    //if user presses the "x" on the search, show all users
+                    if (newText.isEmpty()) {
+                        userAdapter.setUserList(initialUsersList);
+                    }
+                    return true;
+                }
+            });
+
+            //search has ended, restore the initial posts list
+            item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                @Override
+                public boolean onMenuItemActionExpand(@NonNull MenuItem item) {
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(@NonNull MenuItem item) {
+                    userAdapter.setUserList(initialUsersList);
+                    return true;
+                }
+            });
+
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Displays application users with or without a search query.
+     * Users are displayed in chronological order with the newest first.
+     *
+     * @param query search query keyword(s)
+     */
+    public void displayApplicationUsers(@Nullable String query) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child(DATABASE_REFERENCE).child(DATABASE_REFERENCE_USERS);
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //get all users from database
+                userAdapter.setUserList(getApplicationPosts(snapshot, query));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    /**
+     * Fetch users from the database with or without a search query.
+     *
+     * @param snapshot instance containing data from a Firebase Database
+     * @param query search query keyword(s)
+     * @return ArrayList<UserModel>
+     */
+    private ArrayList<UserModel> getApplicationPosts(DataSnapshot snapshot, @Nullable String query) {
+        ArrayList<UserModel> users = new ArrayList<>();
+        Iterable<DataSnapshot> children = snapshot.getChildren();
+        for (DataSnapshot child : children) {
+            UserModel user = child.getValue(UserModel.class);
+            if (user != null){
+                //get all users
+                if (query == null) {
+                    users.add(user);
+                }
+                //get users based on search query
+                else{
+                    if (user.getEmail().contains(query) || user.getUsername().contains(query)) {
+                        users.add(user);
+                    }
+                }
+            }
+        }
+        return users;
     }
 }

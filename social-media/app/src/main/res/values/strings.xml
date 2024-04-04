@@ -56,4 +56,5 @@
     <string name="label_user_name">User:&#160;</string>
     <string name="label_member_since">Member Since:&#160;</string>
     <string name="label_posts_count">Posts:&#160;</string>
+    <string name="text_search_users">Search Users</string>
 </resources>

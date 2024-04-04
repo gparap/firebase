@@ -19,6 +19,7 @@ import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
@@ -27,10 +28,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
+import android.view.KeyEvent;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -118,6 +121,36 @@ public class UserActivityInstrumentedTest {
         onView(withId(R.id.editTextProfileMobile)).check(matches(withText(testUser_phone)));
     }
 
+    @Test
+    @LargeTest
+    public void testUserSearch_searchUserByEmail() throws InterruptedException {
+        //search for the default test user by e-mail
+        openSearchView();
+        onView(withId(androidx.appcompat.R.id.search_src_text)).perform(typeText(testUser_email)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+        Espresso.closeSoftKeyboard();
+
+        //get the number of users after search
+        activityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_users);
+            assert (Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() == 1);
+        });
+    }
+
+    @Test
+    @LargeTest
+    public void testUserSearch_searchUserByUsername() throws InterruptedException {
+        //search for the default test user by username
+        openSearchView();
+        onView(withId(androidx.appcompat.R.id.search_src_text)).perform(typeText(testUser_username)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
+        Espresso.closeSoftKeyboard();
+
+        //get the number of users after search
+        activityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_users);
+            assert (Objects.requireNonNull(recyclerView.getAdapter()).getItemCount() == 1);
+        });
+    }
+
     /**
      * Signs-out either from the appbar icon or the menu item.
      */
@@ -141,5 +174,21 @@ public class UserActivityInstrumentedTest {
         closeSoftKeyboard();
         onView(withId(R.id.buttonLogin)).perform(click());
         Thread.sleep(1667);
+    }
+
+    /** Opens SearchView from the "Search Users" menu option. */
+    private void openSearchView() throws InterruptedException {
+        try {
+            //open from action bar icon
+            onView(withId(R.id.user_menu_item_search_users)).perform(click());
+        }
+        catch (Exception e) {
+            //open from overflow menu
+            openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+            onView(withText(R.string.text_search_users)).perform(click());
+        }finally {
+            //wait for the users to be fetched from db
+            Thread.sleep(1667);
+        }
     }
 }
