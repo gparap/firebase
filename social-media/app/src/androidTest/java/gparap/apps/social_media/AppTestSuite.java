@@ -15,6 +15,7 @@
  */
 package gparap.apps.social_media;
 
+import gparap.apps.social_media.users.UserPostsActivityInstrumentedTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -33,6 +34,7 @@ import gparap.apps.social_media.users.UserDetailsActivityInstrumentedTest;
         ProfileActivityInstrumentedTest.class,
         UserActivityInstrumentedTest.class,
         UserDetailsActivityInstrumentedTest.class,
+        UserPostsActivityInstrumentedTest.class,
         AddPostActivityInstrumentedTest.class,
         EditPostActivityInstrumentedTest.class
 })

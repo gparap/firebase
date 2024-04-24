@@ -18,6 +18,7 @@ package gparap.apps.social_media.users;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,5 +72,13 @@ public class UserDetailsActivity extends AppCompatActivity {
         //display the user about text
         TextView userAboutText = findViewById(R.id.textViewUserDetailsAboutMe);
         userAboutText.setText(user.getAboutMe());
+
+        //display user posts
+        Button buttonViewPosts = findViewById(R.id.buttonUserDetailsViewPosts);
+        buttonViewPosts.setOnClickListener(view -> {
+            Intent userPostsIntent = new Intent(this, UserPostsActivity.class);
+            userPostsIntent.putExtra(AppConstants.USER_ID, user.getId());
+            startActivity(userPostsIntent);
+        });
     }
 }
