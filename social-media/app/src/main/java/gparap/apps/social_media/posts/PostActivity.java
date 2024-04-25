@@ -15,15 +15,6 @@
  */
 package gparap.apps.social_media.posts;
 
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_POSTS;
-import static gparap.apps.social_media.utils.AppConstants.POST_DETAILS;
-import static gparap.apps.social_media.utils.AppConstants.POST_ID;
-import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_STORAGE_ID;
-import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_URL;
-import static gparap.apps.social_media.utils.AppConstants.POST_TITLE;
-import static gparap.apps.social_media.utils.AppConstants.POST_USER_ID;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +28,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -47,7 +40,12 @@ import java.util.Objects;
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
+import gparap.apps.social_media.data.UserModel;
 import gparap.apps.social_media.utils.AppConstants;
+import gparap.apps.social_media.utils.Utils;
+
+import static gparap.apps.social_media.utils.AppConstants.*;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POSTS_COUNT;
 
 public class PostActivity extends AppCompatActivity {
     private PostModel post = null;
@@ -109,6 +107,9 @@ public class PostActivity extends AppCompatActivity {
                                                     StorageReference imageRef = userRef.child(post.getImageStorageId());
                                                     imageRef.delete();
                                                 }
+
+                                                //decrease the number of the posts this user has published
+                                                Utils.getInstance().updateUserPostCounter(currentUser.getUid(), false);
 
                                                 //close this activity and return to application posts
                                                 this.startActivity(new Intent(this, MainActivity.class));

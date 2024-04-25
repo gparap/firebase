@@ -15,25 +15,6 @@
  */
 package gparap.apps.social_media.posts;
 
-import static gparap.apps.social_media.utils.AppConstants.APP_BAR_TITLE_ADD_POST;
-import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_AUTHOR;
-import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_DESCRIPTION;
-import static gparap.apps.social_media.utils.AppConstants.CONTENT_VALUE_TITLE;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_DETAILS;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_ID;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_IMAGE_STORAGE_ID;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_IMAGE_URL;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_TITLE;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POST_USER_ID;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_POSTS;
-import static gparap.apps.social_media.utils.AppConstants.MIME_TYPE_IMAGE;
-import static gparap.apps.social_media.utils.AppConstants.PERMISSION_CAMERA;
-import static gparap.apps.social_media.utils.AppConstants.PERMISSION_WRITE_EXTERNAL_STORAGE;
-import static gparap.apps.social_media.utils.AppConstants.REQUEST_CODE_CAMERA_PERMISSION;
-import static gparap.apps.social_media.utils.AppConstants.REQUEST_CODE_CAPTURE_POST_IMAGE;
-import static gparap.apps.social_media.utils.AppConstants.REQUEST_CODE_GET_POST_IMAGE;
-
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -58,6 +39,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -72,6 +54,10 @@ import java.util.Objects;
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
+import gparap.apps.social_media.data.UserModel;
+import gparap.apps.social_media.utils.Utils;
+
+import static gparap.apps.social_media.utils.AppConstants.*;
 
 @SuppressWarnings("deprecation")
 public class AddPostActivity extends AppCompatActivity {
@@ -80,6 +66,7 @@ public class AddPostActivity extends AppCompatActivity {
     private Uri imageUri;
     private Boolean isUsingImageFromGallery = true;
     String lastPathSegment = null;  //the decoded last path segment of an image uri
+    FirebaseUser user;              //the current signed-in user of the application
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +128,7 @@ public class AddPostActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
 
             //get the current user
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            user = FirebaseAuth.getInstance().getCurrentUser();
 
             if (user != null) {
                 //create post
@@ -168,7 +155,7 @@ public class AddPostActivity extends AppCompatActivity {
                     StorageReference cloudRef = FirebaseStorage.getInstance().getReference();
 
                     //get the last path segment of the image URI
-                    // (BUG: getLastPathSegment() don't works as expected most of the times)
+                    // (BUG: getLastPathSegment() don't works as expected most of the time)
                     List<String> stringList = imageUri.getPathSegments();
                     lastPathSegment = stringList.get(stringList.size() - 1);
                     //fix lastPathSegment, if needed
@@ -298,6 +285,9 @@ public class AddPostActivity extends AppCompatActivity {
         } else {
             postsRef.child(DATABASE_FIELD_POST_IMAGE_STORAGE_ID).setValue(post.getImageStorageId());
         }
+
+        //increase the number of the posts this user has published
+        Utils.getInstance().updateUserPostCounter(user.getUid(), true);
     }
 
     //check is the post title and details are filled-in
