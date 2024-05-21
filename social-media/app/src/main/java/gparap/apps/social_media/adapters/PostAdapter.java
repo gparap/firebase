@@ -91,6 +91,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.postTitle.setText(postsList.get(position).getTitle());
         holder.postDetails.setText(postsList.get(position).getDetails());
 
+        //display user post interactions
+        holder.postFavorites.setText(String.valueOf(postsList.get(position).getFavorites()));
+        holder.postComments.setText(String.valueOf(postsList.get(position).getComments()));
+        holder.postLikes.setText(String.valueOf(postsList.get(position).getLikes()));
+        holder.postDislikes.setText(String.valueOf(postsList.get(position).getDislikes()));
+
         //get the FirebaseDatabase instance for the specified URL
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -130,6 +136,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         private final ImageView postImage;
         private final TextView postTitle, postDetails, postCreator;
+        private final TextView postFavorites, postComments, postLikes, postDislikes;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -137,6 +144,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             postTitle = itemView.findViewById(R.id.editTextAddPostTitle);
             postDetails = itemView.findViewById(R.id.editTextAddPostDetails);
             postCreator = itemView.findViewById(R.id.textViewPostCreator_thumbnail);
+            postFavorites = itemView.findViewById(R.id.post_interaction_favorites);
+            postComments = itemView.findViewById(R.id.post_interaction_comments);
+            postLikes = itemView.findViewById(R.id.post_interaction_likes);
+            postDislikes = itemView.findViewById(R.id.post_interaction_dislikes);
         }
     }
 }

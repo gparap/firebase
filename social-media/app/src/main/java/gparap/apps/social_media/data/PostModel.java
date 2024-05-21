@@ -15,11 +15,20 @@
  */
 package gparap.apps.social_media.data;
 
+import com.google.firebase.database.PropertyName;
+
 /**
  * This is a model class for a user post.
  */
 public class PostModel {
     private String id, userId, title, details, imageUrl, imageStorageId;
+
+    //used for user post interactions
+    private int favorites, comments;
+    @PropertyName("thumbsUp")
+    private int likes;
+    @PropertyName("thumbsDown")
+    private int dislikes;
 
     public String getId() {
         return id;
@@ -70,6 +79,42 @@ public class PostModel {
         this.imageStorageId = imageStorageId;
     }
 
+    public int getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(int favorites) {
+        this.favorites = favorites;
+    }
+
+    public int getComments() {
+        return comments;
+    }
+
+    public void setComments(int comments) {
+        this.comments = comments;
+    }
+
+    @PropertyName("thumbsUp")
+    public int getLikes() {
+        return likes;
+    }
+
+    @PropertyName("thumbsUp")
+    public void setLikes(int thumbsUp) {
+        this.likes = thumbsUp;
+    }
+
+    @PropertyName("thumbsDown")
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    @PropertyName("thumbsDown")
+    public void setDislikes(int thumbsDown) {
+        this.dislikes = thumbsDown;
+    }
+
     /** @noinspection unused !!! required for Firebase*/
     private PostModel() {
     }
@@ -81,6 +126,10 @@ public class PostModel {
         details = builder.details;
         imageUrl = builder.imageUrl;
         imageStorageId = builder.imageStorageId;
+        favorites = builder.favorites;
+        comments = builder.comments;
+        likes = builder.likes;
+        dislikes = builder.dislikes;
     }
 
     /**
@@ -88,6 +137,7 @@ public class PostModel {
      */
     public static class Builder {
         private String id, userId, title, details, imageUrl, imageStorageId;
+        private int favorites, comments, likes, dislikes;
 
         public Builder setId(String id) {
             this.id = id;
@@ -116,6 +166,26 @@ public class PostModel {
 
         public Builder setImageStorageId(String imageStorageId) {
             this.imageStorageId = imageStorageId;
+            return this;
+        }
+
+        public Builder setFavorites(int favorites) {
+            this.favorites = favorites;
+            return this;
+        }
+
+        public Builder setComments(int comments) {
+            this.comments = comments;
+            return this;
+        }
+
+        public Builder setLikes(int likes) {
+            this.likes = likes;
+            return this;
+        }
+
+        public Builder setDislikes(int dislikes) {
+            this.dislikes = dislikes;
             return this;
         }
 
