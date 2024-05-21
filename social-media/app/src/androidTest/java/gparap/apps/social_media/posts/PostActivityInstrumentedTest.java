@@ -17,6 +17,7 @@ package gparap.apps.social_media.posts;
 
 import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.AmbiguousViewMatcherException;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
@@ -96,6 +98,18 @@ public class PostActivityInstrumentedTest {
         onView(withId(R.id.textViewPostCreator)).check(matches(isDisplayed()));
         onView(withId(R.id.imageButton_deletePost)).check(matches(isDisplayed()));
         onView(withId(R.id.imageButton_editPost)).check(matches(isDisplayed()));
+
+        //go back, as we have opened a post //TODO: delete added test post
+        pressBack();
+        try {
+            onView(withId(R.id.layout_post_interactions)).check(matches(isDisplayed()));
+        } catch (Exception exception) {
+            if (exception instanceof AmbiguousViewMatcherException) {
+                assert true;    //it's ok, there is a post interaction layout for every post
+            } else {
+                assert false;
+            }
+        }
     }
 
     @Test
@@ -113,6 +127,7 @@ public class PostActivityInstrumentedTest {
         try {
             onView(withText(postTitle)).check(matches(not(isDisplayed())));
         } catch (androidx.test.espresso.NoMatchingViewException exception) {
+            //noinspection RedundantIfStatement
             if (exception.getMessage() != null && exception.getMessage().contains(postTitle)) {
                 assert true;
             }

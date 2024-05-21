@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_post_interactions"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!--Number of times this post is in someone's favorites posts-->
+    <TextView
+        android:id="@+id/post_interaction_favorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/zero"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:drawableLeftCompat="@drawable/ic_favorite_24" />
+
+    <!--Number of like for this post-->
+    <TextView
+        android:id="@+id/post_interaction_likes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/zero"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:drawableLeftCompat="@drawable/ic_thumb_up_24" />
+
+    <!--Number of dislikes for this post-->
+    <TextView
+        android:id="@+id/post_interaction_dislikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/zero"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:drawableLeftCompat="@drawable/ic_thumb_down_24" />
+
+    <!--Number of comments for this post-->
+    <TextView
+        android:id="@+id/post_interaction_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/zero"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:drawableLeftCompat="@drawable/ic_comment_24" />
+
+</LinearLayout>

@@ -46,10 +46,10 @@
             android:id="@+id/editTextAddPostDetails"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxLines="5"
             android:autofillHints="false"
             android:background="@null"
             android:gravity="top|start"
+            android:maxLines="5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,22 +59,32 @@
 
         <!-- Post creator -->
         <TextView
-            android:textStyle="italic"
-            android:text="@string/text_posted_by"
-            android:layout_marginTop="8dp"
             android:id="@+id/textViewPostCreator_thumbnail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:autofillHints="false"
             android:background="@null"
             android:ems="10"
             android:gravity="start|center"
+            android:text="@string/text_posted_by"
+            android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextAddPostDetails"
             tools:text="Post Creator" />
 
+        <!--Post interactions (info)-->
+        <include
+            layout="@layout/layout_post_interactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewPostCreator_thumbnail"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
