@@ -15,11 +15,21 @@
  */
 package gparap.apps.social_media.posts;
 
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE;
+import static gparap.apps.social_media.utils.AppConstants.DATABASE_REFERENCE_POSTS;
+import static gparap.apps.social_media.utils.AppConstants.POST_DETAILS;
+import static gparap.apps.social_media.utils.AppConstants.POST_ID;
+import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_STORAGE_ID;
+import static gparap.apps.social_media.utils.AppConstants.POST_IMAGE_URL;
+import static gparap.apps.social_media.utils.AppConstants.POST_TITLE;
+import static gparap.apps.social_media.utils.AppConstants.POST_USER_ID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +38,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,12 +48,8 @@ import java.util.Objects;
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
-import gparap.apps.social_media.data.UserModel;
 import gparap.apps.social_media.utils.AppConstants;
 import gparap.apps.social_media.utils.Utils;
-
-import static gparap.apps.social_media.utils.AppConstants.*;
-import static gparap.apps.social_media.utils.AppConstants.DATABASE_FIELD_POSTS_COUNT;
 
 public class PostActivity extends AppCompatActivity {
     private PostModel post = null;
@@ -78,7 +82,7 @@ public class PostActivity extends AppCompatActivity {
         );
 
         //display post image TODO: fixed <<if (!post.getImageUrl().isEmpty())>>
-        if (!post.getImageUrl().isEmpty()){
+        if (!post.getImageUrl().isEmpty()) {
             Picasso.get().load(post.getImageUrl()).into(((ImageView) findViewById(R.id.imageViewPost)));
         }
 
@@ -137,6 +141,36 @@ public class PostActivity extends AppCompatActivity {
                 intent.putExtra(POST_IMAGE_STORAGE_ID, post.getImageStorageId());
                 startActivity(intent);
             });
+
         }
+
+        //if the user that views the post is not its creator, show & handle the interaction buttons
+        else {
+            //show the interaction layout
+            LinearLayout layoutPostInteractions = findViewById(R.id.layout_post_interactions);
+            layoutPostInteractions.setVisibility(View.VISIBLE);
+
+            //handle the favorites interaction
+            TextView favorites = findViewById(R.id.post_interaction_favorites);
+            favorites.setOnClickListener(view -> {
+                System.out.println("Clicked: post_interaction_favorites");
+            });
+
+            //handle the likes interaction
+            TextView likes = findViewById(R.id.post_interaction_likes);
+            likes.setOnClickListener(view -> {
+                System.out.println("Clicked: post_interaction_likes");
+            });
+
+            //handle the dislikes interaction
+            TextView dislikes = findViewById(R.id.post_interaction_dislikes);
+            dislikes.setOnClickListener(view -> {
+                System.out.println("Clicked: post_interaction_dislikes");
+            });
+
+            //handle the comments interaction
+            //TODO ("Not implemented yet.)
+        }
+
     }
 }

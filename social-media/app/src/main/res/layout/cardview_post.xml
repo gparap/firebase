@@ -71,6 +71,20 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewPostDetails"
             tools:text="Post Creator" />
 
+        <!-- Post interactions (except creator)-->
+        <include
+            android:id="@+id/layout_post_interactions"
+            layout="@layout/layout_post_interactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:layout_constraintEnd_toStartOf="@+id/imageButton_editPost"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewPostCreator"
+            tools:visibility="visible" />
+
         <!--Delete post (creator only)-->
         <ImageButton
             android:id="@+id/imageButton_deletePost"

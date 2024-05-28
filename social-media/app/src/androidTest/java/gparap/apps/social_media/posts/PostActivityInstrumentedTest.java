@@ -92,7 +92,7 @@ public class PostActivityInstrumentedTest {
     }
 
     @Test
-    public void areVisible_allWidgetsExceptImageView() {
+    public void areVisible_allPostWidgetsExceptImageView() {
         onView(withId(R.id.textViewPostTitle)).check(matches(isDisplayed()));
         onView(withId(R.id.textViewPostDetails)).check(matches(isDisplayed()));
         onView(withId(R.id.textViewPostCreator)).check(matches(isDisplayed()));
@@ -110,6 +110,50 @@ public class PostActivityInstrumentedTest {
                 assert false;
             }
         }
+    }
+
+    @Test
+    public void areNotVisible_allInteractionWidgets_userIsTheCreator() {
+        onView(withId(R.id.post_interaction_favorites)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.post_interaction_likes)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.post_interaction_dislikes)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.post_interaction_comments)).check(matches(not(isDisplayed())));
+
+        //go back, as we have opened a post //TODO: delete added test post
+        pressBack();
+    }
+
+    @Test
+    public void areNotVisible_allInteractionWidgets_userIsNotCreator() throws InterruptedException {
+        //log out and sign in as a different test user
+        //use test user: user1@dot.com with pass: 123123
+        FirebaseAuth.getInstance().signOut();
+        loginActivityActivityScenario = ActivityScenario.launch(LoginActivity.class);
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText("user1@dot.com"));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testUser_password));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonLogin)).perform(click());
+        Thread.sleep(1667); //wait for firebase..
+
+        //launch the main scenario and open the most recent post
+        mainActivityScenario = ActivityScenario.launch(MainActivity.class);
+        mainActivityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_posts);
+            count = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
+        });
+        Thread.sleep(4667); //!!!do NOT remove this
+        onView(withId(R.id.recycler_view_posts)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(count - 1, click()));
+
+        //test here
+        onView(withId(R.id.post_interaction_favorites)).check(matches(isDisplayed()));
+        onView(withId(R.id.post_interaction_likes)).check(matches(isDisplayed()));
+        onView(withId(R.id.post_interaction_dislikes)).check(matches(isDisplayed()));
+        onView(withId(R.id.post_interaction_comments)).check(matches(isDisplayed()));
+
+        //go back, as we have opened a post //TODO: delete added test post
+        pressBack();
     }
 
     @Test
