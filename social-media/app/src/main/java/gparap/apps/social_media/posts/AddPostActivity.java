@@ -285,6 +285,10 @@ public class AddPostActivity extends AppCompatActivity {
         } else {
             postsRef.child(DATABASE_FIELD_POST_IMAGE_STORAGE_ID).setValue(post.getImageStorageId());
         }
+        postsRef.child(DATABASE_FIELD_POST_FAVORITES_COUNT).setValue(0); //no favorites yet
+        postsRef.child(DATABASE_FIELD_POST_LIKES_COUNT).setValue(0);     //no likes yet
+        postsRef.child(DATABASE_FIELD_POST_DISLIKES_COUNT).setValue(0);  //no dislikes yet
+        postsRef.child(DATABASE_FIELD_POST_COMMENTS_COUNT).setValue(0);  //no comments yet
 
         //increase the number of the posts this user has published
         Utils.getInstance().updateUserPostCounter(user.getUid(), true);

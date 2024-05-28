@@ -18,6 +18,8 @@ package gparap.apps.social_media.utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.data.UserModel;
 
 import static gparap.apps.social_media.utils.AppConstants.*;
@@ -60,6 +62,49 @@ public class Utils {
                     posts -= 1;
                 }
                 userRef.child(DATABASE_FIELD_POSTS_COUNT).setValue(posts);
+            }
+        });
+    }
+
+    /**
+     * Updates the number of times the post is specifically marked by a user interaction.
+     *
+     * @param postId            The current post the is been viewed by a user of the application.
+     * @param interactionType   A specific interaction like add to favorites, like, dislike, etc.
+     */
+    public void updatePostInteractionCounter(String postId, String interactionType) {
+        //get the FirebaseDatabase instance for the specified URL
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+        //get the DatabaseReference for the specific post
+        DatabaseReference postRef = firebaseDatabase.getReference(DATABASE_REFERENCE).child(DATABASE_REFERENCE_POSTS).child(postId);
+
+        //update the interaction counter of the post
+        postRef.get().addOnCompleteListener(task -> {
+            DataSnapshot postSnapshot = task.getResult();
+            PostModel post = postSnapshot.getValue(PostModel.class);
+            if (post != null) {
+                int interactions;
+                switch (interactionType) {
+                    case "addToFavorite":
+                        interactions = post.getFavorites();
+                        interactions += 1;
+                        postRef.child(DATABASE_FIELD_POST_FAVORITES_COUNT).setValue(interactions);
+                        break;
+                    case "like":
+                        interactions = post.getLikes();
+                        interactions += 1;
+                        postRef.child(DATABASE_FIELD_POST_LIKES_COUNT).setValue(interactions);
+                        break;
+                    case "dislike":
+                        interactions = post.getDislikes();
+                        interactions += 1;
+                        postRef.child(DATABASE_FIELD_POST_DISLIKES_COUNT).setValue(interactions);
+                        break;
+                    case "comment":
+                        //TODO (Not implemented yet)
+                        break;
+                }
             }
         });
     }

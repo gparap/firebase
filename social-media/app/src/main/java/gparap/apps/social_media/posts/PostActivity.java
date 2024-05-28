@@ -144,7 +144,7 @@ public class PostActivity extends AppCompatActivity {
 
         }
 
-        //if the user that views the post is not its creator, show & handle the interaction buttons
+        //if the user that views the post is not its creator, show & handle the interactions
         else {
             //show the interaction layout
             LinearLayout layoutPostInteractions = findViewById(R.id.layout_post_interactions);
@@ -152,21 +152,21 @@ public class PostActivity extends AppCompatActivity {
 
             //handle the favorites interaction
             TextView favorites = findViewById(R.id.post_interaction_favorites);
-            favorites.setOnClickListener(view -> {
-                System.out.println("Clicked: post_interaction_favorites");
-            });
+            favorites.setOnClickListener(view ->
+                    Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite")
+            );
 
             //handle the likes interaction
             TextView likes = findViewById(R.id.post_interaction_likes);
-            likes.setOnClickListener(view -> {
-                System.out.println("Clicked: post_interaction_likes");
-            });
+            likes.setOnClickListener(view ->
+                    Utils.getInstance().updatePostInteractionCounter(post.getId(), "like")
+            );
 
             //handle the dislikes interaction
             TextView dislikes = findViewById(R.id.post_interaction_dislikes);
-            dislikes.setOnClickListener(view -> {
-                System.out.println("Clicked: post_interaction_dislikes");
-            });
+            dislikes.setOnClickListener(view ->
+                    Utils.getInstance().updatePostInteractionCounter(post.getId(), "dislike")
+            );
 
             //handle the comments interaction
             //TODO ("Not implemented yet.)
