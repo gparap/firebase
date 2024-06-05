@@ -49,6 +49,7 @@ import java.util.Objects;
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
+import gparap.apps.social_media.data.UserPostFavoriteModel;
 import gparap.apps.social_media.data.UserPostLikeModel;
 import gparap.apps.social_media.utils.AppConstants;
 import gparap.apps.social_media.utils.Utils;
@@ -152,7 +153,7 @@ public class PostActivity extends AppCompatActivity {
             LinearLayout layoutPostInteractions = findViewById(R.id.layout_post_interactions);
             layoutPostInteractions.setVisibility(View.VISIBLE);
 
-            //handle the favorites interaction
+            //handle the favorites interaction //TODO: Refactor
             TextView favorites = findViewById(R.id.post_interaction_favorites);
             favorites.setOnClickListener(view -> {
                 Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite");
@@ -171,8 +172,8 @@ public class PostActivity extends AppCompatActivity {
 
                 //update UserPostFavorite interaction
                 assert currentUser != null;
-                UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
-                dbRefInteraction.setValue(userLike);
+                UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
+                dbRefInteraction.setValue(userFavorite);
 
                 //TODO: show increased interaction counter
                 //DEBUG...just for testing now
@@ -181,11 +182,35 @@ public class PostActivity extends AppCompatActivity {
                 favorites.setText(String.valueOf(tempFavInt));
             });
 
-            //handle the likes interaction
+            //handle the likes interaction //TODO: Refactor
             TextView likes = findViewById(R.id.post_interaction_likes);
-            likes.setOnClickListener(view ->
-                    Utils.getInstance().updatePostInteractionCounter(post.getId(), "like")
-            );
+            likes.setOnClickListener(view -> {
+                Utils.getInstance().updatePostInteractionCounter(post.getId(), "like");
+
+                //TODO: check for existing interaction
+
+                //get the FirebaseDatabase instance for the specified URL
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                //get the DatabaseReference for the specific user-post interaction
+                DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_thumbsUp");
+
+                //auto-generate id
+                DatabaseReference dbRefInteraction = dbRef.push();
+                String id = dbRefInteraction.getKey();
+
+                //update UserPostFavorite interaction
+                assert currentUser != null;
+                UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
+                dbRefInteraction.setValue(userLike);
+
+                //TODO: show increased interaction counter
+                //DEBUG...just for testing now
+                int tempLikeInt = Integer.parseInt(likes.getText().toString());
+                tempLikeInt++;
+                likes.setText(String.valueOf(tempLikeInt));
+
+            });
 
             //handle the dislikes interaction
             TextView dislikes = findViewById(R.id.post_interaction_dislikes);

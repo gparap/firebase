@@ -164,7 +164,7 @@ public class PostActivityInstrumentedTest {
     }
 
     @Test
-    public void userPostInteraction_addToFavorites_updateFavoritesCounterDisplay() throws InterruptedException {
+    public void userPostInteraction_addToFavorites_updateFavoritesCounterDisplay() throws InterruptedException { //TODO: refactor
         //sign-out existing user
         FirebaseAuth.getInstance().signOut();
 
@@ -193,6 +193,41 @@ public class PostActivityInstrumentedTest {
 
         //test here
         onView(withId(R.id.post_interaction_favorites)).check(matches(withText("1")));
+
+        //TODO: delete post
+    }
+
+
+    @Test
+    public void userPostInteraction_likePost_updateLikesCounterDisplay() throws InterruptedException { //TODO: refactor
+        //sign-out existing user
+        FirebaseAuth.getInstance().signOut();
+
+        //sign-in with a different test user
+        loginActivityActivityScenario = ActivityScenario.launch(LoginActivity.class);
+        onView(withId(R.id.editTextLoginEmail)).perform(typeText("user1@dot.com"));
+        closeSoftKeyboard();
+        onView(withId(R.id.editTextLoginPassword)).perform(typeText(testUser_password));
+        closeSoftKeyboard();
+        onView(withId(R.id.buttonLogin)).perform(click());
+        Thread.sleep(1667); //wait for firebase..
+
+        //launch the main scenario and open the most recent post
+        mainActivityScenario = ActivityScenario.launch(MainActivity.class);
+        mainActivityScenario.onActivity(activity -> {
+            RecyclerView recyclerView = activity.findViewById(R.id.recycler_view_posts);
+            count = Objects.requireNonNull(recyclerView.getAdapter()).getItemCount();
+        });
+        Thread.sleep(4667); //!!!do NOT remove this
+        onView(withId(R.id.recycler_view_posts)).perform(
+                RecyclerViewActions.actionOnItemAtPosition(count - 1, click()));
+
+        //perform the "like post" interaction
+        onView(withId(R.id.post_interaction_likes)).perform(click());
+        Thread.sleep(1667); //wait for firebase..
+
+        //test here
+        onView(withId(R.id.post_interaction_likes)).check(matches(withText("1")));
 
         //TODO: delete post
     }
