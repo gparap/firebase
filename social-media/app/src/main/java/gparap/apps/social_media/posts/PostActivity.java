@@ -38,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -48,6 +49,7 @@ import java.util.Objects;
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
+import gparap.apps.social_media.data.UserPostLikeModel;
 import gparap.apps.social_media.utils.AppConstants;
 import gparap.apps.social_media.utils.Utils;
 
@@ -152,9 +154,32 @@ public class PostActivity extends AppCompatActivity {
 
             //handle the favorites interaction
             TextView favorites = findViewById(R.id.post_interaction_favorites);
-            favorites.setOnClickListener(view ->
-                    Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite")
-            );
+            favorites.setOnClickListener(view -> {
+                Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite");
+
+                //TODO: check for existing interaction
+
+                //get the FirebaseDatabase instance for the specified URL
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                //get the DatabaseReference for the specific user-post interaction
+                DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_favorites");
+
+                //auto-generate id
+                DatabaseReference dbRefInteraction = dbRef.push();
+                String id = dbRefInteraction.getKey();
+
+                //update UserPostFavorite interaction
+                assert currentUser != null;
+                UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
+                dbRefInteraction.setValue(userLike);
+
+                //TODO: show increased interaction counter
+                //DEBUG...just for testing now
+                int tempFavInt = Integer.parseInt(favorites.getText().toString());
+                tempFavInt++;
+                favorites.setText(String.valueOf(tempFavInt));
+            });
 
             //handle the likes interaction
             TextView likes = findViewById(R.id.post_interaction_likes);
