@@ -51,6 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
+import gparap.apps.social_media.data.UserPostDislikeModel;
 import gparap.apps.social_media.data.UserPostFavoriteModel;
 import gparap.apps.social_media.data.UserPostLikeModel;
 import gparap.apps.social_media.utils.AppConstants;
@@ -205,7 +206,7 @@ public class PostActivity extends AppCompatActivity {
                 });
             });
 
-            //handle the likes interaction //TODO: Refactor
+            //handle the likes interaction //TODO: Refactor, Revoke dislike
             TextView likes = findViewById(R.id.post_interaction_likes);
             likes.setOnClickListener(view -> {
                 //get the FirebaseDatabase instance for the specified URL
@@ -255,11 +256,55 @@ public class PostActivity extends AppCompatActivity {
                 });
             });
 
-            //handle the dislikes interaction
+            //handle the dislikes interaction //TODO: Refactor, Revoke like
             TextView dislikes = findViewById(R.id.post_interaction_dislikes);
-            dislikes.setOnClickListener(view ->
-                    Utils.getInstance().updatePostInteractionCounter(post.getId(), "dislike")
-            );
+            dislikes.setOnClickListener(view -> {
+                //get the FirebaseDatabase instance for the specified URL
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                //get the DatabaseReference for the specific user-post interaction
+                DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_thumbsDown");
+
+                //find the current user interactions (dislikes)
+                AtomicBoolean isAlreadyDisliked = new AtomicBoolean(false);
+                dbRef.get().addOnCompleteListener(taskDislikes -> {
+                    isAlreadyDisliked.set(false);
+                    for (DataSnapshot dataSnapshot : taskDislikes.getResult().getChildren()) {
+                        String userId = dataSnapshot.child("userId").getValue(String.class);
+                        String postId = dataSnapshot.child("postId").getValue(String.class);
+                        assert currentUser != null;
+                        if (Objects.equals(userId, currentUser.getUid())) {
+                            //check if the user has already disliked this post
+                            assert postId != null;
+                            if (postId.equals(post.getId())) {
+                                isAlreadyDisliked.set(true);
+                                break;
+                            }
+                        }
+                    }
+
+                    //add post to user dislikes
+                    if (!isAlreadyDisliked.get()) {
+                        //increase the post counter
+                        Utils.getInstance().updatePostInteractionCounter(post.getId(), "dislike");
+
+                        //auto-generate id
+                        DatabaseReference dbRefInteraction = dbRef.push();
+                        String id = dbRefInteraction.getKey();
+
+                        //update UserPostDislike interaction
+                        assert currentUser != null;
+                        UserPostDislikeModel userDislike = new UserPostDislikeModel(id, currentUser.getUid(), post.getId());
+                        dbRefInteraction.setValue(userDislike);
+
+                        //TODO: show increased interaction counter
+                        //DEBUG...just for testing now
+                        int tempLikeInt = Integer.parseInt(dislikes.getText().toString());
+                        tempLikeInt++;
+                        dislikes.setText(String.valueOf(tempLikeInt));
+                    }
+                });
+            });
 
             //handle the comments interaction
             //TODO ("Not implemented yet.)
