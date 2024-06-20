@@ -38,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -45,6 +46,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
@@ -156,60 +158,101 @@ public class PostActivity extends AppCompatActivity {
             //handle the favorites interaction //TODO: Refactor
             TextView favorites = findViewById(R.id.post_interaction_favorites);
             favorites.setOnClickListener(view -> {
-                Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite");
-
-                //TODO: check for existing interaction
-
                 //get the FirebaseDatabase instance for the specified URL
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
 
                 //get the DatabaseReference for the specific user-post interaction
                 DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_favorites");
 
-                //auto-generate id
-                DatabaseReference dbRefInteraction = dbRef.push();
-                String id = dbRefInteraction.getKey();
+                //find the current user interactions (favorites)
+                AtomicBoolean isAlreadyFavorite = new AtomicBoolean(false);
+                dbRef.get().addOnCompleteListener(taskFavorites -> {
+                    isAlreadyFavorite.set(false);
+                    for (DataSnapshot dataSnapshot : taskFavorites.getResult().getChildren()) {
+                        String userId = dataSnapshot.child("userId").getValue(String.class);
+                        String postId = dataSnapshot.child("postId").getValue(String.class);
+                        assert currentUser != null;
+                        if (Objects.equals(userId, currentUser.getUid())) {
+                            //check if the user has already added this post to favorites
+                            assert postId != null;
+                            if (postId.equals(post.getId())) {
+                                isAlreadyFavorite.set(true);
+                                break;
+                            }
+                        }
+                    }
 
-                //update UserPostFavorite interaction
-                assert currentUser != null;
-                UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
-                dbRefInteraction.setValue(userFavorite);
+                    //add post to user favorites
+                    if (!isAlreadyFavorite.get()) {
+                        //increase the post counter
+                        Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite");
 
-                //TODO: show increased interaction counter
-                //DEBUG...just for testing now
-                int tempFavInt = Integer.parseInt(favorites.getText().toString());
-                tempFavInt++;
-                favorites.setText(String.valueOf(tempFavInt));
+                        //auto-generate id
+                        DatabaseReference dbRefInteraction = dbRef.push();
+                        String id = dbRefInteraction.getKey();
+
+                        //update UserPostFavorite interaction
+                        assert currentUser != null;
+                        UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
+                        dbRefInteraction.setValue(userFavorite);
+
+                        //TODO: show increased interaction counter
+                        //DEBUG...just for testing now
+                        int tempFavInt = Integer.parseInt(favorites.getText().toString());
+                        tempFavInt++;
+                        favorites.setText(String.valueOf(tempFavInt));
+                    }
+                });
             });
 
             //handle the likes interaction //TODO: Refactor
             TextView likes = findViewById(R.id.post_interaction_likes);
             likes.setOnClickListener(view -> {
-                Utils.getInstance().updatePostInteractionCounter(post.getId(), "like");
-
-                //TODO: check for existing interaction
-
                 //get the FirebaseDatabase instance for the specified URL
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
 
                 //get the DatabaseReference for the specific user-post interaction
                 DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_thumbsUp");
 
-                //auto-generate id
-                DatabaseReference dbRefInteraction = dbRef.push();
-                String id = dbRefInteraction.getKey();
+                //find the current user interactions (likes)
+                AtomicBoolean isAlreadyLiked = new AtomicBoolean(false);
+                dbRef.get().addOnCompleteListener(taskLikes -> {
+                    isAlreadyLiked.set(false);
+                    for (DataSnapshot dataSnapshot : taskLikes.getResult().getChildren()) {
+                        String userId = dataSnapshot.child("userId").getValue(String.class);
+                        String postId = dataSnapshot.child("postId").getValue(String.class);
+                        assert currentUser != null;
+                        if (Objects.equals(userId, currentUser.getUid())) {
+                            //check if the user has already liked this post
+                            assert postId != null;
+                            if (postId.equals(post.getId())) {
+                                isAlreadyLiked.set(true);
+                                break;
+                            }
+                        }
+                    }
 
-                //update UserPostFavorite interaction
-                assert currentUser != null;
-                UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
-                dbRefInteraction.setValue(userLike);
+                    //add post to user likes
+                    if (!isAlreadyLiked.get()) {
+                        //increase the post counter
+                        Utils.getInstance().updatePostInteractionCounter(post.getId(), "like");
 
-                //TODO: show increased interaction counter
-                //DEBUG...just for testing now
-                int tempLikeInt = Integer.parseInt(likes.getText().toString());
-                tempLikeInt++;
-                likes.setText(String.valueOf(tempLikeInt));
+                        //auto-generate id
+                        DatabaseReference dbRefInteraction = dbRef.push();
+                        String id = dbRefInteraction.getKey();
 
+                        //update UserPostLike interaction
+                        assert currentUser != null;
+                        UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
+                        dbRefInteraction.setValue(userLike);
+
+                        //TODO: show increased interaction counter
+                        //DEBUG...just for testing now
+                        int tempLikeInt = Integer.parseInt(likes.getText().toString());
+                        tempLikeInt++;
+                        likes.setText(String.valueOf(tempLikeInt));
+                    }
+                });
             });
 
             //handle the dislikes interaction
