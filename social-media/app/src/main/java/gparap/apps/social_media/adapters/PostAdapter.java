@@ -114,6 +114,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         //open the full post in another activity
                         holder.itemView.setOnClickListener(v->{
                             Intent intent = new Intent(context, PostActivity.class);
+
+                            //add post extras
                             intent.putExtra(POST_ID, postsList.get(position).getId());
                             intent.putExtra(POST_USER_ID, postsList.get(position).getUserId());
                             intent.putExtra(POST_USER_NAME, user.getUsername());
@@ -121,6 +123,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                             intent.putExtra(POST_DETAILS, postsList.get(position).getDetails());
                             intent.putExtra(POST_IMAGE_URL, postsList.get(position).getImageUrl());
                             intent.putExtra(POST_IMAGE_STORAGE_ID, postsList.get(position).getImageStorageId());
+
+                            //add post interaction extras TODO: Refactor
+                            intent.putExtra("post_interaction_favorites", holder.postFavorites.getText().toString());
+                            intent.putExtra("post_interaction_comments", holder.postComments.getText().toString());
+                            intent.putExtra("post_interaction_likes", holder.postLikes.getText().toString());
+                            intent.putExtra("post_interaction_dislikes", holder.postDislikes.getText().toString());
+
                             context.startActivity(intent);
                         });
                     }

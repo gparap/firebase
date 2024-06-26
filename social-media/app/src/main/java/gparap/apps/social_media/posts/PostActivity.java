@@ -50,6 +50,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
+import gparap.apps.social_media.data.PostInteractionModel;
 import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.data.UserPostDislikeModel;
 import gparap.apps.social_media.data.UserPostFavoriteModel;
@@ -59,6 +60,7 @@ import gparap.apps.social_media.utils.Utils;
 
 public class PostActivity extends AppCompatActivity {
     private PostModel post = null;
+    private PostInteractionModel postInteraction = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class PostActivity extends AppCompatActivity {
         //get post extras from intent
         String username = "";
         if (getIntent() != null) {
+            //get post data
             post = new PostModel.Builder()
                     .setId(getIntent().getStringExtra(AppConstants.POST_ID))
                     .setUserId(getIntent().getStringExtra(AppConstants.POST_USER_ID))
@@ -76,6 +79,16 @@ public class PostActivity extends AppCompatActivity {
                     .setImageUrl(getIntent().getStringExtra(AppConstants.POST_IMAGE_URL))
                     .setImageStorageId(getIntent().getStringExtra(AppConstants.POST_IMAGE_STORAGE_ID))
                     .build();
+
+            //get post interactions data
+            postInteraction = new PostInteractionModel(
+                    Integer.parseInt(getIntent().getStringExtra("post_interaction_favorites")),
+                    Integer.parseInt(getIntent().getStringExtra("post_interaction_likes")),
+                    Integer.parseInt(getIntent().getStringExtra("post_interaction_dislikes")),
+                    Integer.parseInt(getIntent().getStringExtra("post_interaction_comments"))
+            );
+
+            //get username
             username = getIntent().getStringExtra(AppConstants.POST_USER_NAME);
         }
 
@@ -158,6 +171,7 @@ public class PostActivity extends AppCompatActivity {
 
             //handle the favorites interaction //TODO: Refactor
             TextView favorites = findViewById(R.id.post_interaction_favorites);
+            favorites.setText(String.valueOf(postInteraction.getFavorites()));
             favorites.setOnClickListener(view -> {
                 //get the FirebaseDatabase instance for the specified URL
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -208,6 +222,7 @@ public class PostActivity extends AppCompatActivity {
 
             //handle the likes interaction //TODO: Refactor, Revoke dislike
             TextView likes = findViewById(R.id.post_interaction_likes);
+            likes.setText(String.valueOf(postInteraction.getLikes()));
             likes.setOnClickListener(view -> {
                 //get the FirebaseDatabase instance for the specified URL
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -258,6 +273,7 @@ public class PostActivity extends AppCompatActivity {
 
             //handle the dislikes interaction //TODO: Refactor, Revoke like
             TextView dislikes = findViewById(R.id.post_interaction_dislikes);
+            dislikes.setText(String.valueOf(postInteraction.getDislikes()));
             dislikes.setOnClickListener(view -> {
                 //get the FirebaseDatabase instance for the specified URL
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
