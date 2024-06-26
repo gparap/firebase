@@ -55,6 +55,7 @@ import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.data.UserPostDislikeModel;
 import gparap.apps.social_media.data.UserPostFavoriteModel;
 import gparap.apps.social_media.data.UserPostLikeModel;
+import gparap.apps.social_media.interfaces.UserPostInteractionCallback;
 import gparap.apps.social_media.utils.AppConstants;
 import gparap.apps.social_media.utils.Utils;
 
@@ -169,55 +170,56 @@ public class PostActivity extends AppCompatActivity {
             LinearLayout layoutPostInteractions = findViewById(R.id.layout_post_interactions);
             layoutPostInteractions.setVisibility(View.VISIBLE);
 
-            //handle the favorites interaction //TODO: Refactor
+            //get the favorites view
             TextView favorites = findViewById(R.id.post_interaction_favorites);
             favorites.setText(String.valueOf(postInteraction.getFavorites()));
-            favorites.setOnClickListener(view -> {
-                //get the FirebaseDatabase instance for the specified URL
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-                //get the DatabaseReference for the specific user-post interaction
-                DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_favorites");
+            //handle the favorites interaction //TODO: Refactor
+            checkForExistingInteraction(currentUser, "users_posts_favorites", isInteractionExisting -> {
+                //the user has added this post to its favorites
+                if (isInteractionExisting) {
+                    //update the view color to active
+                    favorites.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24_active, 0, 0, 0);
+                }
 
-                //find the current user interactions (favorites)
-                AtomicBoolean isAlreadyFavorite = new AtomicBoolean(false);
-                dbRef.get().addOnCompleteListener(taskFavorites -> {
-                    isAlreadyFavorite.set(false);
-                    for (DataSnapshot dataSnapshot : taskFavorites.getResult().getChildren()) {
-                        String userId = dataSnapshot.child("userId").getValue(String.class);
-                        String postId = dataSnapshot.child("postId").getValue(String.class);
-                        assert currentUser != null;
-                        if (Objects.equals(userId, currentUser.getUid())) {
-                            //check if the user has already added this post to favorites
-                            assert postId != null;
-                            if (postId.equals(post.getId())) {
-                                isAlreadyFavorite.set(true);
-                                break;
-                            }
+                //the user has not added this post to its favorites (yet?)
+                else {
+                    //onClickListener flag for adding or removing a post to favorites
+                    AtomicBoolean isAlreadyAddedToFavorites = new AtomicBoolean(false);
+
+                    //add or remove post from user favorites
+                    favorites.setOnClickListener(view -> {
+                        //the post is not in user favorites, so add it
+                        if (!isAlreadyAddedToFavorites.get()) {
+                            //get the DatabaseReference for the specific user-post interaction
+                            DatabaseReference dbRef = getDatabaseReferenceByPath("users_posts_favorites");
+
+                            //increase the post counter
+                            Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite");
+
+                            //auto-generate id
+                            DatabaseReference dbRefInteraction = dbRef.push();
+                            String id = dbRefInteraction.getKey();
+
+                            //update UserPostFavorite interaction
+                            assert currentUser != null;
+                            UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
+                            dbRefInteraction.setValue(userFavorite);
+
+                            //increase the favorites counter
+                            postInteraction.setFavorites(postInteraction.getFavorites() + 1);
+                            favorites.setText(String.valueOf(postInteraction.getFavorites()));
+
+                            //update the view color to active
+                            favorites.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24_active, 0, 0, 0);
+
+                            //update onClickListener flag
+                            isAlreadyAddedToFavorites.set(true);
                         }
-                    }
 
-                    //add post to user favorites
-                    if (!isAlreadyFavorite.get()) {
-                        //increase the post counter
-                        Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite");
-
-                        //auto-generate id
-                        DatabaseReference dbRefInteraction = dbRef.push();
-                        String id = dbRefInteraction.getKey();
-
-                        //update UserPostFavorite interaction
-                        assert currentUser != null;
-                        UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
-                        dbRefInteraction.setValue(userFavorite);
-
-                        //TODO: show increased interaction counter
-                        //DEBUG...just for testing now
-                        int tempFavInt = Integer.parseInt(favorites.getText().toString());
-                        tempFavInt++;
-                        favorites.setText(String.valueOf(tempFavInt));
-                    }
-                });
+                        //TODO: the post is already in user favorites, so remove it
+                    });
+                }
             });
 
             //handle the likes interaction //TODO: Refactor, Revoke dislike
@@ -326,5 +328,54 @@ public class PostActivity extends AppCompatActivity {
             //TODO ("Not implemented yet.)
         }
 
+    }
+
+    /**
+     * Checks if a user has interacted with the post.
+     *
+     * @param user the current user that interacts with this post
+     * @param path database reference path
+     */
+    private void checkForExistingInteraction(FirebaseUser user, String path, UserPostInteractionCallback callback) {
+        AtomicBoolean isInteractionExisting = new AtomicBoolean(false);
+
+        //get the FirebaseDatabase instance for the specified URL
+        DatabaseReference dbRef = getDatabaseReferenceByPath(path);
+
+        //find the current user interactions
+        dbRef.get().addOnCompleteListener(task -> {
+                    for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                        String userId = dataSnapshot.child("userId").getValue(String.class);
+                        String postId = dataSnapshot.child("postId").getValue(String.class);
+                        assert user != null;
+                        if (Objects.equals(userId, user.getUid())) {
+                            //check if the user has already interacted with this post
+                            assert postId != null;
+                            if (postId.equals(post.getId())) {
+                                isInteractionExisting.set(true);
+                                break;
+                            }
+                        }
+                    }
+
+                    //invoke the callback with the existing interaction result
+                    callback.onExistingInteraction(isInteractionExisting.get());
+                }
+
+        );
+    }
+
+    /**
+     * Returns a DatabaseReference object based on a relative path.
+     *
+     * @param path the relative path of the database reference
+     * @return DatabaseReference object
+     */
+    private DatabaseReference getDatabaseReferenceByPath(String path) {
+        //get the FirebaseDatabase instance for the specified URL
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        //return the DatabaseReference for the path
+        return database.getReference(DATABASE_REFERENCE).child(path);
     }
 }

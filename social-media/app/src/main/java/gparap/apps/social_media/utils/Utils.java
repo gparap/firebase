@@ -91,6 +91,11 @@ public class Utils {
                         interactions += 1;
                         postRef.child(DATABASE_FIELD_POST_FAVORITES_COUNT).setValue(interactions);
                         break;
+                        case "removeFromFavorite":
+                        interactions = post.getFavorites();
+                        interactions -= 1;
+                        postRef.child(DATABASE_FIELD_POST_FAVORITES_COUNT).setValue(interactions);
+                        break;
                     case "like":
                         interactions = post.getLikes();
                         interactions += 1;
