@@ -16,5 +16,8 @@
 package gparap.apps.social_media.posts;
 
 public enum PostInteractionType {
-    ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES, LIKE, DISLIKE, COMMENT
+    ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES,
+    LIKE, REVOKE_LIKE,
+    DISLIKE, REVOKE_DISLIKE,
+    COMMENT
 }

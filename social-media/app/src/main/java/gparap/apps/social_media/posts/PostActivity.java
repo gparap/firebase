@@ -47,6 +47,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import gparap.apps.social_media.MainActivity;
 import gparap.apps.social_media.R;
@@ -342,6 +343,9 @@ public class PostActivity extends AppCompatActivity {
                         break;
 
                     case LIKE:
+                        //clean dislike interaction, if present
+                        revokeInteraction(AppConstants.DATABASE_REFERENCE_USERS_POSTS_DISLIKES, currentUser, PostInteractionType.LIKE);
+
                         //update interaction
                         assert currentUser != null;
                         UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
@@ -356,6 +360,9 @@ public class PostActivity extends AppCompatActivity {
                         break;
 
                     case DISLIKE:
+                        //clean dislike interaction, if present
+                        revokeInteraction(AppConstants.DATABASE_REFERENCE_USERS_POSTS_LIKES, currentUser, PostInteractionType.DISLIKE);
+
                         //update interaction
                         assert currentUser != null;
                         UserPostDislikeModel userDislike = new UserPostDislikeModel(id, currentUser.getUid(), post.getId());
@@ -377,8 +384,75 @@ public class PostActivity extends AppCompatActivity {
                 //update onClickListener flag
                 isAlreadyExisting.set(true);
             }
+        });
+    }
 
-            //TODO: the post is already in user interactions, so remove it
+    /**
+     * Revokes the opposite of a user-post like or dislike interaction.
+     * These types of interactions cannot be present at the same time.
+     *
+     * @param path            the relative path of the database reference
+     * @param currentUser     the type of user-post interaction
+     * @param interactionType the current user that interacts with this post
+     */
+    private void revokeInteraction(String path, FirebaseUser currentUser, PostInteractionType interactionType) {
+        //find this user-post specific interaction, if exists
+        AtomicReference<String> dbRefId = new AtomicReference<>("");
+        DatabaseReference dbRef = getDatabaseReferenceByPath(path);
+        dbRef.get().addOnCompleteListener(task -> {
+            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                String userId = dataSnapshot.child("userId").getValue(String.class);
+                String postId = dataSnapshot.child("postId").getValue(String.class);
+                assert userId != null;
+                assert postId != null;
+                if (userId.equals(currentUser.getUid()) && postId.equals(post.getId())) {
+                    //get id of the database reference
+                    dbRefId.set(dataSnapshot.child("id").getValue(String.class));
+
+                    //revoke the opposite interaction
+                    if (!dbRefId.get().isEmpty()) {
+                        //revoke dislike interaction
+                        if (interactionType == PostInteractionType.LIKE) {
+                            dbRef.child(dbRefId.get()).removeValue().addOnCompleteListener(empty -> {
+                                //update the view color to active
+                                TextView textViewDislikes = findViewById(R.id.post_interaction_dislikes);
+                                textViewDislikes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_down_24, 0, 0, 0);
+                                handleInteraction(currentUser, PostInteractionType.DISLIKE);
+
+                                //decrease the interaction counter
+                                if (postInteraction.getDislikes() > 0) {
+                                    postInteraction.setDislikes(postInteraction.getDislikes() - 1);
+                                    textViewDislikes.setText(String.valueOf(postInteraction.getDislikes()));
+                                }
+
+                                //decrease the post counter
+                                Utils.getInstance().updatePostInteractionCounter(post.getId(), PostInteractionType.REVOKE_DISLIKE);
+                            });
+                            break;
+                        }
+
+                        //revoke like interaction
+                        else if (interactionType == PostInteractionType.DISLIKE) {
+                            dbRef.child(dbRefId.get()).removeValue().addOnCompleteListener(empty -> {
+                                //update the view color to active
+                                TextView textViewLikes = findViewById(R.id.post_interaction_likes);
+                                textViewLikes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_up_24, 0, 0, 0);
+                                handleInteraction(currentUser, PostInteractionType.LIKE);
+
+                                //decrease the interaction counter
+                                if (postInteraction.getLikes() > 0) {
+                                    postInteraction.setLikes(postInteraction.getLikes() - 1);
+                                    textViewLikes.setText(String.valueOf(postInteraction.getLikes()));
+                                }
+
+                                //decrease the post counter
+                                Utils.getInstance().updatePostInteractionCounter(post.getId(), PostInteractionType.REVOKE_LIKE);
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
         });
     }
 }

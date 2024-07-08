@@ -102,9 +102,19 @@ public class Utils {
                         interactions += 1;
                         postRef.child(DATABASE_FIELD_POST_LIKES_COUNT).setValue(interactions);
                         break;
+                    case REVOKE_LIKE:
+                        interactions = post.getLikes();
+                        interactions -= 1;
+                        postRef.child(DATABASE_FIELD_POST_LIKES_COUNT).setValue(interactions);
+                        break;
                     case DISLIKE:
                         interactions = post.getDislikes();
                         interactions += 1;
+                        postRef.child(DATABASE_FIELD_POST_DISLIKES_COUNT).setValue(interactions);
+                        break;
+                    case REVOKE_DISLIKE:
+                        interactions = post.getDislikes();
+                        interactions -= 1;
                         postRef.child(DATABASE_FIELD_POST_DISLIKES_COUNT).setValue(interactions);
                         break;
                     case COMMENT:

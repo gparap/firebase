@@ -127,9 +127,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
                             //add post interaction extras TODO: Refactor
                             intent.putExtra(AppConstants.POST_INTERACTION_FAVORITES, holder.postFavorites.getText().toString());
-                            intent.putExtra(AppConstants.POST_INTERACTION_LIKES, holder.postComments.getText().toString());
-                            intent.putExtra(AppConstants.POST_INTERACTION_DISLIKES, holder.postLikes.getText().toString());
-                            intent.putExtra(AppConstants.POST_INTERACTION_COMMENTS, holder.postDislikes.getText().toString());
+                            intent.putExtra(AppConstants.POST_INTERACTION_LIKES, holder.postLikes.getText().toString());
+                            intent.putExtra(AppConstants.POST_INTERACTION_DISLIKES, holder.postDislikes.getText().toString());
+                            intent.putExtra(AppConstants.POST_INTERACTION_COMMENTS, holder.postComments.getText().toString());
 
                             context.startActivity(intent);
                         });
