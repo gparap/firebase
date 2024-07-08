@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.data.UserModel;
+import gparap.apps.social_media.posts.PostInteractionType;
 
 import static gparap.apps.social_media.utils.AppConstants.*;
 
@@ -72,7 +73,7 @@ public class Utils {
      * @param postId            The current post the is been viewed by a user of the application.
      * @param interactionType   A specific interaction like add to favorites, like, dislike, etc.
      */
-    public void updatePostInteractionCounter(String postId, String interactionType) {
+    public void updatePostInteractionCounter(String postId, PostInteractionType interactionType) {
         //get the FirebaseDatabase instance for the specified URL
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -86,27 +87,27 @@ public class Utils {
             if (post != null) {
                 int interactions;
                 switch (interactionType) {
-                    case "addToFavorite":
+                    case ADD_TO_FAVORITES:
                         interactions = post.getFavorites();
                         interactions += 1;
                         postRef.child(DATABASE_FIELD_POST_FAVORITES_COUNT).setValue(interactions);
                         break;
-                        case "removeFromFavorite":
+                    case REMOVE_FROM_FAVORITES:
                         interactions = post.getFavorites();
                         interactions -= 1;
                         postRef.child(DATABASE_FIELD_POST_FAVORITES_COUNT).setValue(interactions);
                         break;
-                    case "like":
+                    case LIKE:
                         interactions = post.getLikes();
                         interactions += 1;
                         postRef.child(DATABASE_FIELD_POST_LIKES_COUNT).setValue(interactions);
                         break;
-                    case "dislike":
+                    case DISLIKE:
                         interactions = post.getDislikes();
                         interactions += 1;
                         postRef.child(DATABASE_FIELD_POST_DISLIKES_COUNT).setValue(interactions);
                         break;
-                    case "comment":
+                    case COMMENT:
                         //TODO (Not implemented yet)
                         break;
                 }

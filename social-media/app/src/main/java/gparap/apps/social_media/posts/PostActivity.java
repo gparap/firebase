@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 gparap
+ * Copyright 2024 gparap
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,10 +83,10 @@ public class PostActivity extends AppCompatActivity {
 
             //get post interactions data
             postInteraction = new PostInteractionModel(
-                    Integer.parseInt(getIntent().getStringExtra("post_interaction_favorites")),
-                    Integer.parseInt(getIntent().getStringExtra("post_interaction_likes")),
-                    Integer.parseInt(getIntent().getStringExtra("post_interaction_dislikes")),
-                    Integer.parseInt(getIntent().getStringExtra("post_interaction_comments"))
+                    Integer.parseInt(getIntent().getStringExtra(AppConstants.POST_INTERACTION_FAVORITES)),
+                    Integer.parseInt(getIntent().getStringExtra(AppConstants.POST_INTERACTION_LIKES)),
+                    Integer.parseInt(getIntent().getStringExtra(AppConstants.POST_INTERACTION_DISLIKES)),
+                    Integer.parseInt(getIntent().getStringExtra(AppConstants.POST_INTERACTION_COMMENTS))
             );
 
             //get username
@@ -170,159 +170,26 @@ public class PostActivity extends AppCompatActivity {
             LinearLayout layoutPostInteractions = findViewById(R.id.layout_post_interactions);
             layoutPostInteractions.setVisibility(View.VISIBLE);
 
-            //get the favorites view
+            //update the favorites view
             TextView favorites = findViewById(R.id.post_interaction_favorites);
             favorites.setText(String.valueOf(postInteraction.getFavorites()));
 
-            //handle the favorites interaction //TODO: Refactor
-            checkForExistingInteraction(currentUser, "users_posts_favorites", isInteractionExisting -> {
-                //the user has added this post to its favorites
-                if (isInteractionExisting) {
-                    //update the view color to active
-                    favorites.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24_active, 0, 0, 0);
-                }
+            //handle the favorites interaction
+            handleInteraction(currentUser, PostInteractionType.ADD_TO_FAVORITES);
 
-                //the user has not added this post to its favorites (yet?)
-                else {
-                    //onClickListener flag for adding or removing a post to favorites
-                    AtomicBoolean isAlreadyAddedToFavorites = new AtomicBoolean(false);
-
-                    //add or remove post from user favorites
-                    favorites.setOnClickListener(view -> {
-                        //the post is not in user favorites, so add it
-                        if (!isAlreadyAddedToFavorites.get()) {
-                            //get the DatabaseReference for the specific user-post interaction
-                            DatabaseReference dbRef = getDatabaseReferenceByPath("users_posts_favorites");
-
-                            //increase the post counter
-                            Utils.getInstance().updatePostInteractionCounter(post.getId(), "addToFavorite");
-
-                            //auto-generate id
-                            DatabaseReference dbRefInteraction = dbRef.push();
-                            String id = dbRefInteraction.getKey();
-
-                            //update UserPostFavorite interaction
-                            assert currentUser != null;
-                            UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
-                            dbRefInteraction.setValue(userFavorite);
-
-                            //increase the favorites counter
-                            postInteraction.setFavorites(postInteraction.getFavorites() + 1);
-                            favorites.setText(String.valueOf(postInteraction.getFavorites()));
-
-                            //update the view color to active
-                            favorites.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24_active, 0, 0, 0);
-
-                            //update onClickListener flag
-                            isAlreadyAddedToFavorites.set(true);
-                        }
-
-                        //TODO: the post is already in user favorites, so remove it
-                    });
-                }
-            });
-
-            //handle the likes interaction //TODO: Refactor, Revoke dislike
+            //update the likes view
             TextView likes = findViewById(R.id.post_interaction_likes);
             likes.setText(String.valueOf(postInteraction.getLikes()));
-            likes.setOnClickListener(view -> {
-                //get the FirebaseDatabase instance for the specified URL
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-                //get the DatabaseReference for the specific user-post interaction
-                DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_thumbsUp");
+            //handle the likes interaction //TODO: Revoke dislike
+            handleInteraction(currentUser, PostInteractionType.LIKE);
 
-                //find the current user interactions (likes)
-                AtomicBoolean isAlreadyLiked = new AtomicBoolean(false);
-                dbRef.get().addOnCompleteListener(taskLikes -> {
-                    isAlreadyLiked.set(false);
-                    for (DataSnapshot dataSnapshot : taskLikes.getResult().getChildren()) {
-                        String userId = dataSnapshot.child("userId").getValue(String.class);
-                        String postId = dataSnapshot.child("postId").getValue(String.class);
-                        assert currentUser != null;
-                        if (Objects.equals(userId, currentUser.getUid())) {
-                            //check if the user has already liked this post
-                            assert postId != null;
-                            if (postId.equals(post.getId())) {
-                                isAlreadyLiked.set(true);
-                                break;
-                            }
-                        }
-                    }
-
-                    //add post to user likes
-                    if (!isAlreadyLiked.get()) {
-                        //increase the post counter
-                        Utils.getInstance().updatePostInteractionCounter(post.getId(), "like");
-
-                        //auto-generate id
-                        DatabaseReference dbRefInteraction = dbRef.push();
-                        String id = dbRefInteraction.getKey();
-
-                        //update UserPostLike interaction
-                        assert currentUser != null;
-                        UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
-                        dbRefInteraction.setValue(userLike);
-
-                        //TODO: show increased interaction counter
-                        //DEBUG...just for testing now
-                        int tempLikeInt = Integer.parseInt(likes.getText().toString());
-                        tempLikeInt++;
-                        likes.setText(String.valueOf(tempLikeInt));
-                    }
-                });
-            });
-
-            //handle the dislikes interaction //TODO: Refactor, Revoke like
+            //update the dislikes view
             TextView dislikes = findViewById(R.id.post_interaction_dislikes);
             dislikes.setText(String.valueOf(postInteraction.getDislikes()));
-            dislikes.setOnClickListener(view -> {
-                //get the FirebaseDatabase instance for the specified URL
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-                //get the DatabaseReference for the specific user-post interaction
-                DatabaseReference dbRef = database.getReference(DATABASE_REFERENCE).child("users_posts_thumbsDown");
-
-                //find the current user interactions (dislikes)
-                AtomicBoolean isAlreadyDisliked = new AtomicBoolean(false);
-                dbRef.get().addOnCompleteListener(taskDislikes -> {
-                    isAlreadyDisliked.set(false);
-                    for (DataSnapshot dataSnapshot : taskDislikes.getResult().getChildren()) {
-                        String userId = dataSnapshot.child("userId").getValue(String.class);
-                        String postId = dataSnapshot.child("postId").getValue(String.class);
-                        assert currentUser != null;
-                        if (Objects.equals(userId, currentUser.getUid())) {
-                            //check if the user has already disliked this post
-                            assert postId != null;
-                            if (postId.equals(post.getId())) {
-                                isAlreadyDisliked.set(true);
-                                break;
-                            }
-                        }
-                    }
-
-                    //add post to user dislikes
-                    if (!isAlreadyDisliked.get()) {
-                        //increase the post counter
-                        Utils.getInstance().updatePostInteractionCounter(post.getId(), "dislike");
-
-                        //auto-generate id
-                        DatabaseReference dbRefInteraction = dbRef.push();
-                        String id = dbRefInteraction.getKey();
-
-                        //update UserPostDislike interaction
-                        assert currentUser != null;
-                        UserPostDislikeModel userDislike = new UserPostDislikeModel(id, currentUser.getUid(), post.getId());
-                        dbRefInteraction.setValue(userDislike);
-
-                        //TODO: show increased interaction counter
-                        //DEBUG...just for testing now
-                        int tempLikeInt = Integer.parseInt(dislikes.getText().toString());
-                        tempLikeInt++;
-                        dislikes.setText(String.valueOf(tempLikeInt));
-                    }
-                });
-            });
+            //handle the dislikes interaction //TODO: Revoke like
+            handleInteraction(currentUser, PostInteractionType.DISLIKE);
 
             //handle the comments interaction
             //TODO ("Not implemented yet.)
@@ -331,10 +198,64 @@ public class PostActivity extends AppCompatActivity {
     }
 
     /**
+     * Handles the interaction of a user with a post.
+     *
+     * @param user            the current user that interacts with this post
+     * @param interactionType the type of interaction
+     */
+    private void handleInteraction(FirebaseUser user, PostInteractionType interactionType) {
+        String path = "";
+        TextView view = null;
+        int drawableId = 0;
+
+        //get database reference relative path, text view, drawable id from interaction type
+        switch (interactionType) {
+            case ADD_TO_FAVORITES:
+                path = AppConstants.DATABASE_REFERENCE_USERS_POSTS_FAVORITES;
+                view = findViewById(R.id.post_interaction_favorites);
+                drawableId = R.drawable.ic_favorite_24_active;
+                break;
+
+            case LIKE:
+                path = AppConstants.DATABASE_REFERENCE_USERS_POSTS_LIKES;
+                view = findViewById(R.id.post_interaction_likes);
+                drawableId = R.drawable.ic_thumb_up_24_active;
+                break;
+
+            case DISLIKE:
+                path = AppConstants.DATABASE_REFERENCE_USERS_POSTS_DISLIKES;
+                view = findViewById(R.id.post_interaction_dislikes);
+                drawableId = R.drawable.ic_thumb_down_24_active;
+                break;
+
+            case COMMENT:
+                //TODO (Not implemented yet)
+                break;
+        }
+
+
+        TextView finalView = view;
+        int finalDrawableId = drawableId;
+        String finalPath = path;
+        checkForExistingInteraction(user, path, isInteractionExisting -> {
+            //the user already has interacted with this post
+            if (isInteractionExisting) {
+                //update the view color to active
+                finalView.setCompoundDrawablesRelativeWithIntrinsicBounds(finalDrawableId, 0, 0, 0);
+            }
+
+            //the user not has interacted with this post (yet?)
+            else {
+                updateTheUserPostInteraction(finalView, finalPath, interactionType, user);
+            }
+        });
+    }
+
+    /**
      * Checks if a user has interacted with the post.
      *
      * @param user the current user that interacts with this post
-     * @param path database reference path
+     * @param path the relative path of the database reference
      */
     private void checkForExistingInteraction(FirebaseUser user, String path, UserPostInteractionCallback callback) {
         AtomicBoolean isInteractionExisting = new AtomicBoolean(false);
@@ -377,5 +298,87 @@ public class PostActivity extends AppCompatActivity {
 
         //return the DatabaseReference for the path
         return database.getReference(DATABASE_REFERENCE).child(path);
+    }
+
+    /**
+     * Handles the update of a specific user-post interaction.
+     *
+     * @param textView        the interaction view
+     * @param path            the relative path of the database reference
+     * @param interactionType the type of user-post interaction
+     * @param currentUser     the current user that interacts with this post
+     */
+    private void updateTheUserPostInteraction(TextView textView, String path, PostInteractionType interactionType, FirebaseUser currentUser) {
+        //onClickListener flag for adding or removing post interactions
+        AtomicBoolean isAlreadyExisting = new AtomicBoolean(false);
+
+        //add or remove post from user interactions
+        textView.setOnClickListener(view -> {
+            //the post is not in user interactions, so add it
+            if (!isAlreadyExisting.get()) {
+                //get the DatabaseReference for the specific user-post interaction
+                DatabaseReference dbRef = getDatabaseReferenceByPath(path);
+
+                //increase the post counter
+                Utils.getInstance().updatePostInteractionCounter(post.getId(), interactionType);
+
+                //auto-generate id
+                DatabaseReference dbRefInteraction = dbRef.push();
+                String id = dbRefInteraction.getKey();
+
+                switch (interactionType) {
+                    case ADD_TO_FAVORITES:
+                        //update interaction
+                        assert currentUser != null;
+                        UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
+                        dbRefInteraction.setValue(userFavorite);
+
+                        //increase the interaction counter
+                        postInteraction.setFavorites(postInteraction.getFavorites() + 1);
+                        textView.setText(String.valueOf(postInteraction.getFavorites()));
+
+                        //update the view color to active
+                        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24_active, 0, 0, 0);
+                        break;
+
+                    case LIKE:
+                        //update interaction
+                        assert currentUser != null;
+                        UserPostLikeModel userLike = new UserPostLikeModel(id, currentUser.getUid(), post.getId());
+                        dbRefInteraction.setValue(userLike);
+
+                        //increase the interaction counter
+                        postInteraction.setLikes(postInteraction.getLikes() + 1);
+                        textView.setText(String.valueOf(postInteraction.getLikes()));
+
+                        //update the view color to active
+                        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_up_24_active, 0, 0, 0);
+                        break;
+
+                    case DISLIKE:
+                        //update interaction
+                        assert currentUser != null;
+                        UserPostDislikeModel userDislike = new UserPostDislikeModel(id, currentUser.getUid(), post.getId());
+                        dbRefInteraction.setValue(userDislike);
+
+                        //increase the interaction counter
+                        postInteraction.setDislikes(postInteraction.getDislikes() + 1);
+                        textView.setText(String.valueOf(postInteraction.getDislikes()));
+
+                        //update the view color to active
+                        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_down_24_active, 0, 0, 0);
+                        break;
+
+                    case COMMENT:
+                        //TODO (Not implemented yet)
+                        break;
+                }
+
+                //update onClickListener flag
+                isAlreadyExisting.set(true);
+            }
+
+            //TODO: the post is already in user interactions, so remove it
+        });
     }
 }

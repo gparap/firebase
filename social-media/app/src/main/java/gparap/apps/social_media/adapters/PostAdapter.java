@@ -50,6 +50,7 @@ import gparap.apps.social_media.posts.PostActivity;
 import gparap.apps.social_media.R;
 import gparap.apps.social_media.data.PostModel;
 import gparap.apps.social_media.data.UserModel;
+import gparap.apps.social_media.utils.AppConstants;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     private ArrayList<PostModel> postsList = new ArrayList<>();
@@ -125,10 +126,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                             intent.putExtra(POST_IMAGE_STORAGE_ID, postsList.get(position).getImageStorageId());
 
                             //add post interaction extras TODO: Refactor
-                            intent.putExtra("post_interaction_favorites", holder.postFavorites.getText().toString());
-                            intent.putExtra("post_interaction_comments", holder.postComments.getText().toString());
-                            intent.putExtra("post_interaction_likes", holder.postLikes.getText().toString());
-                            intent.putExtra("post_interaction_dislikes", holder.postDislikes.getText().toString());
+                            intent.putExtra(AppConstants.POST_INTERACTION_FAVORITES, holder.postFavorites.getText().toString());
+                            intent.putExtra(AppConstants.POST_INTERACTION_LIKES, holder.postComments.getText().toString());
+                            intent.putExtra(AppConstants.POST_INTERACTION_DISLIKES, holder.postLikes.getText().toString());
+                            intent.putExtra(AppConstants.POST_INTERACTION_COMMENTS, holder.postDislikes.getText().toString());
 
                             context.startActivity(intent);
                         });
