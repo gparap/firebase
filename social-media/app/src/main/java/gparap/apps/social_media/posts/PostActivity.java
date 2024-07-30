@@ -102,7 +102,7 @@ public class PostActivity extends AppCompatActivity {
                 String.format("%s%s", getString(R.string.text_posted_by), username)
         );
 
-        //display post image TODO: fixed <<if (!post.getImageUrl().isEmpty())>>
+        //display post image
         if (!post.getImageUrl().isEmpty()) {
             Picasso.get().load(post.getImageUrl()).into(((ImageView) findViewById(R.id.imageViewPost)));
         }
@@ -182,20 +182,19 @@ public class PostActivity extends AppCompatActivity {
             TextView likes = findViewById(R.id.post_interaction_likes);
             likes.setText(String.valueOf(postInteraction.getLikes()));
 
-            //handle the likes interaction //TODO: Revoke dislike
+            //handle the likes interaction
             handleInteraction(currentUser, PostInteractionType.LIKE);
 
             //update the dislikes view
             TextView dislikes = findViewById(R.id.post_interaction_dislikes);
             dislikes.setText(String.valueOf(postInteraction.getDislikes()));
 
-            //handle the dislikes interaction //TODO: Revoke like
+            //handle the dislikes interaction
             handleInteraction(currentUser, PostInteractionType.DISLIKE);
 
             //handle the comments interaction
             //TODO ("Not implemented yet.)
         }
-
     }
 
     /**
@@ -234,7 +233,7 @@ public class PostActivity extends AppCompatActivity {
                 break;
         }
 
-
+        //handle interactions
         TextView finalView = view;
         int finalDrawableId = drawableId;
         String finalPath = path;
@@ -243,6 +242,11 @@ public class PostActivity extends AppCompatActivity {
             if (isInteractionExisting) {
                 //update the view color to active
                 finalView.setCompoundDrawablesRelativeWithIntrinsicBounds(finalDrawableId, 0, 0, 0);
+                //update favorites interaction
+                if (interactionType == PostInteractionType.ADD_TO_FAVORITES ||
+                    interactionType == PostInteractionType.REMOVE_FROM_FAVORITES) {
+                    updateTheUserPostInteraction(finalView, finalPath, interactionType, user);
+                }
             }
 
             //the user not has interacted with this post (yet?)
@@ -283,7 +287,6 @@ public class PostActivity extends AppCompatActivity {
                     //invoke the callback with the existing interaction result
                     callback.onExistingInteraction(isInteractionExisting.get());
                 }
-
         );
     }
 
@@ -312,6 +315,23 @@ public class PostActivity extends AppCompatActivity {
     private void updateTheUserPostInteraction(TextView textView, String path, PostInteractionType interactionType, FirebaseUser currentUser) {
         //onClickListener flag for adding or removing post interactions
         AtomicBoolean isAlreadyExisting = new AtomicBoolean(false);
+
+        //check if this post is already added to the user's favorites
+        DatabaseReference dbRefFavorites = getDatabaseReferenceByPath(AppConstants.DATABASE_REFERENCE_USERS_POSTS_FAVORITES);
+        dbRefFavorites.get().addOnCompleteListener(task -> {
+            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                String userId = dataSnapshot.child("userId").getValue(String.class);
+                String postId = dataSnapshot.child("postId").getValue(String.class);
+                if (Objects.equals(userId, currentUser.getUid())) {
+                    //check if the user has already interacted with this post
+                    assert postId != null;
+                    if (postId.equals(post.getId())) {
+                        isAlreadyExisting.set(true);
+                        break;
+                    }
+                }
+            }
+        });
 
         //add or remove post from user interactions
         textView.setOnClickListener(view -> {
@@ -383,6 +403,50 @@ public class PostActivity extends AppCompatActivity {
 
                 //update onClickListener flag
                 isAlreadyExisting.set(true);
+            }
+
+            //the post is already in user interactions, so revoke it
+            //!!! only for "favorite" type interaction
+            else {
+                if (interactionType == PostInteractionType.ADD_TO_FAVORITES || interactionType == PostInteractionType.REMOVE_FROM_FAVORITES) {
+                    dbRefFavorites.get().addOnCompleteListener(task -> {
+                        for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                            String id = dataSnapshot.child("id").getValue(String.class);
+                            String userId = dataSnapshot.child("userId").getValue(String.class);
+                            String postId = dataSnapshot.child("postId").getValue(String.class);
+                            if (Objects.equals(userId, currentUser.getUid())) {
+                                //check if the user has already interacted with this post
+                                assert postId != null;
+                                if (postId.equals(post.getId())) {
+                                    isAlreadyExisting.set(true);
+
+                                    //get the interaction id
+                                    AtomicReference<String> dbRefId = new AtomicReference<>(id);
+
+                                    //handle the interaction
+                                    dbRefFavorites.child(dbRefId.get()).removeValue().addOnCompleteListener(empty -> {
+                                        //update the view color to inactive
+                                        TextView textViewFavorites = findViewById(R.id.post_interaction_favorites);
+                                        textViewFavorites.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24, 0, 0, 0);
+
+                                        //decrease the interaction counter
+                                        if (postInteraction.getFavorites() > 0) {
+                                            postInteraction.setFavorites(postInteraction.getFavorites() - 1);
+                                            textViewFavorites.setText(String.valueOf(postInteraction.getFavorites()));
+                                        }
+
+                                        //decrease the post counter
+                                        Utils.getInstance().updatePostInteractionCounter(post.getId(), PostInteractionType.REMOVE_FROM_FAVORITES);
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    });
+
+                    //update onClickListener flag
+                    isAlreadyExisting.set(false);
+                }
             }
         });
     }
