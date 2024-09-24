@@ -60,7 +60,7 @@ import gparap.apps.social_media.interfaces.UserPostInteractionCallback;
 import gparap.apps.social_media.utils.AppConstants;
 import gparap.apps.social_media.utils.Utils;
 
-public class PostActivity extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {   //TODO: Refactor code
     private PostModel post = null;
     private PostInteractionModel postInteraction = null;
 
@@ -244,7 +244,17 @@ public class PostActivity extends AppCompatActivity {
                 finalView.setCompoundDrawablesRelativeWithIntrinsicBounds(finalDrawableId, 0, 0, 0);
                 //update favorites interaction
                 if (interactionType == PostInteractionType.ADD_TO_FAVORITES ||
-                    interactionType == PostInteractionType.REMOVE_FROM_FAVORITES) {
+                        interactionType == PostInteractionType.REMOVE_FROM_FAVORITES) {
+                    updateTheUserPostInteraction(finalView, finalPath, interactionType, user);
+                }
+                //update likes interaction
+                if (interactionType == PostInteractionType.LIKE ||
+                        interactionType == PostInteractionType.REVOKE_LIKE) {
+                    updateTheUserPostInteraction(finalView, finalPath, interactionType, user);
+                }
+                //update dislikes interaction
+                if (interactionType == PostInteractionType.DISLIKE ||
+                        interactionType == PostInteractionType.REVOKE_DISLIKE) {
                     updateTheUserPostInteraction(finalView, finalPath, interactionType, user);
                 }
             }
@@ -313,42 +323,94 @@ public class PostActivity extends AppCompatActivity {
      * @param currentUser     the current user that interacts with this post
      */
     private void updateTheUserPostInteraction(TextView textView, String path, PostInteractionType interactionType, FirebaseUser currentUser) {
-        //onClickListener flag for adding or removing post interactions
-        AtomicBoolean isAlreadyExisting = new AtomicBoolean(false);
+        //onClickListener flags for adding or removing post interactions
+        AtomicBoolean isAlreadyExistingFavorite = new AtomicBoolean(false);
+        AtomicBoolean isAlreadyExistingLike = new AtomicBoolean(false);
+        AtomicBoolean isAlreadyExistingDislike = new AtomicBoolean(false);
 
         //check if this post is already added to the user's favorites
-        DatabaseReference dbRefFavorites = getDatabaseReferenceByPath(AppConstants.DATABASE_REFERENCE_USERS_POSTS_FAVORITES);
-        dbRefFavorites.get().addOnCompleteListener(task -> {
-            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
-                String userId = dataSnapshot.child("userId").getValue(String.class);
-                String postId = dataSnapshot.child("postId").getValue(String.class);
-                if (Objects.equals(userId, currentUser.getUid())) {
-                    //check if the user has already interacted with this post
-                    assert postId != null;
-                    if (postId.equals(post.getId())) {
-                        isAlreadyExisting.set(true);
-                        break;
+        DatabaseReference dbRefFavorites;
+        if (interactionType == PostInteractionType.ADD_TO_FAVORITES || interactionType == PostInteractionType.REMOVE_FROM_FAVORITES) {
+            dbRefFavorites = getDatabaseReferenceByPath(AppConstants.DATABASE_REFERENCE_USERS_POSTS_FAVORITES);
+            dbRefFavorites.get().addOnCompleteListener(task -> {
+                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                    String userId = dataSnapshot.child("userId").getValue(String.class);
+                    String postId = dataSnapshot.child("postId").getValue(String.class);
+                    if (Objects.equals(userId, currentUser.getUid())) {
+                        //check if the user has already interacted with this post
+                        assert postId != null;
+                        if (postId.equals(post.getId())) {
+                            isAlreadyExistingFavorite.set(true);
+                            break;
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            dbRefFavorites = null;
+        }
+
+        //check if the user has already liked this post
+        DatabaseReference dbRefLikes;
+        if (interactionType == PostInteractionType.LIKE || interactionType == PostInteractionType.REVOKE_LIKE) {
+            dbRefLikes = getDatabaseReferenceByPath(AppConstants.DATABASE_REFERENCE_USERS_POSTS_LIKES);
+            dbRefLikes.get().addOnCompleteListener(task -> {
+                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                    String userId = dataSnapshot.child("userId").getValue(String.class);
+                    String postId = dataSnapshot.child("postId").getValue(String.class);
+                    if (Objects.equals(userId, currentUser.getUid())) {
+                        //check if the user has already interacted with this post
+                        assert postId != null;
+                        if (postId.equals(post.getId())) {
+                            isAlreadyExistingLike.set(true);
+                            break;
+                        }
+                    }
+                }
+            });
+        } else {
+            dbRefLikes = null;
+        }
+
+        //check if the user has already disliked this post
+        DatabaseReference dbRefDislikes;
+        if (interactionType == PostInteractionType.DISLIKE || interactionType == PostInteractionType.REVOKE_DISLIKE) {
+            dbRefDislikes = getDatabaseReferenceByPath(AppConstants.DATABASE_REFERENCE_USERS_POSTS_DISLIKES);
+            dbRefDislikes.get().addOnCompleteListener(task -> {
+                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                    String userId = dataSnapshot.child("userId").getValue(String.class);
+                    String postId = dataSnapshot.child("postId").getValue(String.class);
+                    if (Objects.equals(userId, currentUser.getUid())) {
+                        //check if the user has already interacted with this post
+                        assert postId != null;
+                        if (postId.equals(post.getId())) {
+                            isAlreadyExistingLike.set(true);
+                            break;
+                        }
+                    }
+                }
+            });
+        } else {
+            dbRefDislikes = null;
+        }
 
         //add or remove post from user interactions
         textView.setOnClickListener(view -> {
-            //the post is not in user interactions, so add it
-            if (!isAlreadyExisting.get()) {
-                //get the DatabaseReference for the specific user-post interaction
-                DatabaseReference dbRef = getDatabaseReferenceByPath(path);
+            //get the DatabaseReference for the specific user-post interaction
+            DatabaseReference dbRef = getDatabaseReferenceByPath(path);
 
-                //increase the post counter
-                Utils.getInstance().updatePostInteractionCounter(post.getId(), interactionType);
+            //increase the post counter
+            Utils.getInstance().updatePostInteractionCounter(post.getId(), interactionType);
 
-                //auto-generate id
-                DatabaseReference dbRefInteraction = dbRef.push();
-                String id = dbRefInteraction.getKey();
+            //auto-generate id (for new interactions)
+            DatabaseReference dbRefInteraction = dbRef.push();
+            String id = dbRefInteraction.getKey();
 
-                switch (interactionType) {
-                    case ADD_TO_FAVORITES:
+            //update interaction
+            switch (interactionType) {
+                case ADD_TO_FAVORITES:
+                    //the post is not in user interactions, so add it
+                    if (!isAlreadyExistingFavorite.get()) {
                         //update interaction
                         assert currentUser != null;
                         UserPostFavoriteModel userFavorite = new UserPostFavoriteModel(id, currentUser.getUid(), post.getId());
@@ -360,11 +422,55 @@ public class PostActivity extends AppCompatActivity {
 
                         //update the view color to active
                         textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24_active, 0, 0, 0);
-                        break;
 
-                    case LIKE:
-                        //clean dislike interaction, if present
+                        //update onClickListener flag
+                        isAlreadyExistingFavorite.set(true);
+                    } else {
+                        //the post is already in user interactions, so revoke it
+                        dbRefFavorites.get().addOnCompleteListener(task -> {
+                            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                                String pathId = dataSnapshot.child("id").getValue(String.class);
+                                String userId = dataSnapshot.child("userId").getValue(String.class);
+                                String postId = dataSnapshot.child("postId").getValue(String.class);
+                                if (Objects.equals(userId, currentUser.getUid())) {
+                                    //check if the user has already interacted with this post
+                                    assert postId != null;
+                                    if (postId.equals(post.getId())) {
+                                        isAlreadyExistingFavorite.set(true);
+
+                                        //get the interaction id
+                                        AtomicReference<String> dbRefId = new AtomicReference<>(pathId);
+
+                                        //handle the interaction
+                                        dbRefFavorites.child(dbRefId.get()).removeValue().addOnCompleteListener(empty -> {
+                                            //update the view color to inactive
+                                            TextView textViewFavorites = findViewById(R.id.post_interaction_favorites);
+                                            textViewFavorites.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24, 0, 0, 0);
+
+                                            //decrease the interaction counter
+                                            if (postInteraction.getFavorites() > 0) {
+                                                postInteraction.setFavorites(postInteraction.getFavorites() - 1);
+                                                textViewFavorites.setText(String.valueOf(postInteraction.getFavorites()));
+                                            }
+
+                                            //decrease the post counter
+                                            Utils.getInstance().updatePostInteractionCounter(post.getId(), PostInteractionType.REMOVE_FROM_FAVORITES);
+                                        });
+                                        //update onClickListener flag
+                                        isAlreadyExistingFavorite.set(false);
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+
+                case LIKE:
+                    if (!isAlreadyExistingLike.get()) {
+                        //clean dislike interaction, if present & update onClickListener flag
                         revokeInteraction(AppConstants.DATABASE_REFERENCE_USERS_POSTS_DISLIKES, currentUser, PostInteractionType.LIKE);
+                        isAlreadyExistingDislike.set(false);
 
                         //update interaction
                         assert currentUser != null;
@@ -377,11 +483,55 @@ public class PostActivity extends AppCompatActivity {
 
                         //update the view color to active
                         textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_up_24_active, 0, 0, 0);
-                        break;
 
-                    case DISLIKE:
-                        //clean dislike interaction, if present
+                        //update onClickListener flag
+                        isAlreadyExistingLike.set(true);
+                        break;
+                    } else {
+                        //the post is already in user interactions, so revoke it
+                        dbRefLikes.get().addOnCompleteListener(task -> {
+                            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                                String pathId = dataSnapshot.child("id").getValue(String.class);
+                                String userId = dataSnapshot.child("userId").getValue(String.class);
+                                String postId = dataSnapshot.child("postId").getValue(String.class);
+                                if (Objects.equals(userId, currentUser.getUid())) {
+                                    //check if the user has already interacted with this post
+                                    assert postId != null;
+                                    if (postId.equals(post.getId())) {
+                                        //get the interaction id
+                                        AtomicReference<String> dbRefId = new AtomicReference<>(pathId);
+
+                                        //handle the interaction
+                                        dbRefLikes.child(dbRefId.get()).removeValue().addOnCompleteListener(empty -> {
+                                            //update the view color to inactive
+                                            TextView textViewLikes = findViewById(R.id.post_interaction_likes);
+                                            textViewLikes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_up_24, 0, 0, 0);
+
+                                            //decrease the interaction counter
+                                            if (postInteraction.getLikes() > 0) {
+                                                postInteraction.setLikes(postInteraction.getLikes() - 1);
+                                                textViewLikes.setText(String.valueOf(postInteraction.getLikes()));
+                                            }
+
+                                            //decrease the post counter
+                                            Utils.getInstance().updatePostInteractionCounter(post.getId(), PostInteractionType.REVOKE_LIKE);
+                                        });
+
+                                        //update onClickListener flag
+                                        isAlreadyExistingLike.set(false);
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+
+                case DISLIKE:
+                    if (!isAlreadyExistingDislike.get()) {
+                        //clean dislike interaction, if present & update onClickListener flag
                         revokeInteraction(AppConstants.DATABASE_REFERENCE_USERS_POSTS_LIKES, currentUser, PostInteractionType.DISLIKE);
+                        isAlreadyExistingLike.set(false);
 
                         //update interaction
                         assert currentUser != null;
@@ -394,59 +544,53 @@ public class PostActivity extends AppCompatActivity {
 
                         //update the view color to active
                         textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_down_24_active, 0, 0, 0);
+
+                        //update onClickListener flag
+                        isAlreadyExistingDislike.set(true);
                         break;
+                    } else {
+                        //the post is already in user interactions, so revoke it
+                        dbRefDislikes.get().addOnCompleteListener(task -> {
+                            for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                                String pathId = dataSnapshot.child("id").getValue(String.class);
+                                String userId = dataSnapshot.child("userId").getValue(String.class);
+                                String postId = dataSnapshot.child("postId").getValue(String.class);
+                                if (Objects.equals(userId, currentUser.getUid())) {
+                                    //check if the user has already interacted with this post
+                                    assert postId != null;
+                                    if (postId.equals(post.getId())) {
+                                        //get the interaction id
+                                        AtomicReference<String> dbRefId = new AtomicReference<>(pathId);
 
-                    case COMMENT:
-                        //TODO (Not implemented yet)
-                        break;
-                }
+                                        //handle the interaction
+                                        dbRefDislikes.child(dbRefId.get()).removeValue().addOnCompleteListener(empty -> {
+                                            //update the view color to inactive
+                                            TextView textViewDislikes = findViewById(R.id.post_interaction_dislikes);
+                                            textViewDislikes.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_thumb_down_24, 0, 0, 0);
 
-                //update onClickListener flag
-                isAlreadyExisting.set(true);
-            }
+                                            //decrease the interaction counter
+                                            if (postInteraction.getDislikes() > 0) {
+                                                postInteraction.setDislikes(postInteraction.getDislikes() - 1);
+                                                textViewDislikes.setText(String.valueOf(postInteraction.getDislikes()));
+                                            }
 
-            //the post is already in user interactions, so revoke it
-            //!!! only for "favorite" type interaction
-            else {
-                if (interactionType == PostInteractionType.ADD_TO_FAVORITES || interactionType == PostInteractionType.REMOVE_FROM_FAVORITES) {
-                    dbRefFavorites.get().addOnCompleteListener(task -> {
-                        for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
-                            String id = dataSnapshot.child("id").getValue(String.class);
-                            String userId = dataSnapshot.child("userId").getValue(String.class);
-                            String postId = dataSnapshot.child("postId").getValue(String.class);
-                            if (Objects.equals(userId, currentUser.getUid())) {
-                                //check if the user has already interacted with this post
-                                assert postId != null;
-                                if (postId.equals(post.getId())) {
-                                    isAlreadyExisting.set(true);
+                                            //decrease the post counter
+                                            Utils.getInstance().updatePostInteractionCounter(post.getId(), PostInteractionType.REVOKE_DISLIKE);
+                                        });
 
-                                    //get the interaction id
-                                    AtomicReference<String> dbRefId = new AtomicReference<>(id);
-
-                                    //handle the interaction
-                                    dbRefFavorites.child(dbRefId.get()).removeValue().addOnCompleteListener(empty -> {
-                                        //update the view color to inactive
-                                        TextView textViewFavorites = findViewById(R.id.post_interaction_favorites);
-                                        textViewFavorites.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_24, 0, 0, 0);
-
-                                        //decrease the interaction counter
-                                        if (postInteraction.getFavorites() > 0) {
-                                            postInteraction.setFavorites(postInteraction.getFavorites() - 1);
-                                            textViewFavorites.setText(String.valueOf(postInteraction.getFavorites()));
-                                        }
-
-                                        //decrease the post counter
-                                        Utils.getInstance().updatePostInteractionCounter(post.getId(), PostInteractionType.REMOVE_FROM_FAVORITES);
-                                    });
-                                    break;
+                                        //update onClickListener flag
+                                        isAlreadyExistingDislike.set(false);
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
+                    break;
 
-                    //update onClickListener flag
-                    isAlreadyExisting.set(false);
-                }
+                case COMMENT:
+                    //TODO (Not implemented yet)
+                    break;
             }
         });
     }
